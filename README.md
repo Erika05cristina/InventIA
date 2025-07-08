@@ -15,13 +15,14 @@ El modelo de predicción permite a los usuarios cargar datos históricos de vent
 ## Tecnologías
 
 - **Frontend:** Angular
-- **Backend:** FastAPI/Django
-- **Base de Datos:** [Base de datos utilizada]
+- **Backend:** Java - Spring
+- **Servidor del Modelo:** FastAPI/Django 
+- **Base de Datos:** Firebase Firestore
 - **Autenticación:** Firebase Authentication
-- **Modelo Predictivo:** [Modelo utilizado para la predicción]
+- **Modelo Predictivo:** RNN o Prophet
 - **Asistente IA:** OpenAI API
 - **Infraestructura:** Docker, CI/CD, Firebase
-- **Despliegue:** [Plataforma de despliegue]
+- **Despliegue:** Google Cloud
 
 ---
 
