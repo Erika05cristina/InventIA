@@ -5,7 +5,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.inventia.inventia_app.entities.PredictionResponse;
+import com.inventia.inventia_app.entities.PredictionResponseGroup;
+import com.inventia.inventia_app.entities.PredictionResponseSingle;
 import com.inventia.inventia_app.entities.Product;
 
 import reactor.core.publisher.Flux;
@@ -37,7 +38,11 @@ public class PredictionService {
         return webClient.get().uri("/run").retrieve().bodyToFlux(String.class);
     }
 
-    public Flux<PredictionResponse> predictSingle(Product product){
-        return webClient.post().uri("/by-product").bodyValue(product).retrieve().bodyToFlux(PredictionResponse.class);
+    public Flux<PredictionResponseSingle> predictSingle(Product product){
+        return webClient.post().uri("/by-product").bodyValue(product).retrieve().bodyToFlux(PredictionResponseSingle.class);
+    }
+
+    public Flux<PredictionResponseGroup> predictGroup(Product product){
+        return webClient.post().uri("/all-products").bodyValue(product).retrieve().bodyToFlux(PredictionResponseGroup.class);
     }
 }
