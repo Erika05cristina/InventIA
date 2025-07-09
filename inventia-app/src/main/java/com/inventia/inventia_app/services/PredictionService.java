@@ -5,6 +5,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.inventia.inventia_app.entities.PredictionResponse;
 import com.inventia.inventia_app.entities.Product;
 
 import reactor.core.publisher.Flux;
@@ -36,18 +37,7 @@ public class PredictionService {
         return webClient.get().uri("/run").retrieve().bodyToFlux(String.class);
     }
 
-    public Flux<String> predictSingle(Product product){
-        String jsonString = "";
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            jsonString = mapper.writeValueAsString(product);
-            System.out.println("Json creado manualmente: " + jsonString);
-        } catch (Exception e) {
-            // TODO: handle exception
-            System.err.println("Error processing JSON: " + e.getMessage());
-            e.printStackTrace();
-        }
-        //return webClient.post().uri("/by-product").bodyValue("{ \"product_id\": 8, \"fecha\": \"2024-07-01\"}").retrieve().bodyToFlux(String.class);
-        return webClient.post().uri("/by-product").bodyValue(jsonString).retrieve().bodyToFlux(String.class);
+    public Flux<PredictionResponse> predictSingle(Product product){
+        return webClient.post().uri("/by-product").bodyValue(product).retrieve().bodyToFlux(PredictionResponse.class);
     }
 }

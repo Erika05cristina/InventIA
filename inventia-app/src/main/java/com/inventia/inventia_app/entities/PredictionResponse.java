@@ -25,11 +25,11 @@ public class PredictionResponse {
         return this.status;
     }
 
-    public void setProductId(Integer product_id) {
+    public void setProduct_id(Integer product_id) {
         this.product_id = product_id;
     }
 
-    public Integer getProductId() {
+    public Integer getProduct_id() {
         return this.product_id;
     }
 

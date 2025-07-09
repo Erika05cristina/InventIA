@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.inventia.inventia_app.entities.PredictionResponse;
 import com.inventia.inventia_app.entities.Product;
 import com.inventia.inventia_app.services.PredictionService;
 
@@ -32,7 +33,7 @@ public class PredictionController {
     }
 
     @PostMapping("/single")
-    public Flux<String> predecirUnico(@RequestBody Product product){
+    public Flux<PredictionResponse> predecirUnico(@RequestBody Product product){
         System.out.println(product.getProduct_id());
         return predictionService.predictSingle(product);
     }
