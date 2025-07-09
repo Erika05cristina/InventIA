@@ -1,0 +1,32 @@
+<div class="upload-container">
+  <label class="upload-label">
+    <span class="upload-button">📁 Selecciona un archivo Excel</span>
+    <input type="file" accept=".xlsx, .xls, .csv" (change)="onFileSelected($event)" />
+  </label>
+
+  @if (previewData().length > 0) {
+    <div class="preview">
+      <h3>Vista previa:</h3>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              @for (header of previewData()[0]; track $index) {
+                <th>{{ header }}</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of previewData().slice(1); track $index) {
+              <tr>
+                @for (cell of row; track $index) {
+                  <td>{{ cell }}</td>
+                }
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+</div>
