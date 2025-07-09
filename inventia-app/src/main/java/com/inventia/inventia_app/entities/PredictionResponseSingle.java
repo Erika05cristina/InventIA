@@ -1,16 +1,16 @@
 package com.inventia.inventia_app.entities;
 
 /**
- * PredictionResponse
+ * PredictionResponseSingle
  */
-public class PredictionResponse {
+public class PredictionResponseSingle {
 
     private String status;
     private Integer product_id;
     private String fecha;
     private Double prediccion;
 
-    public PredictionResponse(String status, Integer product_id, String fecha, Double prediccion){
+    public PredictionResponseSingle(String status, Integer product_id, String fecha, Double prediccion){
         this.status = status;
         this.product_id = product_id;
         this.fecha = fecha;
@@ -25,11 +25,11 @@ public class PredictionResponse {
         return this.status;
     }
 
-    public void setProductId(Integer product_id) {
+    public void setProduct_id(Integer product_id) {
         this.product_id = product_id;
     }
 
-    public Integer getProductId() {
+    public Integer getProduct_id() {
         return this.product_id;
     }
 
@@ -47,5 +47,22 @@ public class PredictionResponse {
 
     public Double getPrediccion() {
         return this.prediccion;
+    }
+
+    @Override
+    public String toString() {
+        return "PredictionResponseSingle{"
+        + "status='"
+        + status
+        + '\''
+        + "product_id='"
+        + product_id
+        + '\''
+        + ", fecha="
+        + fecha
+        + '\''
+        + ", prediccion="
+        + prediccion
+        + '}';
     }
 }
