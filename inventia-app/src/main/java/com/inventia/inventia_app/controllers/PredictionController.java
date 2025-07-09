@@ -1,6 +1,7 @@
 package com.inventia.inventia_app.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,6 +29,7 @@ public class PredictionController {
     }
 
     @GetMapping("/single")
+    @CrossOrigin(origins="*")
     public Flux<PredictionResponseSingle> predecirUnico(@RequestParam Integer product_id, @RequestParam String fecha){
         System.out.println("Prediciendo de un solo producto: " + product_id + ", " + fecha);
         Product product = new Product(product_id, fecha);
@@ -35,6 +37,7 @@ public class PredictionController {
     }
 
     @GetMapping("/group")
+    @CrossOrigin(origins="*")
     public Flux<PredictionResponseGroup> predecirGrupo(@RequestParam String fecha){
         System.out.println("Prediciendo de todos los productos: " + fecha);
         Product product = new Product(0, fecha);
