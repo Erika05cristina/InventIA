@@ -2,12 +2,9 @@ package com.inventia.inventia_app.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import com.inventia.inventia_app.entities.PredictionResponseGroup;
 import com.inventia.inventia_app.entities.PredictionResponseSingle;
@@ -28,10 +25,6 @@ public class PredictionController {
     @Autowired
     public PredictionController(PredictionService predictionService) {
         this.predictionService = predictionService;
-    }
-
-    public PredictionController() {
-        //predictionService = new PredictionService(webClientBuilder);
     }
 
     @GetMapping("/single")
