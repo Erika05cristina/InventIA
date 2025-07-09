@@ -18,6 +18,6 @@ public class CorsConfig implements WebFluxConfigurer{
             .allowedHeaders("*")
             .allowCredentials(true)
             .maxAge(3000);
+        WebFluxConfigurer.super.addCorsMappings(registry);
     }
-
 }
