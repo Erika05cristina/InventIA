@@ -29,4 +29,32 @@
       </div>
     </div>
   }
+
+  <div class="manual-input">
+    <label>
+      ID del producto:
+      <input type="number" [(ngModel)]="productId" />
+    </label>
+
+    <label>
+      Fecha:
+      <input type="date" [(ngModel)]="fecha" />
+    </label>
+
+    <button (click)="getPrediction()">Predecir</button>
+  </div>
+
+  @if (predictionResult()) {
+    <div class="prediction-box">
+      <h3>Resultado de predicción:</h3>
+      <ul>
+        @for (r of predictionResult(); track r.productId) {
+          <li>
+            Producto #{{ r.productId }} que se necesita para la fecha {{ r.date }}:
+            <strong>{{ r.prediction }}</strong>
+          </li>
+        }
+      </ul>
+    </div>
+  }
 </div>
