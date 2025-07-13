@@ -10,6 +10,7 @@ data/uploads/
 
 # Modelos grandes (si no quieres subirlo)
 modelos/*.keras
+modelos/*.save
 
 # Notebooks temporales
 *.ipynb_checkpoints/
@@ -17,3 +18,4 @@ modelos/*.keras
 # Archivos temporales
 *.log
 .DS_Store
+ .csv
