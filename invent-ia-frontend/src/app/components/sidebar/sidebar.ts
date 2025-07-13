@@ -17,8 +17,8 @@ export class Sidebar implements AfterViewInit {
   readonly isMenuActive = signal(false);
 
   readonly primaryNav = [
+    { icon: 'archive', label: 'Upload', route: '/upload' },
     { icon: 'dashboard', label: 'Dashboard' },
-    { icon: 'calendar_today', label: 'Calendar', route: '/upload' },
     { icon: 'notifications', label: 'Notifications' },
     { icon: 'group', label: 'Team' },
     { icon: 'insert_chart', label: 'Analytics' },
