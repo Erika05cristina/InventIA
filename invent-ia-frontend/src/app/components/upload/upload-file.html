@@ -1,6 +1,9 @@
 <div class="upload-container">
   <label class="upload-label">
-    <span class="upload-button">📁 Selecciona un archivo Excel</span>
+    <span class="upload-button">
+        <span class="material-symbols-rounded icon">folder_open</span>
+        Selecciona un archivo Excel
+      </span>
     <input type="file" accept=".xlsx, .xls, .csv" (change)="onFileSelected($event)" />
   </label>
 
