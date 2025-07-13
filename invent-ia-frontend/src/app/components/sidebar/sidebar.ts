@@ -18,7 +18,7 @@ export class Sidebar implements AfterViewInit {
 
   readonly primaryNav = [
     { icon: 'dashboard', label: 'Dashboard' },
-    { icon: 'calendar_today', label: 'Calendar' },
+    { icon: 'calendar_today', label: 'Calendar', route: '/upload' },
     { icon: 'notifications', label: 'Notifications' },
     { icon: 'group', label: 'Team' },
     { icon: 'insert_chart', label: 'Analytics' },
@@ -28,7 +28,7 @@ export class Sidebar implements AfterViewInit {
 
   readonly secondaryNav = [
     { icon: 'account_circle', label: 'Profile' },
-    { icon: 'logout', label: 'Logout' },
+    { icon: 'logout', label: 'Logout', route: '/login'},
   ];
 
   ngAfterViewInit(): void {

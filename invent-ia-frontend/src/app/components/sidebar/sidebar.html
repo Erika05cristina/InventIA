@@ -21,7 +21,7 @@
     <ul class="nav-list primary-nav">
       @for (item of primaryNav; track item.label) {
         <li class="nav-item">
-          <a href="#" class="nav-link">
+          <a [routerLink]="item.route" class="nav-link">
             <span class="nav-icon material-symbols-rounded" [innerText]="item.icon"></span>
             <span class="nav-label">{{ item.label }}</span>
           </a>
@@ -33,7 +33,7 @@
     <ul class="nav-list secondary-nav">
       @for (item of secondaryNav; track item.label) {
         <li class="nav-item">
-          <a href="#" class="nav-link">
+          <a [routerLink]="item.route" class="nav-link">
             <span class="nav-icon material-symbols-rounded" [innerText]="item.icon"></span>
             <span class="nav-label">{{ item.label }}</span>
           </a>
