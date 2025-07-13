@@ -11,12 +11,12 @@ import * as XLSX from 'xlsx';
 import {
   Prediction,
   PredictionResponseSingle
-} from '../services/prediction';
+} from '../../services/prediction';
 
 @Component({
   selector: 'app-upload-file',
   standalone: true,
-  imports: [CommonModule, FormsModule, AsyncPipe],
+  imports: [CommonModule, FormsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './upload-file.html',
   styleUrls: ['./upload-file.scss']
