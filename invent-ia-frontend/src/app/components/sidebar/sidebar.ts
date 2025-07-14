@@ -20,7 +20,7 @@ export class Sidebar implements AfterViewInit {
     { icon: 'network_intel_node', label: 'Upload', route: '/upload' },
     { icon: 'dashboard', label: 'Dashboard' },
     { icon: 'clarify', label: 'Explanation', route: '/explanation' },
-    { icon: 'group', label: 'Team' },
+    { icon: 'group', label: 'Agent', route: '/agent' },
     { icon: 'insert_chart', label: 'Analytics' },
     { icon: 'history', label: 'Bookmarks' },
     { icon: 'settings', label: 'Settings' },
