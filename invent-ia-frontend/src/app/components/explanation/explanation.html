@@ -1,0 +1,28 @@
+<div class="explanation-container">
+  <h1>Explicación del modelo</h1>
+  <p>Aquí encontrarás las razones por las que nuestro modelo hace sus predicciones.</p>
+
+  <section class="explanation-section">
+    <h2>Variables clave</h2>
+    <ul>
+      @for (feature of keyFeatures; track feature.name) {
+        <li>
+          <span class="material-symbols-rounded">insights</span>
+          <strong>{{ feature.name }}:</strong> {{ feature.description }}
+        </li>
+      }
+    </ul>
+  </section>
+
+  <section class="explanation-section">
+    <h2>Importancia de características</h2>
+    @for (feature of featureImportance; track feature.name) {
+      <div class="feature-importance-bar">
+        <span>{{ feature.name }}</span>
+        <div class="bar">
+          <div class="fill" [style.width.%]="feature.importance"></div>
+        </div>
+      </div>
+    }
+  </section>
+</div>
