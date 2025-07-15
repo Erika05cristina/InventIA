@@ -61,6 +61,7 @@ Carga un archivo CSV con datos históricos para entrenar el modelo global.
 - `media_7d` (calculada automáticamente)
 - `std_7d` (calculada automáticamente)
 
+
 ✅ **Cómo enviar desde backend/frontend:**
 
 #### Ejemplo frontend (JavaScript):
@@ -69,7 +70,18 @@ const formData = new FormData();
 formData.append('file', yourCSVFile);
 await fetch('http://localhost:8000/upload/', { method: 'POST', body: formData });
 
-### Respuesta JSON
+### 🔹 `POST /predict/by-product`
+**Descripción:**  
+Devuelve predicción de ventas + explicabilidad simple y avanzada para un producto específico.
+
+**Request JSON:**
+```json
+{
+  "product_id": 38,
+  "fecha_prediccion": "2024-07-15"
+}
+
+#### Respuesta JSON
 {
   "status": "ok",
   "prediccion": {
@@ -90,4 +102,25 @@ await fetch('http://localhost:8000/upload/', { method: 'POST', body: formData })
     ],
     "grafica_explicabilidad_base64": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
   }
+}
+
+### 🔹 `POST /predict/all-products`
+
+**Descripción:**  
+Devuelve predicciones para todos los `product_id` disponibles en el dataset cargado.
+
+**Request JSON:**
+```json
+{
+  "fecha_prediccion": "2024-07-15"
+}
+#### Respuesta JSON
+{
+  "status": "ok",
+  "fecha": "2024-07-15",
+  "predicciones": [
+    { "product_id": 38, "predicted_stock": 3.45 },
+    { "product_id": 45, "predicted_stock": 2.10 },
+    { "product_id": 60, "predicted_stock": 7.90 }
+  ]
 }
