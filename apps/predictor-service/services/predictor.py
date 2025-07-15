@@ -32,3 +32,44 @@ def predecir_por_producto(file_path, product_id, fecha_prediccion):
     pred = model.predict([x_input, pid_array])[0][0]
 
     return {"product_id": int(product_id), "fecha_prediccion": fecha_prediccion, "prediccion": float(pred)}
+
+
+def predecir_en_lote(fecha_prediccion, file_path):
+    model = load_model(MODEL_PATH)
+    scaler = joblib.load(SCALER_PATH)
+
+    df = pd.read_csv(file_path)
+    df = prepare_dataframe(df)
+    df_proc = df.copy()
+
+    x_batch, ids_batch = [], []
+
+    for pid in df["product_id"].unique():
+        datos = df_proc[(df_proc["product_id"] == pid) & (df_proc["dt"] < fecha_prediccion)]
+        datos = datos.sort_values("dt")
+
+        if len(datos) < N_DIAS:
+            continue
+
+        secuencia = datos.tail(N_DIAS)[SEQ_FEATURES].values
+        if np.isnan(secuencia).any():
+            continue
+
+        secuencia_scaled = scaler.transform(secuencia)
+        x_batch.append(secuencia_scaled)
+        ids_batch.append(pid)
+
+    if not x_batch:
+        return []
+
+    x_batch = np.array(x_batch)
+    ids_batch = np.array(ids_batch).reshape(-1, 1)
+
+    predicciones = model.predict([x_batch, ids_batch], batch_size=128, verbose=1)
+
+    resultados = [
+        {"product_id": int(pid), "predicted_stock": float(pred)}
+        for pid, pred in zip(ids_batch.flatten(), predicciones.flatten())
+    ]
+
+    return resultados
