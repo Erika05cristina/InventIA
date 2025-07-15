@@ -8,8 +8,8 @@ __pycache__/
 # Datos subidos por usuarios
 data/uploads/
 
-# Modelos grandes (si no quieres subirlo)
-modelos/*.keras
+# Modelos grandes
+modelos/*
 
 # Notebooks temporales
 *.ipynb_checkpoints/
@@ -17,4 +17,3 @@ modelos/*.keras
 # Archivos temporales
 *.log
 .DS_Store
-*.zip
