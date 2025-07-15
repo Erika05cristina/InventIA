@@ -41,20 +41,20 @@ class IndividualPrediction {
 }
 
 /**
- * PredictionResponseGroup
+ * PredictionGroup
  */
-public class PredictionResponseGroup {
+public class PredictionGroup {
 
     private String status;
     private String fecha;
     private ArrayList<IndividualPrediction> predicciones;
 
-    public PredictionResponseGroup(String status, String fecha) {
+    public PredictionGroup(String status, String fecha) {
         this.status = status;
         this.fecha = fecha;
     }
 
-    public PredictionResponseGroup() {
+    public PredictionGroup() {
         this.predicciones = new ArrayList<>();
     }
 
