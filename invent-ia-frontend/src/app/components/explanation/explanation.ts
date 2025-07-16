@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject,computed } from '@angular/core';
+import { ExplanationState } from '../../services/explanation-state';
 
 @Component({
   selector: 'app-explanation',
@@ -8,16 +9,10 @@ import { Component } from '@angular/core';
 })
 export class Explanation {
 
-  keyFeatures = [
-    { name: 'Precio', description: 'El precio influye directamente en la demanda.' },
-    { name: 'Estacionalidad', description: 'Factores de temporada afectan el consumo.' },
-    { name: 'Promociones', description: 'Descuentos aumentan la probabilidad de compra.' },
-  ];
+  private state = inject(ExplanationState);
 
-  featureImportance = [
-    { name: 'Precio', importance: 40 },
-    { name: 'Estacionalidad', importance: 35 },
-    { name: 'Promociones', importance: 25 },
-  ];
+    readonly explicacionSimple = computed(() => this.state.explicacionSimple());
+    readonly variables = computed(() => this.state.variablesImportantes());
+    readonly grafica = computed(() => this.state.graficaBase64());
 
 }

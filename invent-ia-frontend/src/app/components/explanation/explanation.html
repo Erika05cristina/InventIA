@@ -1,28 +1,43 @@
 <div class="explanation-container">
   <h1>Explicación del modelo</h1>
-  <p>Aquí encontrarás las razones por las que nuestro modelo hace sus predicciones.</p>
 
-  <section class="explanation-section">
-    <h2>Variables clave</h2>
-    <ul>
-      @for (feature of keyFeatures; track feature.name) {
-        <li>
-          <span class="material-symbols-rounded">insights</span>
-          <strong>{{ feature.name }}:</strong> {{ feature.description }}
-        </li>
-      }
-    </ul>
-  </section>
+  <!-- ✅ Resumen simple -->
+  @if (explicacionSimple()) {
+    <section class="explanation-section">
+      <h2>Resumen de la predicción</h2>
+      <p>{{ explicacionSimple() }}</p>
+    </section>
+  } @else {
+    <section class="explanation-section">
+      <p><em>No hay una explicación simple disponible aún.</em></p>
+    </section>
+  }
 
-  <section class="explanation-section">
-    <h2>Importancia de características</h2>
-    @for (feature of featureImportance; track feature.name) {
-      <div class="feature-importance-bar">
-        <span>{{ feature.name }}</span>
-        <div class="bar">
-          <div class="fill" [style.width.%]="feature.importance"></div>
+  <!-- ✅ Variables importantes -->
+  @if (variables().length > 0) {
+    <section class="explanation-section">
+      <h2>Importancia de variables</h2>
+      @for (feature of variables(); track feature[0]) {
+        <div class="feature-importance-bar">
+          <span>{{ feature[0] }}</span>
+          <div class="bar">
+            <div class="fill" [style.width.%]="feature[1] * 100"></div>
+          </div>
         </div>
-      </div>
-    }
-  </section>
+      }
+    </section>
+  }
+
+  <!-- ✅ Gráfico -->
+  @if (grafica()) {
+    <section class="explanation-section">
+      <h2>Gráfico de explicación</h2>
+      <img
+        [src]="grafica()"
+        alt="Gráfico generado por el modelo"
+        class="explicacion-img"
+        style="max-width: 100%; height: auto; border: 1px solid #ccc; border-radius: 8px;"
+      />
+    </section>
+  }
 </div>

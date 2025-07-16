@@ -12,6 +12,7 @@ import {
   PredictionResponseSingle
 } from '../../services/prediction';
 import { UploadState } from '../../services/upload-state';
+import { ExplanationState } from '../../services/explanation-state';
 
 @Component({
   selector: 'app-upload-file',
@@ -23,12 +24,13 @@ import { UploadState } from '../../services/upload-state';
 })
 export class UploadFile {
 
+  private explanationState = inject(ExplanationState);
   private state = inject(UploadState);
   private predictionService = inject(Prediction);
 
   private rawData = signal<string[][]>([]);
   readonly previewData = this.state.previewData;
-  readonly predictionResult = this.state.predictionResult;
+  readonly predictionResult = signal<PredictionResponseSingle[] | null>(null);
 
   // 🔄 Señales separadas
   readonly isUploading = this.state.isUploading;
@@ -63,13 +65,31 @@ export class UploadFile {
 
     this.isPredicting.set(true);
     this.predictionService.predictSingle(this.manualProductIdValue, fechaFormateada).subscribe({
-      next: (res) => this.predictionResult.set(res),
+      next: (res) => {
+        // ✅ Transformamos PredictionExplanation[] a PredictionResponseSingle[]
+        const preds = res.map(({ prediccion }) => ({
+          productId: prediccion.product_id,
+          date: prediccion.fecha_prediccion,
+          prediction: prediccion.prediccion
+        }));
+        this.predictionResult.set(preds);
+
+        // ✅ Guardar explicación en ExplanationState (sólo si hay respuesta)
+        if (res.length > 0) {
+          const explicacion = res[0];
+
+          this.explanationState.explicacionSimple.set(explicacion.explicacion_simple ?? '');
+          this.explanationState.variablesImportantes.set(explicacion.explicacion_avanzada?.variables_importantes ?? []);
+          this.explanationState.graficaBase64.set(explicacion.explicacion_avanzada?.grafica_explicabilidad_base64 ?? '');
+        }
+      },
       error: (err) => {
         console.error('Error al predecir individual:', err);
         this.predictionResult.set(null);
       },
       complete: () => this.isPredicting.set(false)
     });
+
   }
 
   getGroupPrediction(): void {
