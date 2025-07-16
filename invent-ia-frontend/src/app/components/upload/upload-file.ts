@@ -71,9 +71,12 @@ export class UploadFile {
     this.isPredicting.set(true);
 
     this.predictionService.predictGroup(fechaFormateada).subscribe({
-      next: (res) => this.predictionResult.set(res as any),
+      next: (res) => {
+        this.predictionResult.set(res as any); // Si querés seguir mostrándolo
+        this.downloadJson(res, `predicciones-${fechaFormateada}.json`);
+      },
       error: (err) => {
-        console.error('Error al predecir por grupo:', err);
+        console.error('Error al predecir para grupo:', err);
         this.predictionResult.set(null);
       },
       complete: () => this.isPredicting.set(false)
@@ -89,11 +92,11 @@ export class UploadFile {
     input.value = ''; // limpia input del campo file
 
     this.isUploading.set(true);
-    this.isTraining.set(false); // por si ya había uno en curso
+    this.isTraining.set(false);
 
     this.predictionService.uploadCsv(file).subscribe({
       next: (msg) => {
-        console.log('✅ Backend procesó CSV:', msg);
+        console.log(' Backend procesó CSV:', msg);
 
         // Mostrar vista previa
         this.processFilePreview(file);
@@ -102,7 +105,7 @@ export class UploadFile {
         this.isTraining.set(true);
       },
       error: (err) => {
-        console.error('❌ Error al subir el archivo:', err);
+        console.error(' Error al subir el archivo:', err);
         this.isUploading.set(false);
         this.isTraining.set(false);
       }
@@ -134,7 +137,7 @@ export class UploadFile {
             this.fecha = fechaFormateada;
           }
 
-          // ✅ solo actualiza vista previa y campos
+          // solo actualiza vista previa y campos
           this.isUploading.set(false);
         } else {
           console.warn('Formato inválido');
@@ -159,4 +162,18 @@ export class UploadFile {
     const dd = String(d.getDate()).padStart(2, '0');
     return `${yyyy}-${mm}-${dd}`;
   }
+
+  downloadJson(data: any, filename: string = 'predicciones.json'): void {
+    const jsonStr = JSON.stringify(data, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+
+    URL.revokeObjectURL(url);
+  }
+
 }
