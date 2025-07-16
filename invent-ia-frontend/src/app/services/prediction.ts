@@ -20,6 +20,15 @@ export class Prediction {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = 'http://localhost:8080/predict';
 
+  uploadCsv(file: File): Observable<string> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return this.http.post('http://localhost:8080/data/upload', formData, {
+      responseType: 'text', // El backend devuelve un String
+    });
+  }
+
   // Predicción para un solo producto
   predictSingle(productId: number, fecha: string): Observable<PredictionResponseSingle[]> {
     return this.http.get<PredictionResponseSingle[]>(`${this.apiUrl}/single`, {

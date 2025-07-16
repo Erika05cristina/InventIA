@@ -54,51 +54,68 @@ export class UploadFile {
     const file = input.files?.[0];
     if (!file) return;
 
-    const reader = new FileReader();
+    // 🔹 Primero, subimos al backend
+    this.predictionService.uploadCsv(file).subscribe({
+      next: (msg) => {
+        console.log('✅ Backend procesó CSV:', msg);
+        // Luego, mostramos vista previa en frontend
+        this.processFilePreview(file);
+      },
+      error: (err) => {
+        console.error(' Error al subir el archivo:', err);
+      },
+    });
+  }
 
-    reader.onload = () => {
-      let workbook: XLSX.WorkBook;
+  private processFilePreview(file: File): void {
+  const reader = new FileReader();
 
-      try {
-        if (file.name.endsWith('.csv')) {
-          workbook = XLSX.read(reader.result as string, { type: 'string' });
-        } else {
-          const data = new Uint8Array(reader.result as ArrayBuffer);
-          workbook = XLSX.read(data, { type: 'array' });
+  reader.onload = () => {
+    let workbook: XLSX.WorkBook;
+
+    try {
+      if (file.name.endsWith('.csv')) {
+        workbook = XLSX.read(reader.result as string, { type: 'string' });
+      } else {
+        const data = new Uint8Array(reader.result as ArrayBuffer);
+        workbook = XLSX.read(data, { type: 'array' });
+      }
+
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+      const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as unknown[];
+
+      if (Array.isArray(jsonData) && jsonData.length > 1 && Array.isArray(jsonData[1])) {
+        this.rawData.set(jsonData as any[][]);
+
+        // Prueba automática con el primer producto
+        const productId = parseInt((jsonData[1][0] ?? '').toString(), 10);
+        const fecha = (jsonData[1][1] ?? '').toString();
+
+        if (!isNaN(productId) && fecha) {
+          this.predictionService.predictSingle(productId, fecha).subscribe({
+            next: (response) => this.predictionResult.set(response),
+            error: (err) => {
+              console.error('Error en la predicción:', err);
+              this.predictionResult.set(null);
+            },
+          });
         }
-
-        const sheet = workbook.Sheets[workbook.SheetNames[0]];
-        const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as unknown[];
-
-        if (Array.isArray(jsonData) && jsonData.length > 1 && Array.isArray(jsonData[1])) {
-          this.rawData.set(jsonData as any[][]);
-
-          const productId = parseInt((jsonData[1][0] ?? '').toString(), 10);
-          const fecha = (jsonData[1][1] ?? '').toString();
-
-          if (!isNaN(productId) && fecha) {
-            this.predictionService.predictSingle(productId, fecha).subscribe({
-              next: (response) => this.predictionResult.set(response),
-              error: (err) => {
-                console.error('Error en la predicción:', err);
-                this.predictionResult.set(null);
-              }
-            });
-          }
-        } else {
-          console.warn('Formato de tabla inválido o muy corto');
-          this.rawData.set([]);
-        }
-      } catch (err) {
-        console.error('Error al leer el archivo:', err);
+      } else {
+        console.warn('Formato inválido');
         this.rawData.set([]);
       }
-    };
-
-    if (file.name.endsWith('.csv')) {
-      reader.readAsText(file);
-    } else {
-      reader.readAsArrayBuffer(file);
+    } catch (err) {
+      console.error('Error al leer el archivo:', err);
+      this.rawData.set([]);
     }
+  };
+
+  if (file.name.endsWith('.csv')) {
+    reader.readAsText(file);
+  } else {
+    reader.readAsArrayBuffer(file);
   }
+}
+
+
 }
