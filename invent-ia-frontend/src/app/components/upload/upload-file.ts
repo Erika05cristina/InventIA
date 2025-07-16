@@ -29,29 +29,28 @@ export class UploadFile {
   readonly isUploading = signal(false);
   readonly isPredicting = signal(false);
   readonly isTraining = signal(false);
+  readonly wasGroupPredictionDownloaded = signal(false);
+  readonly trainingCompleted = signal(false);
 
   public productId: number | null = null;
   public fecha: string = '';
+
+  public manualProductId: number | null = null;
+  public manualFecha: string = '';
 
   private selectedFile: File | null = null;
 
   private predictionService = inject(Prediction);
 
   getPrediction(): void {
-    const fechaFormateada = this.formatFecha(this.fecha);
-    if (!fechaFormateada) {
-      console.warn('Fecha inválida o vacía');
-      return;
-    }
-
-    if (this.productId === null || isNaN(this.productId)) {
-      console.warn('ID de producto inválido o vacío');
+    const fechaFormateada = this.formatFecha(this.manualFecha);
+    if (!fechaFormateada || this.manualProductId === null || isNaN(this.manualProductId)) {
+      console.warn('Predicción individual: datos inválidos');
       return;
     }
 
     this.isPredicting.set(true);
-
-    this.predictionService.predictSingle(this.productId, fechaFormateada).subscribe({
+    this.predictionService.predictSingle(this.manualProductId, fechaFormateada).subscribe({
       next: (res) => this.predictionResult.set(res),
       error: (err) => {
         console.error('Error al predecir individual:', err);
@@ -64,24 +63,38 @@ export class UploadFile {
   getGroupPrediction(): void {
     const fechaFormateada = this.formatFecha(this.fecha);
     if (!fechaFormateada) {
-      console.warn('Fecha inválida o vacía');
+      console.warn('Predicción grupal: fecha inválida');
       return;
     }
 
     this.isPredicting.set(true);
+    this.wasGroupPredictionDownloaded.set(false);
 
     this.predictionService.predictGroup(fechaFormateada).subscribe({
       next: (res) => {
-        this.predictionResult.set(res as any); // Si querés seguir mostrándolo
-        this.downloadJson(res, `predicciones-${fechaFormateada}.json`);
+        const blob = new Blob([JSON.stringify(res, null, 2)], {
+          type: 'application/json',
+        });
+
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `prediccion_grupo_${fechaFormateada}.json`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        this.wasGroupPredictionDownloaded.set(true);
       },
       error: (err) => {
-        console.error('Error al predecir para grupo:', err);
-        this.predictionResult.set(null);
+        console.error('Error al predecir por grupo:', err);
       },
-      complete: () => this.isPredicting.set(false)
+      complete: () => {
+        this.isPredicting.set(false);
+      }
     });
   }
+
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -103,6 +116,12 @@ export class UploadFile {
 
         // Inicia estado de entrenamiento (manual, sin detenerlo aún)
         this.isTraining.set(true);
+
+        setTimeout(() => {
+          this.isTraining.set(false);
+          this.trainingCompleted.set(true); 
+          console.log(' Entrenamiento finalizado automáticamente');
+        }, 5 * 60 * 1000); // 5 minutos
       },
       error: (err) => {
         console.error(' Error al subir el archivo:', err);
@@ -123,6 +142,12 @@ export class UploadFile {
         const data = lines.map((line) => line.split(','));
 
         if (data.length > 1) {
+          // 🔄 Limpiar campos antes de mostrar nueva vista previa
+          this.productId = null;
+          this.fecha = '';
+          this.predictionResult.set(null);
+          this.wasGroupPredictionDownloaded.set(false);
+
           this.rawData.set(data);
 
           const extractedProductId = parseInt((data[1][0] ?? '').toString(), 10);
@@ -137,13 +162,13 @@ export class UploadFile {
             this.fecha = fechaFormateada;
           }
 
-          // solo actualiza vista previa y campos
           this.isUploading.set(false);
         } else {
           console.warn('Formato inválido');
           this.rawData.set([]);
           this.isUploading.set(false);
         }
+
       } catch (err) {
         console.error('Error al leer archivo:', err);
         this.rawData.set([]);

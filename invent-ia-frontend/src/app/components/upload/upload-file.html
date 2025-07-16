@@ -17,7 +17,7 @@
   }
 
   <!-- ✅ Vista previa -->
-  @if (!isUploading() && !isPredicting() && previewData().length > 0) {
+  @if (!isUploading() && previewData().length > 0) {
     <div class="preview">
       <h3>Vista previa:</h3>
       <div class="table-wrapper">
@@ -43,39 +43,6 @@
     </div>
   }
 
-  <!-- 🧍 Predicción individual -->
-  <div class="manual-input">
-    <label>
-      ID del producto:
-      <input type="number" [(ngModel)]="productId" />
-    </label>
-
-    <label>
-      Fecha:
-      <input type="date" [(ngModel)]="fecha" />
-    </label>
-
-    <button (click)="getPrediction()">Predecir individual</button>
-  </div>
-
-  <!-- 👥 Predicción grupal -->
-  <div class="group-input">
-    <label>
-      Fecha:
-      <input type="date" [(ngModel)]="fecha" />
-    </label>
-
-    <button (click)="getGroupPrediction()">Predecir todos los productos</button>
-  </div>
-
-  <!-- 🔵 Loader de predicción -->
-  @if (isPredicting()) {
-    <div class="loader-box loader-predict">
-      <span class="spinner"></span>
-      <p>Procesando predicción...</p>
-    </div>
-  }
-
   <!-- 🟢 Entrenamiento en progreso -->
   @if (isTraining()) {
     <div class="loader-box loader-training">
@@ -84,7 +51,30 @@
     </div>
   }
 
-  <!-- ✅ Resultado -->
+  <!-- ✅ Mensaje de entrenamiento completado -->
+  @if (trainingCompleted()) {
+    <div class="loader-box loader-success">
+      <span class="material-symbols-rounded">check_circle</span>
+      <p>Modelo entrenado exitosamente</p>
+    </div>
+  }
+
+  <!-- 📝 Inputs individuales -->
+  <div class="manual-input">
+    <label>
+      ID del producto:
+      <input type="number" [(ngModel)]="manualProductId" />
+    </label>
+
+    <label>
+      Fecha:
+      <input type="date" [(ngModel)]="manualFecha" />
+    </label>
+
+    <button (click)="getPrediction()">Predecir individual</button>
+  </div>
+
+  <!-- ✅ Resultado de predicción individual -->
   @if (predictionResult()) {
     <div class="prediction-box">
       <h3>Resultado de predicción:</h3>
@@ -98,4 +88,31 @@
       </ul>
     </div>
   }
+
+  <!-- 📝 Inputs de predicción por grupo -->
+  <div class="manual-input">
+    <label>
+      Fecha:
+      <input type="date" [(ngModel)]="fecha" />
+    </label>
+
+    <button (click)="getGroupPrediction()">Predecir todos los productos</button>
+  </div>
+
+  <!-- 🟢 Mensaje de descarga grupo -->
+  @if (wasGroupPredictionDownloaded()) {
+    <div class="loader-box loader-predict">
+      <span class="material-symbols-rounded">download_done</span>
+      <p>Predicción para todos los productos descargada correctamente</p>
+    </div>
+  }
+
+  <!-- 🔵 Loader de predicción -->
+  @if (isPredicting()) {
+    <div class="loader-box loader-predict">
+      <span class="spinner"></span>
+      <p>Procesando predicción...</p>
+    </div>
+  }
+
 </div>
