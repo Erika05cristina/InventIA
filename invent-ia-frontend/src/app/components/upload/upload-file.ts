@@ -11,6 +11,7 @@ import {
   Prediction,
   PredictionResponseSingle
 } from '../../services/prediction';
+import { UploadState } from '../../services/upload-state';
 
 @Component({
   selector: 'app-upload-file',
@@ -21,36 +22,47 @@ import {
   styleUrls: ['./upload-file.scss']
 })
 export class UploadFile {
+
+  private state = inject(UploadState);
+  private predictionService = inject(Prediction);
+
   private rawData = signal<string[][]>([]);
-  readonly previewData = computed(() => this.rawData().slice(0, 5));
-  readonly predictionResult = signal<PredictionResponseSingle[] | null>(null);
+  readonly previewData = this.state.previewData;
+  readonly predictionResult = this.state.predictionResult;
 
   // 🔄 Señales separadas
-  readonly isUploading = signal(false);
-  readonly isPredicting = signal(false);
-  readonly isTraining = signal(false);
-  readonly wasGroupPredictionDownloaded = signal(false);
-  readonly trainingCompleted = signal(false);
+  readonly isUploading = this.state.isUploading;
+  readonly isPredicting = this.state.isPredicting;
+  readonly isTraining = this.state.isTraining;
+  readonly wasGroupPredictionDownloaded = this.state.wasGroupPredictionDownloaded;
+  readonly trainingCompleted = this.state.trainingCompleted;
 
   public productId: number | null = null;
   public fecha: string = '';
 
-  public manualProductId: number | null = null;
-  public manualFecha: string = '';
+    get manualProductIdValue(): number | null {
+    return this.state.manualProductId();
+  }
+  set manualProductIdValue(val: number | null) {
+    this.state.manualProductId.set(val);
+  }
 
-  private selectedFile: File | null = null;
-
-  private predictionService = inject(Prediction);
+  get manualFechaValue(): string {
+    return this.state.manualFecha();
+  }
+  set manualFechaValue(val: string) {
+    this.state.manualFecha.set(val);
+  }
 
   getPrediction(): void {
-    const fechaFormateada = this.formatFecha(this.manualFecha);
-    if (!fechaFormateada || this.manualProductId === null || isNaN(this.manualProductId)) {
+    const fechaFormateada = this.formatFecha(this.manualFechaValue);
+    if (!fechaFormateada || this.manualProductIdValue === null || isNaN(this.manualProductIdValue)) {
       console.warn('Predicción individual: datos inválidos');
       return;
     }
 
     this.isPredicting.set(true);
-    this.predictionService.predictSingle(this.manualProductId, fechaFormateada).subscribe({
+    this.predictionService.predictSingle(this.manualProductIdValue, fechaFormateada).subscribe({
       next: (res) => this.predictionResult.set(res),
       error: (err) => {
         console.error('Error al predecir individual:', err);
@@ -101,7 +113,6 @@ export class UploadFile {
     const file = input.files?.[0];
     if (!file) return;
 
-    this.selectedFile = file;
     input.value = ''; // limpia input del campo file
 
     this.isUploading.set(true);
@@ -142,13 +153,13 @@ export class UploadFile {
         const data = lines.map((line) => line.split(','));
 
         if (data.length > 1) {
-          // 🔄 Limpiar campos antes de mostrar nueva vista previa
+          // Limpiar estado anterior
           this.productId = null;
           this.fecha = '';
           this.predictionResult.set(null);
           this.wasGroupPredictionDownloaded.set(false);
 
-          this.rawData.set(data);
+          this.state.setRawData(data); // ✅ este es el cambio importante
 
           const extractedProductId = parseInt((data[1][0] ?? '').toString(), 10);
           const extractedFecha = (data[1][1] ?? '').toString();
@@ -165,13 +176,13 @@ export class UploadFile {
           this.isUploading.set(false);
         } else {
           console.warn('Formato inválido');
-          this.rawData.set([]);
+          this.state.setRawData([]);
           this.isUploading.set(false);
         }
 
       } catch (err) {
         console.error('Error al leer archivo:', err);
-        this.rawData.set([]);
+        this.state.setRawData([]);
         this.isUploading.set(false);
       }
     };
