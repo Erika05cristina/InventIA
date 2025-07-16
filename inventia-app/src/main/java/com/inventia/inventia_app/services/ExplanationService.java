@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import reactor.core.publisher.Flux;
+
 /**
  * ExplanationService
  */
@@ -28,5 +30,9 @@ public class ExplanationService {
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
+    }
+
+    public Flux<String> explain() {
+        return webClient.post().uri("/explain").retrieve().bodyToFlux(String.class);
     }
 }
