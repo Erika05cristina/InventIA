@@ -48,10 +48,11 @@ public class DataController {
             System.out.println("Se encontraron " + products.size() + " productos en el CSV.");
             //products.forEach(product -> System.out.println("Parsed product: " + product));
             // productRepository.saveAll(products);
-            this.dataService.upload(file);
+            String response = this.dataService.upload(file).block();
+            System.out.println("FastAPI Response: " + response);
 
             System.out.println("Se han cargado todos los datos");
-            return new ResponseEntity<>("Archivo CSV procesado correctamente. Se encontraron " + products.size() + " registros de productos.", HttpStatus.OK);
+            return new ResponseEntity<>("Archivo CSV procesado correctamente. Se encontraron " + products.size() + " registros de productos. El entrenamiento se está ejecutando en segundo plano, por favor, espere unos momentos para que termine.", HttpStatus.OK);
 
         } catch (IllegalArgumentException e) {
             System.out.println("Error en la validación del CSV: " + e.getMessage());
