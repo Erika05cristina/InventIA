@@ -1,11 +1,14 @@
 package com.inventia.inventia_app.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Product
  */
 public class Product {
 
     private Integer product_id;
+    @JsonProperty("fecha_prediccion")
     private String fecha;
 
     public Product(Integer product_id, String fecha){

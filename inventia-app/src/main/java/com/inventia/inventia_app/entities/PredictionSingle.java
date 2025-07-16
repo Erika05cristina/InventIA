@@ -1,36 +1,92 @@
 package com.inventia.inventia_app.entities;
 
-/**
- * PredictionSingle
- */
-public class PredictionSingle {
+import java.util.List;
 
-    private String status;
-    private Integer product_id;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+/*
+* "explicacion_avanzada": {
+    "producto_id": 38,
+    "prediccion": 0.04732787609100342,
+    "variables_importantes": [
+        [
+            "sale_amount",
+            0.8985185196251297
+        ],
+        [
+            "avg_temperature",
+            0.17775082988437793
+        ],
+        [
+            "holiday_flag",
+            0.13028467096889373
+        ],
+        [
+            "discount",
+            0.07526980119801568
+        ],
+        [
+            "avg_humidity",
+            0.07071108022976644
+        ]
+    ],
+    "grafica_explicabilidad_base64":
+*/
+
+class ExplicacionAvanzada {
+
+    @JsonProperty("producto_id")
+    private Integer productId;
+    private Double prediccion;
+    @JsonProperty("variables_importantes")
+    private List<List<Object>> importantes;
+    @JsonProperty("grafica_explicabilidad_base64")
+    private String graphBase64;
+
+    public ExplicacionAvanzada(Integer productId, Double prediccion) {
+        this.productId = productId;
+        this.prediccion = prediccion;
+    }
+
+    @Override
+    public String toString() {
+        return "ExplicacionAvanzada{"
+                + "productId='"
+                + productId
+                + '\''
+                + ", prediccion='"
+                + prediccion
+                + '\''
+                + ", importantes='"
+                + importantes
+                + '\''
+                + ", graphBase64='"
+                + graphBase64
+                + '\''
+                + '}';
+    }
+}
+
+class Prediccion {
+
+    @JsonProperty("product_id")
+    private Integer productId;
+    @JsonProperty("fecha_prediccion")
     private String fecha;
     private Double prediccion;
 
-    public PredictionSingle(String status, Integer product_id, String fecha, Double prediccion) {
-        this.status = status;
-        this.product_id = product_id;
+    public Prediccion(Integer productId, String fecha, Double prediccion){
+        this.productId = productId;
         this.fecha = fecha;
         this.prediccion = prediccion;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setProductId(Integer productId) {
+        this.productId = productId;
     }
 
-    public String getStatus() {
-        return this.status;
-    }
-
-    public void setProduct_id(Integer product_id) {
-        this.product_id = product_id;
-    }
-
-    public Integer getProduct_id() {
-        return this.product_id;
+    public Integer getProductId() {
+        return this.productId;
     }
 
     public void setFecha(String fecha) {
@@ -51,18 +107,82 @@ public class PredictionSingle {
 
     @Override
     public String toString() {
+        return "Prediccion{"
+                + "productId='"
+                + productId
+                + '\''
+                + "fecha_prediccion='"
+                + fecha
+                + '\''
+                + ", prediccion='"
+                + prediccion
+                + '\''
+                + '}';
+    }
+}
+
+/**
+ * PredictionSingle
+ */
+public class PredictionSingle {
+
+    private String status;
+    private Prediccion prediccion;
+    @JsonProperty("explicacion_simple")
+    private String simple;
+    @JsonProperty("explicacion_avanzada")
+    private ExplicacionAvanzada explicacionAvanzada;
+
+    public PredictionSingle(String status, String simple) {
+        this.status = status;
+        this.simple = simple;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getStatus() {
+        return this.status;
+    }
+
+    public void setPrediccion(Prediccion prediccion) {
+        this.prediccion = prediccion;
+    }
+
+    public Prediccion getPrediccion() {
+        return this.prediccion;
+    }
+
+    public void setSimple(String simple) {
+        this.simple = simple;
+    }
+
+    public String getSimple() {
+        return this.simple;
+    }
+
+    public void setExplicacionAvanzada(ExplicacionAvanzada explicacionAvanzada) {
+        this.explicacionAvanzada = explicacionAvanzada;
+    }
+
+    public ExplicacionAvanzada getExplicacionAvanzada() {
+        return this.explicacionAvanzada;
+    }
+
+    @Override
+    public String toString() {
         return "PredictionSingle{"
                 + "status='"
                 + status
                 + '\''
-                + "product_id='"
-                + product_id
+                + "prediccion="
+                + prediccion.toString()
+                + ", explicacion_simple='"
+                + simple
                 + '\''
-                + ", fecha="
-                + fecha
-                + '\''
-                + ", prediccion="
-                + prediccion
+                + ", explicacion_avanzada="
+                + explicacionAvanzada.toString()
                 + '}';
     }
 }
