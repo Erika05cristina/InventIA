@@ -3,6 +3,7 @@ import numpy as np
 import io
 import base64
 import tensorflow as tf
+from numpy.random import default_rng
 
 def generar_explicacion(prediccion, promedio_historico):
     if promedio_historico > 0:
@@ -79,3 +80,39 @@ def explicar_prediccion_producto(idx, model, x_eval, product_ids_eval, compute_i
         "variables_importantes": importancia_ordenada[:5],
         "grafica_explicabilidad_base64": img_data_uri
     }
+
+
+def calcular_importancia_global(model, scaler, df, seq_features, n_dias=14):
+    importancias_acumuladas = np.zeros(len(seq_features))
+    total_productos = 0
+
+    productos = df["product_id"].unique()
+    rng = default_rng(seed=42)
+    sample_size = min(20, len(productos))
+    productos = rng.choice(productos, size=sample_size, replace=False)
+
+    for pid in productos:
+        df_pid = df[df["product_id"] == pid].sort_values("dt")
+        if len(df_pid) < n_dias:
+            continue
+
+        features = scaler.transform(df_pid[seq_features].values)
+        secuencia = features[-n_dias:]
+
+        baseline_seq = np.zeros_like(secuencia)
+        input_id = np.array([[pid]])
+
+        igrads_seq = compute_integrated_gradients_rnn(
+            model, baseline_seq, secuencia, input_id, steps=20
+        )
+        importancia = np.sum(np.abs(igrads_seq), axis=0)
+        importancias_acumuladas += importancia
+        total_productos += 1
+
+    if total_productos == 0:
+        return []
+
+    importancia_media = importancias_acumuladas / total_productos
+    resultado = list(zip(seq_features, importancia_media))
+    resultado.sort(key=lambda x: abs(x[1]), reverse=True)
+    return resultado

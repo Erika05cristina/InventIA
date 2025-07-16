@@ -80,3 +80,27 @@ def predict_all(request: PredictAllRequest):
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/global-feature-importance")
+def global_feature_importance():
+    try:
+        scaler = joblib.load("modelos/scaler.save")
+        model = load_model("modelos/model_rnn.keras")
+        df = pd.read_csv(DATA_FILE)
+        df = prepare_dataframe(df)
+
+        SEQ_FEATURES = ["sale_amount", "discount", "holiday_flag", "avg_temperature", "avg_humidity", "media_7d", "std_7d"]
+
+        from services.explainability import calcular_importancia_global
+        importancia = calcular_importancia_global(model, scaler, df, SEQ_FEATURES)
+
+        importancia_json = [[var, float(val)] for var, val in importancia]
+
+        return {
+            "status": "ok",
+            "importancia_global": importancia_json
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+

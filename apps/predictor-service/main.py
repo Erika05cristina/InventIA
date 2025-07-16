@@ -7,4 +7,4 @@ app = FastAPI(
 )
 
 app.include_router(predict.router, prefix="/predict", tags=["Predicción"])
-app.include_router(upload.router, prefix="/upload", tags=["Carga de Datos"])  # <- Asegúrate de incluirlo
+app.include_router(upload.router, prefix="/upload", tags=["Carga de Datos"]) 
