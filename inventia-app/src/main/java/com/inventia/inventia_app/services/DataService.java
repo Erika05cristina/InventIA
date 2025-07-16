@@ -10,6 +10,7 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
 
 /**
  * DataService
@@ -27,16 +28,24 @@ public class DataService {
     @Autowired
     public DataService(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder
-                .baseUrl(URL_ROUTE)
-                .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                //.baseUrl(URL_ROUTE)
                 .build();
     }
 
     public Mono<String> upload(MultipartFile file) {
         MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
         bodyBuilder.part("file", file.getResource()).filename(file.getOriginalFilename());
-        return webClient.post().uri("/").body(BodyInserters.fromMultipartData(bodyBuilder.build())).retrieve().bodyToMono(String.class);
+        //System.out.println("Llamando al servicio para entrenar el modelo: " + URL_ROUTE);
+        return webClient.post()
+            .uri("http://localhost:8000/upload/data")
+            .body(BodyInserters.fromMultipartData(bodyBuilder.build()))
+            .retrieve()
+            .bodyToMono(String.class)
+            .onErrorResume(e -> {
+                System.err.println("Error al reenviar el archivo a FastAPI: " + e.getMessage());
+                return Mono.error(new RuntimeException("No se pudo reenviar el archivo al servicio de destino.", e));
+            }
+        );
     }
 
 }

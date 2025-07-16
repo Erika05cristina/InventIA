@@ -38,7 +38,7 @@ public class PredictionService {
     }
 
     public Flux<PredictionSingle> predictSingle(Product product)  {
-        return webClient.post().uri("/by-product") .bodyValue(product).retrieve()
+        return webClient.post().uri("/by-product").bodyValue(product).retrieve()
             .bodyToFlux(PredictionSingle.class);
     }
 

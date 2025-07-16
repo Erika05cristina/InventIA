@@ -7,7 +7,7 @@ router = APIRouter()
 UPLOAD_DIR = "data/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-@router.post("/")
+@router.post("/data")
 async def upload_file(file: UploadFile = File(...), background_tasks: BackgroundTasks = None):
     if not file.filename.endswith(".csv"):
         raise HTTPException(status_code=400, detail="Solo se permiten archivos CSV")
