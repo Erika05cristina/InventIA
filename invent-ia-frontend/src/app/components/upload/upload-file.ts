@@ -92,22 +92,21 @@ export class UploadFile {
         if (data.length > 1) {
           this.rawData.set(data);
 
-          const productId = parseInt((data[1][0] ?? '').toString(), 10);
-          const fecha = (data[1][1] ?? '').toString();
-          const fechaFormateada = this.formatFecha(fecha);
+          const extractedProductId = parseInt((data[1][0] ?? '').toString(), 10);
+          const extractedFecha = (data[1][1] ?? '').toString();
+          const fechaFormateada = this.formatFecha(extractedFecha);
 
-          if (!isNaN(productId) && fechaFormateada) {
-            this.predictionService.predictSingle(productId, fechaFormateada).subscribe({
-              next: (response) => this.predictionResult.set(response),
-              error: (err) => {
-                console.error('Error en predicción desde archivo:', err);
-                this.predictionResult.set(null);
-              },
-              complete: () => this.isLoading.set(false)
-            });
-          } else {
-            this.isLoading.set(false);
+          // ✅ Solo asigna a los inputs del formulario
+          if (!isNaN(extractedProductId)) {
+            this.productId = extractedProductId;
           }
+
+          if (fechaFormateada) {
+            this.fecha = fechaFormateada;
+          }
+
+          // ❌ No lances la predicción automática aquí
+          this.isLoading.set(false);
         } else {
           console.warn('Formato inválido');
           this.rawData.set([]);
@@ -122,6 +121,7 @@ export class UploadFile {
 
     reader.readAsText(file);
   }
+
 
   private formatFecha(fecha: string): string | null {
     const d = new Date(fecha);
