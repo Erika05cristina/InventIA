@@ -1,13 +1,20 @@
 <div class="upload-container">
   <label class="upload-label">
     <span class="upload-button">
-        <span class="material-symbols-rounded icon">folder_open</span>
-        Selecciona un archivo Excel
-      </span>
-    <input type="file" accept=".xlsx, .xls, .csv" (change)="onFileSelected($event)" />
+      <span class="material-symbols-rounded icon">folder_open</span>
+      Selecciona un archivo CSV
+    </span>
+    <input type="file" accept=".csv" (change)="onFileSelected($event)" />
   </label>
 
-  @if (previewData().length > 0) {
+  @if (isLoading()) {
+    <div class="loader-box">
+      <span class="spinner"></span>
+      <p>Cargando datos y procesando predicción...</p>
+    </div>
+  }
+
+  @if (previewData().length > 0 && !isLoading()) {
     <div class="preview">
       <h3>Vista previa:</h3>
       <div class="table-wrapper">

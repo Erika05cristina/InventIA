@@ -12,5 +12,6 @@ html, body {
   height: 100%;
   width: 100%;
   background-color: whitesmoke;
-  overflow: hidden;
+  overflow-x: hidden;   // ⬅ solo oculta scroll horizontal
+  overflow-y: auto;     // ⬅ permite scroll vertical
 }

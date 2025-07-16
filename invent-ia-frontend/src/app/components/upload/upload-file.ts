@@ -5,9 +5,8 @@ import {
   inject,
   signal
 } from '@angular/core';
-import { CommonModule, AsyncPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import * as XLSX from 'xlsx';
 import {
   Prediction,
   PredictionResponseSingle
@@ -22,31 +21,44 @@ import {
   styleUrls: ['./upload-file.scss']
 })
 export class UploadFile {
-  // Señales
-  private rawData = signal<any[][]>([]);
+  private rawData = signal<string[][]>([]);
   readonly previewData = computed(() => this.rawData().slice(0, 5));
   readonly predictionResult = signal<PredictionResponseSingle[] | null>(null);
+  readonly isLoading = signal(false); // 🔄 Señal para animación de carga
 
-  // Inputs manuales
   public productId: number | null = null;
   public fecha: string = '';
 
-  // Servicio HTTP
   private predictionService = inject(Prediction);
 
   getPrediction(): void {
-    if (this.productId === null || this.fecha.trim() === '') {
-      console.warn('Faltan datos para la predicción');
+    const fechaFormateada = this.formatFecha(this.fecha);
+    if (!fechaFormateada) {
+      console.warn('Fecha inválida o vacía');
       return;
     }
 
-    this.predictionService.predictSingle(this.productId, this.fecha).subscribe({
-      next: (res) => this.predictionResult.set(res),
-      error: (err) => {
-        console.error('Error al predecir desde inputs:', err);
-        this.predictionResult.set(null);
-      }
-    });
+    this.isLoading.set(true);
+
+    if (this.productId === null || isNaN(this.productId)) {
+      this.predictionService.predictGroup(fechaFormateada).subscribe({
+        next: (res) => this.predictionResult.set(res as any),
+        error: (err) => {
+          console.error('Error al predecir para grupo:', err);
+          this.predictionResult.set(null);
+        },
+        complete: () => this.isLoading.set(false)
+      });
+    } else {
+      this.predictionService.predictSingle(this.productId, fechaFormateada).subscribe({
+        next: (res) => this.predictionResult.set(res),
+        error: (err) => {
+          console.error('Error al predecir individual:', err);
+          this.predictionResult.set(null);
+        },
+        complete: () => this.isLoading.set(false)
+      });
+    }
   }
 
   onFileSelected(event: Event): void {
@@ -54,68 +66,69 @@ export class UploadFile {
     const file = input.files?.[0];
     if (!file) return;
 
-    // 🔹 Primero, subimos al backend
+    this.isLoading.set(true);
+
     this.predictionService.uploadCsv(file).subscribe({
       next: (msg) => {
         console.log('✅ Backend procesó CSV:', msg);
-        // Luego, mostramos vista previa en frontend
         this.processFilePreview(file);
       },
       error: (err) => {
-        console.error(' Error al subir el archivo:', err);
+        console.error('❌ Error al subir el archivo:', err);
+        this.isLoading.set(false);
       },
     });
   }
 
   private processFilePreview(file: File): void {
-  const reader = new FileReader();
+    const reader = new FileReader();
 
-  reader.onload = () => {
-    let workbook: XLSX.WorkBook;
+    reader.onload = () => {
+      try {
+        const text = reader.result as string;
+        const lines = text.split('\n').filter((l) => l.trim().length > 0);
+        const data = lines.map((line) => line.split(','));
 
-    try {
-      if (file.name.endsWith('.csv')) {
-        workbook = XLSX.read(reader.result as string, { type: 'string' });
-      } else {
-        const data = new Uint8Array(reader.result as ArrayBuffer);
-        workbook = XLSX.read(data, { type: 'array' });
-      }
+        if (data.length > 1) {
+          this.rawData.set(data);
 
-      const sheet = workbook.Sheets[workbook.SheetNames[0]];
-      const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as unknown[];
+          const productId = parseInt((data[1][0] ?? '').toString(), 10);
+          const fecha = (data[1][1] ?? '').toString();
+          const fechaFormateada = this.formatFecha(fecha);
 
-      if (Array.isArray(jsonData) && jsonData.length > 1 && Array.isArray(jsonData[1])) {
-        this.rawData.set(jsonData as any[][]);
-
-        // Prueba automática con el primer producto
-        const productId = parseInt((jsonData[1][0] ?? '').toString(), 10);
-        const fecha = (jsonData[1][1] ?? '').toString();
-
-        if (!isNaN(productId) && fecha) {
-          this.predictionService.predictSingle(productId, fecha).subscribe({
-            next: (response) => this.predictionResult.set(response),
-            error: (err) => {
-              console.error('Error en la predicción:', err);
-              this.predictionResult.set(null);
-            },
-          });
+          if (!isNaN(productId) && fechaFormateada) {
+            this.predictionService.predictSingle(productId, fechaFormateada).subscribe({
+              next: (response) => this.predictionResult.set(response),
+              error: (err) => {
+                console.error('Error en predicción desde archivo:', err);
+                this.predictionResult.set(null);
+              },
+              complete: () => this.isLoading.set(false)
+            });
+          } else {
+            this.isLoading.set(false);
+          }
+        } else {
+          console.warn('Formato inválido');
+          this.rawData.set([]);
+          this.isLoading.set(false);
         }
-      } else {
-        console.warn('Formato inválido');
+      } catch (err) {
+        console.error('Error al leer archivo:', err);
         this.rawData.set([]);
+        this.isLoading.set(false);
       }
-    } catch (err) {
-      console.error('Error al leer el archivo:', err);
-      this.rawData.set([]);
-    }
-  };
+    };
 
-  if (file.name.endsWith('.csv')) {
     reader.readAsText(file);
-  } else {
-    reader.readAsArrayBuffer(file);
   }
-}
 
-
+  private formatFecha(fecha: string): string | null {
+    const d = new Date(fecha);
+    if (isNaN(d.getTime())) return null;
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  }
 }

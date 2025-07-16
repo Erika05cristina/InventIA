@@ -146,3 +146,30 @@
     }
   }
 }
+
+.loader-box {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  background: #fff3cd;
+  border-left: 4px solid #ffecb5;
+  color: #856404;
+  font-weight: 500;
+}
+
+.spinner {
+  width: 1.2rem;
+  height: 1.2rem;
+  border: 3px solid #ffecb5;
+  border-top: 3px solid #856404;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

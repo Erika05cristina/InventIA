@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 export interface PredictionResponseSingle {
   productId: number;
@@ -30,15 +31,24 @@ export class Prediction {
     });
   }
 
+  // Predicción para un solo producto
   predictSingle(productId: number, fecha: string): Observable<PredictionResponseSingle[]> {
-    return this.http.get<PredictionResponseSingle[]>(`${this.predictionUrl}/single`, {
-      params: { product_id: productId, fecha },
+    return this.http.get<any[]>(`${this.predictionUrl}/single`, {
+      params: { product_id: productId, fecha_prediccion: fecha },
+    }).pipe(
+      map((res) => res.map(item => ({
+        productId: item.prediccion.product_id,
+        date: item.prediccion.fecha_prediccion,
+        prediction: item.prediccion.prediccion
+      })))
+    );
+  }
+
+// Predicción para todos los productos
+  predictGroup(fecha: string): Observable<PredictionResponseGroup[]> {
+    return this.http.get<PredictionResponseGroup[]>(`${this.predictionUrl}/group`, {
+      params: { fecha_prediccion: fecha },
     });
   }
 
-  predictGroup(fecha: string): Observable<PredictionResponseGroup[]> {
-    return this.http.get<PredictionResponseGroup[]>(`${this.predictionUrl}/group`, {
-      params: { fecha },
-    });
-  }
 }
