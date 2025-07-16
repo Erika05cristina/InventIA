@@ -17,9 +17,10 @@
   max-width: 900px;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
+/* 📁 Botón de carga */
 .upload-label {
   text-align: center;
 
@@ -45,6 +46,51 @@
   }
 }
 
+/* 🔄 Loader general */
+.loader-box {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  border-left: 4px solid;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+  margin-bottom: 0.5rem;
+}
+
+/* 🟡 Loader para subir CSV */
+.loader-upload {
+  background: #fff8e1;
+  border-left-color: #ffe082;
+  color: #8d6e63;
+}
+
+/* 🔵 Loader para predicción */
+.loader-predict {
+  background: #e3f2fd;
+  border-left-color: #64b5f6;
+  color: #1565c0;
+  margin-top: -1rem; // ☑️ opcional para pegarlo más arriba
+}
+
+/* 🔁 Spinner */
+.spinner {
+  width: 1.2rem;
+  height: 1.2rem;
+  border: 3px solid #ccc;
+  border-top: 3px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 📊 Vista previa */
 .preview {
   h3 {
     font-size: 1.25rem;
@@ -62,7 +108,8 @@
       border-collapse: collapse;
       font-size: 0.95rem;
 
-      th, td {
+      th,
+      td {
         padding: 0.75rem 1rem;
         text-align: left;
         border-bottom: 1px solid #eee;
@@ -84,6 +131,7 @@
   }
 }
 
+/* 🧾 Inputs */
 .manual-input {
   display: flex;
   gap: 1rem;
@@ -121,11 +169,14 @@
   }
 }
 
+/* ✅ Resultado */
 .prediction-box {
-  background: #e3f2fd;
-  border-left: 4px solid #2196f3;
+  background: #e8f5e9;
+  border-left: 4px solid #66bb6a;
   padding: 1.25rem;
   border-radius: 0.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  color: #2e7d32;
 
   h3 {
     margin-bottom: 0.75rem;
@@ -139,37 +190,19 @@
 
     li {
       margin-bottom: 0.5rem;
-    }
+      font-size: 0.95rem;
 
-    strong {
-      color: #0d47a1;
+      strong {
+        color: #1b5e20;
+        font-weight: 600;
+      }
     }
   }
-}
 
-.loader-box {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem 1.5rem;
-  border-radius: 0.5rem;
-  background: #fff3cd;
-  border-left: 4px solid #ffecb5;
-  color: #856404;
-  font-weight: 500;
-}
-
-.spinner {
-  width: 1.2rem;
-  height: 1.2rem;
-  border: 3px solid #ffecb5;
-  border-top: 3px solid #856404;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
+  &::before {
+    content: '🔍';
+    font-size: 1.2rem;
+    margin-right: 0.5rem;
+    vertical-align: middle;
   }
 }

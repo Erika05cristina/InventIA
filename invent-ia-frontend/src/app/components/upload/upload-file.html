@@ -1,4 +1,5 @@
 <div class="upload-container">
+  <!-- 📁 Subida de archivo CSV -->
   <label class="upload-label">
     <span class="upload-button">
       <span class="material-symbols-rounded icon">folder_open</span>
@@ -7,14 +8,16 @@
     <input type="file" accept=".csv" (change)="onFileSelected($event)" />
   </label>
 
-  @if (isLoading()) {
-    <div class="loader-box">
+  <!-- 🟡 Loader de carga CSV (después del botón) -->
+  @if (isUploading()) {
+    <div class="loader-box loader-upload">
       <span class="spinner"></span>
-      <p>Cargando datos y procesando predicción...</p>
+      <p>Cargando archivo CSV...</p>
     </div>
   }
 
-  @if (previewData().length > 0 && !isLoading()) {
+  <!-- ✅ Vista previa (solo si no hay cargas ni predicción) -->
+  @if (!isUploading() && previewData().length > 0) {
     <div class="preview">
       <h3>Vista previa:</h3>
       <div class="table-wrapper">
@@ -40,6 +43,7 @@
     </div>
   }
 
+  <!-- 📝 Inputs manuales -->
   <div class="manual-input">
     <label>
       ID del producto:
@@ -54,6 +58,15 @@
     <button (click)="getPrediction()">Predecir</button>
   </div>
 
+  <!-- 🟠 Loader de predicción (MOVIDO aquí debajo) -->
+  @if (isPredicting()) {
+    <div class="loader-box loader-predict">
+      <span class="spinner"></span>
+      <p>Procesando predicción...</p>
+    </div>
+  }
+
+  <!-- ✅ Resultado -->
   @if (predictionResult()) {
     <div class="prediction-box">
       <h3>Resultado de predicción:</h3>

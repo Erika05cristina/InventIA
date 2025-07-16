@@ -24,10 +24,15 @@ export class UploadFile {
   private rawData = signal<string[][]>([]);
   readonly previewData = computed(() => this.rawData().slice(0, 5));
   readonly predictionResult = signal<PredictionResponseSingle[] | null>(null);
-  readonly isLoading = signal(false); // 🔄 Señal para animación de carga
+
+  // 🔄 Señales separadas
+  readonly isUploading = signal(false);
+  readonly isPredicting = signal(false);
 
   public productId: number | null = null;
   public fecha: string = '';
+
+  private selectedFile: File | null = null;
 
   private predictionService = inject(Prediction);
 
@@ -38,7 +43,7 @@ export class UploadFile {
       return;
     }
 
-    this.isLoading.set(true);
+    this.isPredicting.set(true);
 
     if (this.productId === null || isNaN(this.productId)) {
       this.predictionService.predictGroup(fechaFormateada).subscribe({
@@ -47,7 +52,7 @@ export class UploadFile {
           console.error('Error al predecir para grupo:', err);
           this.predictionResult.set(null);
         },
-        complete: () => this.isLoading.set(false)
+        complete: () => this.isPredicting.set(false)
       });
     } else {
       this.predictionService.predictSingle(this.productId, fechaFormateada).subscribe({
@@ -56,7 +61,7 @@ export class UploadFile {
           console.error('Error al predecir individual:', err);
           this.predictionResult.set(null);
         },
-        complete: () => this.isLoading.set(false)
+        complete: () => this.isPredicting.set(false)
       });
     }
   }
@@ -66,7 +71,10 @@ export class UploadFile {
     const file = input.files?.[0];
     if (!file) return;
 
-    this.isLoading.set(true);
+    this.selectedFile = file;
+    input.value = '';
+
+    this.isUploading.set(true);
 
     this.predictionService.uploadCsv(file).subscribe({
       next: (msg) => {
@@ -75,7 +83,7 @@ export class UploadFile {
       },
       error: (err) => {
         console.error('❌ Error al subir el archivo:', err);
-        this.isLoading.set(false);
+        this.isUploading.set(false);
       },
     });
   }
@@ -96,7 +104,6 @@ export class UploadFile {
           const extractedFecha = (data[1][1] ?? '').toString();
           const fechaFormateada = this.formatFecha(extractedFecha);
 
-          // ✅ Solo asigna a los inputs del formulario
           if (!isNaN(extractedProductId)) {
             this.productId = extractedProductId;
           }
@@ -105,23 +112,22 @@ export class UploadFile {
             this.fecha = fechaFormateada;
           }
 
-          // ❌ No lances la predicción automática aquí
-          this.isLoading.set(false);
+          // ✅ solo actualiza vista previa y campos
+          this.isUploading.set(false);
         } else {
           console.warn('Formato inválido');
           this.rawData.set([]);
-          this.isLoading.set(false);
+          this.isUploading.set(false);
         }
       } catch (err) {
         console.error('Error al leer archivo:', err);
         this.rawData.set([]);
-        this.isLoading.set(false);
+        this.isUploading.set(false);
       }
     };
 
     reader.readAsText(file);
   }
-
 
   private formatFecha(fecha: string): string | null {
     const d = new Date(fecha);
