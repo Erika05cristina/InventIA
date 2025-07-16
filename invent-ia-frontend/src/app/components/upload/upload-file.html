@@ -8,7 +8,7 @@
     <input type="file" accept=".csv" (change)="onFileSelected($event)" />
   </label>
 
-  <!-- 🟡 Loader de carga CSV (después del botón) -->
+  <!-- 🟡 Loader de carga CSV -->
   @if (isUploading()) {
     <div class="loader-box loader-upload">
       <span class="spinner"></span>
@@ -16,8 +16,8 @@
     </div>
   }
 
-  <!-- ✅ Vista previa (solo si no hay cargas ni predicción) -->
-  @if (!isUploading() && previewData().length > 0) {
+  <!-- ✅ Vista previa -->
+  @if (!isUploading() && !isPredicting() && previewData().length > 0) {
     <div class="preview">
       <h3>Vista previa:</h3>
       <div class="table-wrapper">
@@ -43,7 +43,7 @@
     </div>
   }
 
-  <!-- 📝 Inputs manuales -->
+  <!-- 🧍 Predicción individual -->
   <div class="manual-input">
     <label>
       ID del producto:
@@ -55,14 +55,32 @@
       <input type="date" [(ngModel)]="fecha" />
     </label>
 
-    <button (click)="getPrediction()">Predecir</button>
+    <button (click)="getPrediction()">Predecir individual</button>
   </div>
 
-  <!-- 🟠 Loader de predicción (MOVIDO aquí debajo) -->
+  <!-- 👥 Predicción grupal -->
+  <div class="group-input">
+    <label>
+      Fecha:
+      <input type="date" [(ngModel)]="fecha" />
+    </label>
+
+    <button (click)="getGroupPrediction()">Predecir todos los productos</button>
+  </div>
+
+  <!-- 🔵 Loader de predicción -->
   @if (isPredicting()) {
     <div class="loader-box loader-predict">
       <span class="spinner"></span>
       <p>Procesando predicción...</p>
+    </div>
+  }
+
+  <!-- 🟢 Entrenamiento en progreso -->
+  @if (isTraining()) {
+    <div class="loader-box loader-training">
+      <span class="spinner"></span>
+      <p>Entrenando modelo en segundo plano...</p>
     </div>
   }
 

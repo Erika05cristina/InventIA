@@ -28,6 +28,7 @@ export class UploadFile {
   // 🔄 Señales separadas
   readonly isUploading = signal(false);
   readonly isPredicting = signal(false);
+  readonly isTraining = signal(false);
 
   public productId: number | null = null;
   public fecha: string = '';
@@ -43,27 +44,40 @@ export class UploadFile {
       return;
     }
 
+    if (this.productId === null || isNaN(this.productId)) {
+      console.warn('ID de producto inválido o vacío');
+      return;
+    }
+
     this.isPredicting.set(true);
 
-    if (this.productId === null || isNaN(this.productId)) {
-      this.predictionService.predictGroup(fechaFormateada).subscribe({
-        next: (res) => this.predictionResult.set(res as any),
-        error: (err) => {
-          console.error('Error al predecir para grupo:', err);
-          this.predictionResult.set(null);
-        },
-        complete: () => this.isPredicting.set(false)
-      });
-    } else {
-      this.predictionService.predictSingle(this.productId, fechaFormateada).subscribe({
-        next: (res) => this.predictionResult.set(res),
-        error: (err) => {
-          console.error('Error al predecir individual:', err);
-          this.predictionResult.set(null);
-        },
-        complete: () => this.isPredicting.set(false)
-      });
+    this.predictionService.predictSingle(this.productId, fechaFormateada).subscribe({
+      next: (res) => this.predictionResult.set(res),
+      error: (err) => {
+        console.error('Error al predecir individual:', err);
+        this.predictionResult.set(null);
+      },
+      complete: () => this.isPredicting.set(false)
+    });
+  }
+
+  getGroupPrediction(): void {
+    const fechaFormateada = this.formatFecha(this.fecha);
+    if (!fechaFormateada) {
+      console.warn('Fecha inválida o vacía');
+      return;
     }
+
+    this.isPredicting.set(true);
+
+    this.predictionService.predictGroup(fechaFormateada).subscribe({
+      next: (res) => this.predictionResult.set(res as any),
+      error: (err) => {
+        console.error('Error al predecir por grupo:', err);
+        this.predictionResult.set(null);
+      },
+      complete: () => this.isPredicting.set(false)
+    });
   }
 
   onFileSelected(event: Event): void {
@@ -72,21 +86,29 @@ export class UploadFile {
     if (!file) return;
 
     this.selectedFile = file;
-    input.value = '';
+    input.value = ''; // limpia input del campo file
 
     this.isUploading.set(true);
+    this.isTraining.set(false); // por si ya había uno en curso
 
     this.predictionService.uploadCsv(file).subscribe({
       next: (msg) => {
         console.log('✅ Backend procesó CSV:', msg);
+
+        // Mostrar vista previa
         this.processFilePreview(file);
+
+        // Inicia estado de entrenamiento (manual, sin detenerlo aún)
+        this.isTraining.set(true);
       },
       error: (err) => {
         console.error('❌ Error al subir el archivo:', err);
         this.isUploading.set(false);
-      },
+        this.isTraining.set(false);
+      }
     });
   }
+
 
   private processFilePreview(file: File): void {
     const reader = new FileReader();
