@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import reactor.core.publisher.Flux;
@@ -36,7 +37,7 @@ public class DataService {
     public Mono<String> upload(MultipartFile file) {
         MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
         bodyBuilder.part("file", file.getResource()).filename(file.getOriginalFilename());
-        return webClient.post().uri("/").body(publisher, elementClass).retrieve().bodyToMono(String.class);
+        return webClient.post().uri("/").body(BodyInserters.fromMultipartData(bodyBuilder.build())).retrieve().bodyToMono(String.class);
     }
 
 }
