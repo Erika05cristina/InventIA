@@ -1,9 +1,6 @@
 package com.inventia.inventia_app.entities;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 /*
 * "explicacion_avanzada": {
     "producto_id": 38,
@@ -33,39 +30,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
     "grafica_explicabilidad_base64":
 */
 
-class ExplicacionAvanzada {
-
-    @JsonProperty("producto_id")
-    private Integer productId;
-    private Double prediccion;
-    @JsonProperty("variables_importantes")
-    private List<List<Object>> importantes;
-    @JsonProperty("grafica_explicabilidad_base64")
-    private String graphBase64;
-
-    public ExplicacionAvanzada(Integer productId, Double prediccion) {
-        this.productId = productId;
-        this.prediccion = prediccion;
-    }
-
-    @Override
-    public String toString() {
-        return "ExplicacionAvanzada{"
-                + "productId='"
-                + productId
-                + '\''
-                + ", prediccion='"
-                + prediccion
-                + '\''
-                + ", importantes='"
-                + importantes
-                + '\''
-                + ", graphBase64='"
-                + graphBase64
-                + '\''
-                + '}';
-    }
-}
 
 class Prediccion {
 
