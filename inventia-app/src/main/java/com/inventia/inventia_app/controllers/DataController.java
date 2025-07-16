@@ -46,10 +46,11 @@ public class DataController {
             List<ProductRecord> products = csvService.parseCsvFile(file);
 
             System.out.println("Se encontraron " + products.size() + " productos en el CSV.");
-            products.forEach(product -> System.out.println("Parsed product: " + product));
+            //products.forEach(product -> System.out.println("Parsed product: " + product));
             // productRepository.saveAll(products);
             this.dataService.upload(file);
 
+            System.out.println("Se han cargado todos los datos");
             return new ResponseEntity<>("Archivo CSV procesado correctamente. Se encontraron " + products.size() + " registros de productos.", HttpStatus.OK);
 
         } catch (IllegalArgumentException e) {
