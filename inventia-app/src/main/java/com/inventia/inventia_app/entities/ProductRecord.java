@@ -1,151 +1,287 @@
 package com.inventia.inventia_app.entities;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * ProductRecords
  */
 public class ProductRecord {
 
-    private Integer product_id;
+    @JsonProperty("city_id")
+    private Integer cityId;
+
+    @JsonProperty("store_id")
+    private Integer storeId;
+
+    @JsonProperty("management_group_id")
+    private Integer managementGroupId;
+
+    @JsonProperty("first_category_id")
+    private Integer firstCategoryId;
+
+    @JsonProperty("second_category_id")
+    private Integer secondCategoryId;
+
+    @JsonProperty("third_category_id")
+    private Integer thirdCategoryId;
+
+    @JsonProperty("product_id")
+    private Integer productId;
+
+    @JsonProperty("dt")
     private String dt;
-    private Integer ventas;
-    private Integer dia;
-    private Integer dia_semana;
-    private Integer es_fin_semana;
-    private Integer es_feriado;
-    private Integer es_inicio_mes;
-    private Double media_7d;
-    private Double std_7d;
+
+    @JsonProperty("sale_amount")
+    private Double saleAmount;
+
+    @JsonProperty("hours_sale")
+    private List<Double> hoursSale;
+
+    @JsonProperty("stock_hour6_22_cnt")
+    private Integer stockHour6_22Cnt;
+
+    @JsonProperty("hours_stock_status")
+    private List<Integer> hoursStockStatus;
+
+    @JsonProperty("discount")
+    private Double discount;
+
+    @JsonProperty("holiday_flag")
+    private Integer holidayFlag;
+
+    @JsonProperty("activity_flag")
+    private Integer activityFlag;
+
+    @JsonProperty("precpt")
+    private Double precpt;
+
+    @JsonProperty("avg_temperature")
+    private Double avgTemperature;
+
+    @JsonProperty("avg_humidity")
+    private Double avgHumidity;
+
+    @JsonProperty("avg_wind_level")
+    private Double avgWindLevel;
 
     public ProductRecord (
+        Integer city_id,
+        Integer store_id,
+        Integer management_group_id,
+        Integer first_category_id,
+        Integer second_category_id,
+        Integer third_category_id,
         Integer product_id,
         String dt,
-        Integer ventas,
-        Integer dia,
-        Integer dia_semana,
-        Integer es_fin_semana,
-        Integer es_feriado,
-        Integer es_inicio_mes,
-        Double media_7d,
-        Double std_7d
+        Double sale_amount,
+        List<Double> hours_sale,
+        Integer stock_hour6_22_cnt,
+        List<Integer> hours_stock_status,
+        Double discount,
+        Integer holiday_flag,
+        Integer activity_flag,
+        Double precpt,
+        Double avg_temperature,
+        Double avg_humidity,
+        Double avg_wind_level
     ){
-        this.product_id = product_id;
+        this.cityId = city_id;
+        this.storeId = store_id;
+        this.managementGroupId = management_group_id;
+        this.firstCategoryId = first_category_id;
+        this.secondCategoryId = second_category_id;
+        this.thirdCategoryId = third_category_id;
+        this.productId = product_id;
         this.dt = dt;
-        this.ventas = ventas;
-        this.dia = dia;
-        this.dia_semana = dia_semana;
-        this.es_fin_semana = es_fin_semana;
-        this.es_feriado = es_feriado;
-        this.es_inicio_mes = es_inicio_mes;
-        this.media_7d = media_7d;
-        this.std_7d = std_7d;
+        this.saleAmount = sale_amount;
+        this.hoursSale = hours_sale;
+        this.stockHour6_22Cnt = stock_hour6_22_cnt;
+        this.hoursStockStatus = hours_stock_status;
+        this.discount = discount;
+        this.holidayFlag = holiday_flag;
+        this.activityFlag = activity_flag;
+        this.precpt = precpt;
+        this.avgTemperature = avg_temperature;
+        this.avgHumidity = avg_humidity;
+        this.avgWindLevel = avg_wind_level;
     }
 
-    public void setProduct_id(Integer product_id){
-        this.product_id = product_id;
+    public Integer getCityId() {
+        return cityId;
     }
 
-    public Integer getProduct_id(){
-        return this.product_id;
+    public void setCityId(Integer cityId) {
+        this.cityId = cityId;
+    }
+
+    public Integer getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(Integer storeId) {
+        this.storeId = storeId;
+    }
+
+    public Integer getManagementGroupId() {
+        return managementGroupId;
+    }
+
+    public void setManagementGroupId(Integer managementGroupId) {
+        this.managementGroupId = managementGroupId;
+    }
+
+    public Integer getFirstCategoryId() {
+        return firstCategoryId;
+    }
+
+    public void setFirstCategoryId(Integer firstCategoryId) {
+        this.firstCategoryId = firstCategoryId;
+    }
+
+    public Integer getSecondCategoryId() {
+        return secondCategoryId;
+    }
+
+    public void setSecondCategoryId(Integer secondCategoryId) {
+        this.secondCategoryId = secondCategoryId;
+    }
+
+    public Integer getThirdCategoryId() {
+        return thirdCategoryId;
+    }
+
+    public void setThirdCategoryId(Integer thirdCategoryId) {
+        this.thirdCategoryId = thirdCategoryId;
+    }
+
+    public Integer getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Integer productId) {
+        this.productId = productId;
+    }
+
+    public String getDt() {
+        return dt;
     }
 
     public void setDt(String dt) {
         this.dt = dt;
     }
 
-    public String getDt() {
-        return this.dt;
+    public Double getSaleAmount() {
+        return saleAmount;
     }
 
-    public void setventas(Integer ventas){
-        this.ventas = ventas;
+    public void setSaleAmount(Double saleAmount) {
+        this.saleAmount = saleAmount;
     }
 
-    public Integer getVentas(){
-        return this.ventas;
-    }
-    public void setDia(Integer dia){
-        this.dia = dia;
+    public List<Double> getHoursSale() {
+        return hoursSale;
     }
 
-    public Integer getDia(){
-        return this.dia;
-    }
-    public void setDia_semana(Integer dia_semana){
-        this.dia_semana = dia_semana;
+    public void setHoursSale(List<Double> hoursSale) {
+        this.hoursSale = hoursSale;
     }
 
-    public Integer getDia_semana() {
-        return this.dia_semana;
+    public Integer getStockHour6_22Cnt() {
+        return stockHour6_22Cnt;
     }
 
-    public Integer getEs_fin_semana(){
-        return this.es_fin_semana;
-    }
-    public void setEs_fin_semana(Integer es_fin_semana){
-        this.es_fin_semana = es_fin_semana;
+    public void setStockHour6_22Cnt(Integer stockHour6_22Cnt) {
+        this.stockHour6_22Cnt = stockHour6_22Cnt;
     }
 
-    public Integer getEs_feriado(){
-        return this.es_feriado;
-    }
-    public void setEs_feriado(Integer es_feriado){
-        this.es_feriado = es_feriado;
+    public List<Integer> getHoursStockStatus() {
+        return hoursStockStatus;
     }
 
-    public Integer getEs_inicio_mes(){
-        return this.es_inicio_mes;
-    }
-    public void setEs_inico_mes(Integer es_inicio_mes){
-        this.es_inicio_mes = es_inicio_mes;
+    public void setHoursStockStatus(List<Integer> hoursStockStatus) {
+        this.hoursStockStatus = hoursStockStatus;
     }
 
-    public void setMedia_7d(Double media_7d) {
-        this.media_7d = media_7d;
+    public Double getDiscount() {
+        return discount;
     }
 
-    public Double getMedia_7d() {
-        return this.media_7d;
-    }
-    public void setStd_7d(Double std_7d) {
-        this.std_7d = std_7d;
+    public void setDiscount(Double discount) {
+        this.discount = discount;
     }
 
-    public Double getStd_7d() {
-        return this.std_7d;
+    public Integer getHolidayFlag() {
+        return holidayFlag;
+    }
+
+    public void setHolidayFlag(Integer holidayFlag) {
+        this.holidayFlag = holidayFlag;
+    }
+
+    public Integer getActivityFlag() {
+        return activityFlag;
+    }
+
+    public void setActivityFlag(Integer activityFlag) {
+        this.activityFlag = activityFlag;
+    }
+
+    public Double getPrecpt() {
+        return precpt;
+    }
+
+    public void setPrecpt(Double precpt) {
+        this.precpt = precpt;
+    }
+
+    public Double getAvgTemperature() {
+        return avgTemperature;
+    }
+
+    public void setAvgTemperature(Double avgTemperature) {
+        this.avgTemperature = avgTemperature;
+    }
+
+    public Double getAvgHumidity() {
+        return avgHumidity;
+    }
+
+    public void setAvgHumidity(Double avgHumidity) {
+        this.avgHumidity = avgHumidity;
+    }
+
+    public Double getAvgWindLevel() {
+        return avgWindLevel;
+    }
+
+    public void setAvgWindLevel(Double avgWindLevel) {
+        this.avgWindLevel = avgWindLevel;
     }
 
     @Override
     public String toString() {
         return "ProductRecord{"
-        + "product_id='"
-        + product_id
-        + '\''
-        + "dt='"
-        + dt
-        + '\''
-        + "ventas='"
-        + ventas
-        + '\''
-        + "dia='"
-        + dia
-        + '\''
-        + "dia_semana='"
-        + dia_semana
-        + '\''
-        + "es_fin_semana='"
-        + es_fin_semana
-        + '\''
-        + "es_feriado='"
-        + es_feriado
-        + '\''
-        + "es_inicio_mes='"
-        + es_inicio_mes
-        + '\''
-        + "media_7d='"
-        + media_7d
-        + '\''
-        + ", std_7d="
-        + std_7d
+        + "city_id='" + cityId + '\''
+        + ", store_id='" + storeId + '\''
+        + ", management_group_id='" + managementGroupId + '\''
+        + ", first_category_id='" + firstCategoryId + '\''
+        + ", second_category_id='" + secondCategoryId + '\''
+        + ", third_category_id='" + thirdCategoryId + '\''
+        + ", product_id='" + productId + '\''
+        + ", dt='" + dt + '\''
+        + ", sale_amount='" + saleAmount + '\''
+        + ", hours_sale=" + hoursSale
+        + ", stock_hour6_22_cnt='" + stockHour6_22Cnt + '\''
+        + ", hours_stock_status=" + hoursStockStatus
+        + ", discount='" + discount + '\''
+        + ", holiday_flag='" + holidayFlag + '\''
+        + ", activity_flag='" + activityFlag + '\''
+        + ", precpt='" + precpt + '\''
+        + ", avg_temperature='" + avgTemperature + '\''
+        + ", avg_humidity='" + avgHumidity + '\''
+        + ", avg_wind_level='" + avgWindLevel + '\''
         + '}';
     }
 }
