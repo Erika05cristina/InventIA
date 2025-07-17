@@ -17,8 +17,7 @@ MODEL_PATH = os.path.join(MODEL_DIR, "model_rnn.keras")
 N_DIAS = 14
 SEQ_FEATURES = ["sale_amount", "discount", "holiday_flag", "avg_temperature", "avg_humidity", "media_7d", "std_7d"]
 
-SPRING_BOOT_URL = "http://spring-backend:8080/training/finished"  # 🔔 Cambia aquí si es localhost o diferente puerto
-
+SPRING_BOOT_URL = "http://localhost:8080/training/finished" 
 def notify_backend_training_completed():
     try:
         payload = {"status": "completed"}
