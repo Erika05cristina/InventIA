@@ -1,3 +1,4 @@
+import requests
 import pandas as pd
 import numpy as np
 import joblib
@@ -16,6 +17,16 @@ MODEL_PATH = os.path.join(MODEL_DIR, "model_rnn.keras")
 N_DIAS = 14
 SEQ_FEATURES = ["sale_amount", "discount", "holiday_flag", "avg_temperature", "avg_humidity", "media_7d", "std_7d"]
 
+SPRING_BOOT_URL = "http://localhost:8080/training/finished" 
+def notify_backend_training_completed():
+    try:
+        payload = {"status": "completed"}
+        response = requests.post(SPRING_BOOT_URL, json=payload)
+        response.raise_for_status()
+        print("✅ Notificación enviada a Spring Boot.")
+    except Exception as e:
+        print(f"⚠️ Error al notificar a Spring Boot: {e}")
+
 def entrenar_modelo_global(file_path):
     df = pd.read_csv(file_path)
     df = prepare_dataframe(df)
@@ -29,7 +40,6 @@ def entrenar_modelo_global(file_path):
         df_pid = df[df["product_id"] == pid].copy()
         if len(df_pid) < N_DIAS + 1:
             continue
-
         features = df_pid[SEQ_FEATURES].values
         scaler.partial_fit(features)
 
@@ -73,3 +83,6 @@ def entrenar_modelo_global(file_path):
 
     print(f"✅ Modelo entrenado y guardado en {MODEL_PATH}")
     print(f"✅ Scaler guardado en {SCALER_PATH}")
+
+    # 🔔 Notificar al backend Spring Boot:
+    notify_backend_training_completed()
