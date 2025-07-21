@@ -1,7 +1,7 @@
 <div class="explanation-container">
   <h1>Explicación del modelo</h1>
 
-  <!-- ✅ Resumen simple -->
+  <!-- Resumen simple -->
   @if (explicacionSimple()) {
     <section class="explanation-section">
       <h2>Resumen de la predicción</h2>
@@ -13,7 +13,7 @@
     </section>
   }
 
-  <!-- ✅ Variables importantes -->
+  <!-- Variables importantes -->
   @if (variables().length > 0) {
     <section class="explanation-section">
       <h2>Importancia de variables</h2>
@@ -28,7 +28,7 @@
     </section>
   }
 
-  <!-- ✅ Gráfico -->
+  <!-- Gráfico -->
   @if (grafica()) {
     <section class="explanation-section">
       <h2>Gráfico de explicación</h2>

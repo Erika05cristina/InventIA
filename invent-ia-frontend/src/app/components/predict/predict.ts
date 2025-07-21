@@ -30,7 +30,8 @@ export class Predict {
 
   readonly predictionResult = signal<PredictionResponseSingle[] | null>(null);
 
-  readonly isPredicting = this.state.isPredicting;
+  readonly isPredictingIndividual = signal(false);
+  readonly isPredictingGroup = signal(false);
   readonly wasGroupPredictionDownloaded = this.state.wasGroupPredictionDownloaded;
 
   public fecha: string = '';
@@ -56,7 +57,7 @@ export class Predict {
       return;
     }
 
-    this.isPredicting.set(true);
+    this.isPredictingIndividual.set(true);
     this.predictionService.predictSingle(this.manualProductIdValue, fechaFormateada).subscribe({
       next: (res) => {
         const preds = res.map(({ prediccion }) => ({
@@ -77,9 +78,10 @@ export class Predict {
         console.error('Error al predecir individual:', err);
         this.predictionResult.set(null);
       },
-      complete: () => this.isPredicting.set(false)
+      complete: () => this.isPredictingIndividual.set(false)
     });
   }
+
 
   getGroupPrediction(): void {
     const fechaFormateada = this.fecha;
@@ -88,7 +90,7 @@ export class Predict {
       return;
     }
 
-    this.isPredicting.set(true);
+    this.isPredictingGroup.set(true);
     this.wasGroupPredictionDownloaded.set(false);
 
     this.predictionService.predictGroup(fechaFormateada).subscribe({
@@ -110,9 +112,8 @@ export class Predict {
       error: (err) => {
         console.error('Error al predecir por grupo:', err);
       },
-      complete: () => {
-        this.isPredicting.set(false);
-      }
+      complete: () => this.isPredictingGroup.set(false)
     });
   }
+
 }
