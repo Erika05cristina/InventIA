@@ -93,7 +93,7 @@ export class UploadFile {
   }
 
   getGroupPrediction(): void {
-    const fechaFormateada = this.formatFecha(this.fecha);
+    const fechaFormateada = this.fecha; // <<<< ya viene en formato correcto YYYY-MM-DD
     if (!fechaFormateada) {
       console.warn('Predicción grupal: fecha inválida');
       return;
@@ -126,7 +126,6 @@ export class UploadFile {
       }
     });
   }
-
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -211,8 +210,14 @@ export class UploadFile {
   }
 
   private formatFecha(fecha: string): string | null {
-    const d = new Date(fecha);
-    if (isNaN(d.getTime())) return null;
+    const partes = fecha.split('-');
+    if (partes.length !== 3) return null;
+
+    const [dia, mes, anio] = partes.map(Number);
+    if (isNaN(dia) || isNaN(mes) || isNaN(anio)) return null;
+
+    // ⚠️ ¡Cuidado! new Date(año, mesIndex, día)
+    const d = new Date(anio, mes - 1, dia);
     const yyyy = d.getFullYear();
     const mm = String(d.getMonth() + 1).padStart(2, '0');
     const dd = String(d.getDate()).padStart(2, '0');
