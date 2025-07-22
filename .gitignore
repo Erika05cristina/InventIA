@@ -1,0 +1,21 @@
+# Entorno virtual
+env_predictor/
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Datos subidos por usuarios
+data/uploads/
+
+# Modelos grandes
+modelos/*
+
+# Notebooks temporales
+*.ipynb_checkpoints/
+
+# Archivos temporales
+*.log
+.DS_Store
+.csv
+*.zip
