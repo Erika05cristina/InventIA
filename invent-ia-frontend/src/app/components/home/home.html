@@ -1,15 +1,22 @@
 <div class="home-container">
-   <img src="/assets/logo.png" width="300" height="300" alt="Invent IA Logo" />
+  <img src="/assets/logo.png" width="200" height="200" alt="Invent IA Logo" />
+  
   <h1>Bienvenido a Invent IA</h1>
+  
+  <p class="home-description">
+    Invent IA es una aplicación diseñada para ayudarte a gestionar y predecir necesidades de inventario utilizando inteligencia artificial. 
+    Podrás cargar tus datos, obtener predicciones automáticas y consultar explicaciones detalladas sobre los resultados.
+  </p>
+
   <p>Selecciona una opción desde el menú lateral para comenzar.</p>
 
   <section class="features">
-    <div class="feature-card"(click)="goTo('/upload')">
+    <div class="feature-card" (click)="goTo('/upload')">
       <span class="material-symbols-rounded">upload_file</span>
       <h3>Cargar datos</h3>
-      <p>Sube un archivo Excel o CSV para generar predicciones inteligentes.</p>
+      <p>Sube un archivo CSV para generar predicciones inteligentes.</p>
     </div>
-    <div class="feature-card"(click)="goTo('/results')">
+    <div class="feature-card" (click)="goTo('/results')">
       <span class="material-symbols-rounded">query_stats</span>
       <h3>Resultados</h3>
       <p>Consulta predicciones previas, analíticas y visualizaciones.</p>
