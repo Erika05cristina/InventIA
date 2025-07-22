@@ -35,7 +35,7 @@ export class UploadFile {
     const file = input.files?.[0];
     if (!file) return;
 
-    input.value = ''; // limpia input del campo file
+    input.value = '';
 
     this.isUploading.set(true);
     this.isTraining.set(false);
@@ -47,7 +47,6 @@ export class UploadFile {
         // Mostrar vista previa
         this.processFilePreview(file);
 
-        // Inicia estado de entrenamiento (manual, sin detenerlo aún)
         this.isTraining.set(true);
 
         setTimeout(() => {
