@@ -37,10 +37,10 @@ public class ExplanationController {
 //         public Mono<String> askOpenAIFromExplanation(@RequestBody Map<String, Object> explicabilidad) {
 //         return explanationService.askOpenAIFromExplanation(explicabilidad);
 //     }
-    @PostMapping("/openai/from-prediction")
-        public Mono<String> explicarConOpenAI(@RequestBody PredictionSingle explicacionCompleta) {
-        return explanationService.askOpenAIFromPrediction(explicacionCompleta);
-    }
+    // @PostMapping("/openai/from-prediction")
+    //     public Mono<String> explicarConOpenAI(@RequestBody PredictionSingle explicacionCompleta) {
+    //     return explanationService.askOpenAIFromPrediction(explicacionCompleta);
+    // }
 
      @GetMapping("/single")
     @CrossOrigin(origins="*")

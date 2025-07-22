@@ -12,10 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.inventia.inventia_app.entities.ExplicacionAvanzada;
 import com.inventia.inventia_app.entities.PredictionSingle; 
 
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono; 
 
 @Service
@@ -24,31 +22,65 @@ public class ExplanationService {
     @Value("${third.party.model.server.url}")
     private String URL_BASE;
 
-    private final String URL_ROUTE = URL_BASE + "/explain";
-
-    // private WebClient webClient = WebClient.create(URL_ROUTE);
-
     @Value("${openai.api.key}")
     private String openAiApiKey;
 
-    @Value("${openai.api.url}")
-    private String openAiApiUrl;
     private WebClient webClient;
-    private String urlRoute;
 
     @Autowired
     public ExplanationService(WebClient.Builder webClientBuilder, @Value("${third.party.model.server.url}") String urlBase) {
-        this.urlRoute = urlBase + "/explain";
         this.webClient = webClientBuilder
-                .baseUrl(this.urlRoute)
+                .baseUrl(urlBase)
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
     }
 
-    public Flux<String> explain() {
-        return webClient.post().uri("/explain").retrieve().bodyToFlux(String.class);
-    }
+public Mono<Map<String, Object>> generarExplicacionEnriquecida(PredictionSingle prediction) {
+    Map<String, Object> payload = new HashMap<>();
+    payload.put("product_id", prediction.getPrediccion().getProductId());
+    payload.put("fecha_prediccion", prediction.getPrediccion().getFecha());
+
+    return webClient.post()
+        .uri("/predict/by-product")
+        .contentType(MediaType.APPLICATION_JSON)
+        .bodyValue(payload)
+        .retrieve()
+        .bodyToMono(Map.class)
+        .flatMap(explicacionPython -> {
+            String explicacionSimple = (String) explicacionPython.get("explicacion_simple");
+            Map<String, Object> avanzada = (Map<String, Object>) explicacionPython.get("explicacion_avanzada");
+            Integer productId = (Integer) avanzada.get("producto_id");
+            Double prediccionValue = (Double) avanzada.get("prediccion");
+            List<List<Object>> variablesImportantes = (List<List<Object>>) avanzada.get("variables_importantes");
+            String graficaBase64 = (String) avanzada.get("grafica_explicabilidad_base64");
+
+            // 🔔 Prompt mejorado para que OpenAI responda de manera profesional y directa
+            StringBuilder sb = new StringBuilder();
+            sb.append("El sistema ha generado una predicción con la siguiente información:\n");
+            sb.append("- Producto ID: ").append(productId).append("\n");
+            sb.append("- Predicción esperada: ").append(prediccionValue).append(" unidades\n");
+            sb.append("- Explicación simple: ").append(explicacionSimple).append("\n");
+            sb.append("- Variables más influyentes:\n");
+            for (List<Object> var : variablesImportantes) {
+                sb.append("   • ").append(var.get(0)).append(" con peso ").append(var.get(1)).append("\n");
+            }
+            sb.append("\nEscribe un resumen profesional y conciso para un usuario de negocio, presentando directamente las conclusiones, sin frases como 'puedo explicar' o 'el sistema ha generado'.");
+
+            String prompt = sb.toString();
+
+            return askOpenAI(prompt).map(explicacionOpenAI -> {
+                Map<String, Object> response = new HashMap<>();
+                response.put("explicacionSimple", explicacionSimple);
+                response.put("variablesImportantes", variablesImportantes);
+                response.put("graficaBase64", graficaBase64);
+                response.put("explicacionOpenAI", explicacionOpenAI);
+                response.put("prediccion", prediccionValue);  // 🔥 Incluye predicción real en la respuesta
+                return response;
+            });
+        });
+}
+
 
     public Mono<String> askOpenAI(String userMessage) {
         Map<String, Object> requestBody = new HashMap<>();
@@ -72,81 +104,4 @@ public class ExplanationService {
                     return message.get("content");
                 });
     }
-
-
-    public Mono<String> askOpenAIFromPrediction(PredictionSingle pred) {
-        String prompt = buildPromptFromPrediction(pred);
-        return askOpenAI(prompt);
-    }
-    public Mono<String> askOpenAIFromExplanation(Map<String, Object> explicabilidad) {
-        // 🔍 Extraer la explicación avanzada
-        Map<String, Object> avanzada = (Map<String, Object>) explicabilidad.get("explicacion_avanzada");
-        String explicacionSimple = (String) explicabilidad.get("explicacion_simple");
-
-        Integer productId = (Integer) avanzada.get("producto_id");
-        Double prediccion = (Double) avanzada.get("prediccion");
-
-        List<List<Object>> variables = (List<List<Object>>) avanzada.get("variables_importantes");
-
-        // 🧠 Construir el prompt
-        StringBuilder sb = new StringBuilder();
-        sb.append("El sistema ha generado una predicción con la siguiente información:\n");
-        sb.append("- Producto ID: ").append(productId).append("\n");
-        sb.append("- Predicción esperada: ").append(prediccion).append(" unidades\n");
-        sb.append("- Explicación simple: ").append(explicacionSimple).append("\n");
-        sb.append("- Variables más influyentes:\n");
-        for (List<Object> var : variables) {
-            sb.append("   • ").append(var.get(0)).append(" con peso ").append(var.get(1)).append("\n");
-        }
-        sb.append("\nPregunta: ¿Explica esta predicción de manera comprensible para un usuario?");
-
-        // ✉️ Enviar prompt a OpenAI
-        return askOpenAI(sb.toString());
-    }
-
-    private String buildPromptFromPrediction(PredictionSingle pred) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Explicación de predicción de inventario:\n");
-        sb.append("- Estado del modelo: ").append(pred.getStatus()).append("\n");
-        sb.append("- Explicación simple: ").append(pred.getSimple()).append("\n");
-                ExplicacionAvanzada avanzada = pred.getExplicacionAvanzada();
-        if (avanzada != null) {
-            sb.append("- Producto ID: ").append(avanzada.getProductId()).append("\n");
-            sb.append("- Predicción esperada: ").append(avanzada.getPrediccion()).append(" unidades\n");
-            sb.append("- Variables más influyentes:\n");
-            if (avanzada.getImportantes() != null) {
-                for (List<Object> var : avanzada.getImportantes()) {
-                    sb.append("   • ").append(var.get(0)).append(" con peso ").append(var.get(1)).append("\n");
-                }
-            }
-        }
-
-        sb.append("\nPregunta: ¿Explica esta predicción a un usuario de negocio de forma comprensible?");
-        return sb.toString();
-
-    }
-    public Mono<Map<String, Object>> generarExplicacionEnriquecida(PredictionSingle prediction) {
-        String explicacionSimple = prediction.getSimple();
-
-        ExplicacionAvanzada avanzada = prediction.getExplicacionAvanzada();
-        List<List<Object>> variablesImportantes = avanzada != null ? avanzada.getImportantes() : null;
-
-        String graficaBase64 = generarGraficaBase64(prediction);
-
-        String prompt = buildPromptFromPrediction(prediction);
-
-        return askOpenAI(prompt).map(explicacionOpenAI -> {
-            Map<String, Object> response = new HashMap<>();
-            response.put("explicacionSimple", explicacionSimple);
-            response.put("variablesImportantes", variablesImportantes);
-            response.put("graficaBase64", graficaBase64);
-            response.put("explicacionOpenAI", explicacionOpenAI);
-            return response;
-        });
-    }
-
-    private String generarGraficaBase64(PredictionSingle prediction) {
-        return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...";
-    }
-
 }
