@@ -20,7 +20,26 @@
   gap: 1.5rem;
 }
 
-/* 📁 Botón de carga */
+.upload-header {
+  text-align: center;
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+  }
+
+  p {
+    font-size: 0.95rem;
+    color: #555;
+    max-width: 600px;
+    margin: 0 auto 1.5rem auto;
+    line-height: 1.4;
+  }
+}
+
+/* Botón de carga */
 .upload-label {
   text-align: center;
 
@@ -46,7 +65,7 @@
   }
 }
 
-/* 🔄 Loader general */
+/* Loader general */
 .loader-box {
   display: flex;
   align-items: center;
@@ -59,14 +78,14 @@
   margin-bottom: 0.5rem;
 }
 
-/* 🟡 Loader para subir CSV */
+/* Loader para subir CSV */
 .loader-upload {
   background: #fff8e1;
   border-left-color: #ffe082;
   color: #8d6e63;
 }
 
-/* 🔁 Spinner */
+/* Spinner */
 .spinner {
   width: 1.2rem;
   height: 1.2rem;
@@ -82,7 +101,7 @@
   }
 }
 
-/* 📊 Vista previa */
+/* Vista previa */
 .preview {
   h3 {
     font-size: 1.25rem;

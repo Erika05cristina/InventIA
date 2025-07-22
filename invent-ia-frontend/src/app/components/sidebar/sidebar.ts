@@ -17,22 +17,22 @@ export class Sidebar implements AfterViewInit {
   readonly isMenuActive = signal(false);
 
   readonly primaryNav = [
-    { icon: 'model_training', label: 'Training', route: '/upload' },
-    { icon: 'network_intel_node', label: 'Prediction', route: '/predict' },
-    { icon: 'clarify', label: 'Explanation', route: '/explanation' },
-    { icon: 'dashboard', label: 'Dashboard' },
-    { icon: 'group', label: 'Agent', route: '/agent' },
-    { icon: 'insert_chart', label: 'Analytics' },
-    { icon: 'history', label: 'Bookmarks' },
-    { icon: 'settings', label: 'Settings' },
+    { icon: 'model_training', label: 'Entrenamiento', route: '/upload' },
+    { icon: 'network_intel_node', label: 'Predicción', route: '/predict' },
+    { icon: 'clarify', label: 'Explicación', route: '/explanation' },
+    { icon: 'insert_chart', label: 'Analíticas' },
+    { icon: 'group', label: 'Agente', route: '/agent' },
+    { icon: 'history', label: 'Marcadores' },
+    { icon: 'settings', label: 'Configuraciones' },
   ];
 
   readonly secondaryNav = [
-    { icon: 'account_circle', label: 'Profile' },
-    { icon: 'logout', label: 'Logout', route: '/login'},
+    { icon: 'account_circle', label: 'Perfil' },
+    { icon: 'logout', label: 'Cerrar sesión', route: '/login'},
   ];
 
   ngAfterViewInit(): void {
+    this.sidebarRef.nativeElement.classList.add('collapsed');
     this.updateSidebarHeight();
   }
 

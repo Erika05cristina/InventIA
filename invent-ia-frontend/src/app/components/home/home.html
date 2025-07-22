@@ -4,17 +4,17 @@
   <p>Selecciona una opción desde el menú lateral para comenzar.</p>
 
   <section class="features">
-    <div class="feature-card">
+    <div class="feature-card"(click)="goTo('/upload')">
       <span class="material-symbols-rounded">upload_file</span>
       <h3>Cargar datos</h3>
       <p>Sube un archivo Excel o CSV para generar predicciones inteligentes.</p>
     </div>
-    <div class="feature-card">
+    <div class="feature-card"(click)="goTo('/results')">
       <span class="material-symbols-rounded">query_stats</span>
       <h3>Resultados</h3>
       <p>Consulta predicciones previas, analíticas y visualizaciones.</p>
     </div>
-    <div class="feature-card">
+    <div class="feature-card" (click)="goTo('/predict')">
       <span class="material-symbols-rounded">insights</span>
       <h3>Predicciones</h3>
       <p>Ingresa manualmente datos para obtener resultados rápidos.</p>

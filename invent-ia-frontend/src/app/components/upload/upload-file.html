@@ -1,5 +1,14 @@
 <div class="upload-container">
-  <!-- 📁 Subida de archivo CSV -->
+
+  <!-- Encabezado general con descripción -->
+  <div class="upload-header">
+    <h2>Entrenamiento</h2>
+    <p>
+      En esta sección puedes cargar un archivo CSV para entrenar el modelo de predicción automáticamente. Una vista previa de los datos cargados se mostrará a continuación.
+    </p>
+  </div>
+
+  <!-- Subida de archivo CSV -->
   <label class="upload-label">
     <span class="upload-button">
       <span class="material-symbols-rounded icon">folder_open</span>
@@ -8,7 +17,7 @@
     <input type="file" accept=".csv" (change)="onFileSelected($event)" />
   </label>
 
-  <!-- 🟡 Loader de carga CSV -->
+  <!-- Loader de carga CSV -->
   @if (isUploading()) {
     <div class="loader-box loader-upload">
       <span class="spinner"></span>
@@ -16,10 +25,10 @@
     </div>
   }
 
-  <!-- ✅ Vista previa -->
+  <!-- Vista previa -->
   @if (!isUploading() && previewData().length > 0) {
     <div class="preview">
-      <h3>Vista previa:</h3>
+      <h3>Vista previa del archivo:</h3>
       <div class="table-wrapper">
         <table>
           <thead>
@@ -43,7 +52,7 @@
     </div>
   }
 
-  <!-- 🟢 Entrenamiento en progreso -->
+  <!-- Entrenamiento en progreso -->
   @if (isTraining()) {
     <div class="loader-box loader-training">
       <span class="spinner"></span>
@@ -51,11 +60,12 @@
     </div>
   }
 
-  <!-- ✅ Mensaje de entrenamiento completado -->
+  <!-- Mensaje de entrenamiento completado -->
   @if (trainingCompleted()) {
     <div class="loader-box loader-success">
       <span class="material-symbols-rounded">check_circle</span>
       <p>Modelo entrenado exitosamente</p>
     </div>
   }
+
 </div>
