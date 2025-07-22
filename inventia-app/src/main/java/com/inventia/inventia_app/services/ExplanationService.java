@@ -12,9 +12,9 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.inventia.inventia_app.entities.PredictionSingle; 
+import com.inventia.inventia_app.entities.PredictionSingle;
 
-import reactor.core.publisher.Mono; 
+import reactor.core.publisher.Mono;
 
 @Service
 public class ExplanationService {
@@ -36,51 +36,54 @@ public class ExplanationService {
                 .build();
     }
 
-public Mono<Map<String, Object>> generarExplicacionEnriquecida(PredictionSingle prediction) {
-    Map<String, Object> payload = new HashMap<>();
-    payload.put("product_id", prediction.getPrediccion().getProductId());
-    payload.put("fecha_prediccion", prediction.getPrediccion().getFecha());
+    public Mono<Map<String, Object>> generarExplicacionEnriquecida(PredictionSingle prediction) {
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("product_id", prediction.getPrediccion().getProductId());
+        payload.put("fecha_prediccion", prediction.getPrediccion().getFecha());
 
-    return webClient.post()
-        .uri("/predict/by-product")
-        .contentType(MediaType.APPLICATION_JSON)
-        .bodyValue(payload)
-        .retrieve()
-        .bodyToMono(Map.class)
-        .flatMap(explicacionPython -> {
-            String explicacionSimple = (String) explicacionPython.get("explicacion_simple");
-            Map<String, Object> avanzada = (Map<String, Object>) explicacionPython.get("explicacion_avanzada");
-            Integer productId = (Integer) avanzada.get("producto_id");
-            Double prediccionValue = (Double) avanzada.get("prediccion");
-            List<List<Object>> variablesImportantes = (List<List<Object>>) avanzada.get("variables_importantes");
-            String graficaBase64 = (String) avanzada.get("grafica_explicabilidad_base64");
+        return webClient.post()
+                .uri("/predict/by-product")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(payload)
+                .retrieve()
+                .bodyToMono(Map.class)
+                .flatMap(explicacionPython -> {
+                    String explicacionSimple = (String) explicacionPython.get("explicacion_simple");
+                    Map<String, Object> avanzada = (Map<String, Object>) explicacionPython.get("explicacion_avanzada");
+                    Integer productId = (Integer) avanzada.get("producto_id");
+                    Double prediccionValue = (Double) avanzada.get("prediccion");
+                    List<List<Object>> variablesImportantes = (List<List<Object>>) avanzada.get("variables_importantes");
+                    String graficaBase64 = (String) avanzada.get("grafica_explicabilidad_base64");
 
-            // 🔔 Prompt mejorado para que OpenAI responda de manera profesional y directa
-            StringBuilder sb = new StringBuilder();
-            sb.append("El sistema ha generado una predicción con la siguiente información:\n");
-            sb.append("- Producto ID: ").append(productId).append("\n");
-            sb.append("- Predicción esperada: ").append(prediccionValue).append(" unidades\n");
-            sb.append("- Explicación simple: ").append(explicacionSimple).append("\n");
-            sb.append("- Variables más influyentes:\n");
-            for (List<Object> var : variablesImportantes) {
-                sb.append("   • ").append(var.get(0)).append(" con peso ").append(var.get(1)).append("\n");
-            }
-            sb.append("\nEscribe un resumen profesional y conciso para un usuario de negocio, presentando directamente las conclusiones, sin frases como 'puedo explicar' o 'el sistema ha generado'.");
+                    // 🔔 Redondeo (elige el que prefieras):
+                    Long prediccionRedondeada = Math.round(prediccionValue);  // 🔧 Redondeo a entero
+                    // Double prediccionRedondeada = Math.round(prediccionValue * 10.0) / 10.0;  // 🔧 O redondeo a 1 decimal
 
-            String prompt = sb.toString();
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("El sistema ha generado una predicción con la siguiente información:\n");
+                    sb.append("- Producto ID: ").append(productId).append("\n");
+                    sb.append("- Predicción esperada: ").append(prediccionRedondeada).append(" unidades\n");  // 🔥 usar prediccion redondeada
+                    sb.append("- Explicación simple: ").append(explicacionSimple).append("\n");
+                    sb.append("- Variables más influyentes:\n");
+                    for (List<Object> var : variablesImportantes) {
+                        sb.append("   • ").append(var.get(0)).append(" con peso ").append(var.get(1)).append("\n");
+                    }
+                    sb.append("\nEscribe un resumen profesional y conciso para un usuario de negocio, presentando directamente las conclusiones, sin frases como 'puedo explicar' o 'el sistema ha generado'.");
 
-            return askOpenAI(prompt).map(explicacionOpenAI -> {
-                Map<String, Object> response = new HashMap<>();
-                response.put("explicacionSimple", explicacionSimple);
-                response.put("variablesImportantes", variablesImportantes);
-                response.put("graficaBase64", graficaBase64);
-                response.put("explicacionOpenAI", explicacionOpenAI);
-                response.put("prediccion", prediccionValue);  // 🔥 Incluye predicción real en la respuesta
-                return response;
-            });
-        });
-}
+                    String prompt = sb.toString();
 
+                    return askOpenAI(prompt).map(explicacionOpenAI -> {
+                        Map<String, Object> response = new HashMap<>();
+                        response.put("explicacionSimple", explicacionSimple);
+                        response.put("variablesImportantes", variablesImportantes);
+                        response.put("graficaBase64", graficaBase64);
+                        response.put("explicacionOpenAI", explicacionOpenAI);
+                        response.put("prediccion", prediccionRedondeada);  // 🔥 Ahora devuelve redondeada
+                        return response;
+                    });
+                });
+
+    }
 
     public Mono<String> askOpenAI(String userMessage) {
         Map<String, Object> requestBody = new HashMap<>();
