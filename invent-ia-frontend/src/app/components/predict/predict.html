@@ -1,0 +1,81 @@
+<div class="predict-container">
+
+  <!-- Encabezado general con descripción -->
+  <div class="predict-header">
+    <h2>Predicciones</h2>
+    <p>
+      En esta sección puedes obtener predicciones automáticas sobre las cantidades de productos necesarias, de forma individual o grupal, para una fecha determinada.
+    </p>
+  </div>
+
+  <!-- Bloque de predicción individual -->
+  <div class="prediction-section">
+    <h3>Predicción individual</h3>
+    <div class="input-row">
+      <label>
+        ID del producto:
+        <input type="number" [(ngModel)]="manualProductIdValue" />
+      </label>
+
+      <label>
+        Fecha:
+        <input type="date" [(ngModel)]="manualFechaValue" />
+      </label>
+
+      <button (click)="getPrediction()">Predecir</button>
+    </div>
+
+    <!-- Loader individual -->
+    @if (isPredictingIndividual()) {
+      <div class="loader-box loader-predict">
+        <span class="spinner"></span>
+        <p>Procesando predicción individual...</p>
+      </div>
+    }
+
+    <!-- Resultado predicción individual -->
+    @if (predictionResult()) {
+      <div class="prediction-box">
+        <h4>Resultado:</h4>
+        <ul>
+          @for (r of predictionResult(); track r.productId) {
+            <li>
+              Producto #{{ r.productId }} — {{ r.date }}:
+              <strong>{{ r.prediction }}</strong>
+            </li>
+          }
+        </ul>
+      </div>
+    }
+  </div>
+
+  <!-- Bloque de predicción grupal -->
+  <div class="prediction-section">
+    <h3>Predicción grupal</h3>
+    <div class="input-row">
+      <label>
+        Fecha:
+        <input type="date" [(ngModel)]="fecha" />
+      </label>
+
+      <button (click)="getGroupPrediction()">Predecir grupo</button>
+    </div>
+
+    <!-- Loader grupal -->
+    @if (isPredictingGroup()) {
+      <div class="loader-box loader-predict">
+        <span class="spinner"></span>
+        <p>Procesando predicción grupal...</p>
+      </div>
+    }
+
+    <!-- Mensaje éxito grupal -->
+    @if (wasGroupPredictionDownloaded()) {
+      <div class="loader-box loader-predict">
+        <span class="material-symbols-rounded">download_done</span>
+        <p>Predicción descargada correctamente</p>
+      </div>
+    }
+  </div>
+
+</div>

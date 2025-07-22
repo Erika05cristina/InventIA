@@ -1,0 +1,49 @@
+<div class="explanation-container">
+  <!-- Encabezado general con descripción -->
+  <div class="explanation-header">
+    <h1>Explicación del modelo</h1>
+    <p>
+      En esta sección puedes consultar una explicación detallada sobre cómo el modelo tomó sus decisiones: resumen de la predicción, variables más relevantes y un gráfico explicativo.
+    </p>
+  </div>
+
+  <!-- Resumen simple -->
+  @if (explicacionSimple()) {
+    <section class="explanation-section">
+      <h2>Resumen de la predicción</h2>
+      <p>{{ explicacionSimple() }}</p>
+    </section>
+  } @else {
+    <section class="explanation-section">
+      <p><em>No hay una explicación simple disponible aún.</em></p>
+    </section>
+  }
+
+  <!-- Variables importantes -->
+  @if (variables().length > 0) {
+    <section class="explanation-section">
+      <h2>Importancia de variables</h2>
+      @for (feature of variables(); track feature[0]) {
+        <div class="feature-importance-bar">
+          <span>{{ feature[0] }}</span>
+          <div class="bar">
+            <div class="fill" [style.width.%]="feature[1] * 100"></div>
+          </div>
+        </div>
+      }
+    </section>
+  }
+
+  <!-- Gráfico -->
+  @if (grafica()) {
+    <section class="explanation-section">
+      <h2>Gráfico de explicación</h2>
+      <img
+        [src]="grafica()"
+        alt="Gráfico generado por el modelo"
+        class="explicacion-img"
+        style="max-width: 100%; height: auto; border: 1px solid #ccc; border-radius: 8px;"
+      />
+    </section>
+  }
+</div>

@@ -1,0 +1,25 @@
+<section class="wrapper" [class.active]="isLogin()">
+  <div class="form signup">
+    <header (click)="toggleSignup()">Signup</header>
+    <form (submit)="onSignup()">
+      <input type="text" placeholder="Full name" [(ngModel)]="signupName" name="name" required />
+      <input type="email" placeholder="Email address" [(ngModel)]="signupEmail" name="email" required />
+      <input type="password" placeholder="Password" [(ngModel)]="signupPassword" name="password" required />
+      <div class="checkbox">
+        <input type="checkbox" id="signupCheck" [(ngModel)]="acceptTerms" name="terms" />
+        <label for="signupCheck">I accept all terms & conditions</label>
+      </div>
+      <input type="submit" value="Signup" />
+    </form>
+  </div>
+
+  <div class="form login">
+    <header (click)="toggleLogin()">Login</header>
+    <form (submit)="onLogin()">
+      <input type="email" placeholder="Email address" [(ngModel)]="loginEmail" name="loginEmail" required />
+      <input type="password" placeholder="Password" [(ngModel)]="loginPassword" name="loginPassword" required />
+      <a href="#">Forgot password?</a>
+      <input type="submit" value="Login" />
+    </form>
+  </div>
+</section>
