@@ -1,16 +1,16 @@
 package com.inventia.inventia_app.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+
 import com.inventia.inventia_app.entities.PredictionGroup;
 import com.inventia.inventia_app.entities.PredictionSingle;
 import com.inventia.inventia_app.entities.Product;
 
 import reactor.core.publisher.Flux;
-
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 /**
  * PredictionService

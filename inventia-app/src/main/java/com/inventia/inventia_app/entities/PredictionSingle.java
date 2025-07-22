@@ -1,6 +1,7 @@
 package com.inventia.inventia_app.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 /*
 * "explicacion_avanzada": {
     "producto_id": 38,
@@ -30,7 +31,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
     "grafica_explicabilidad_base64":
 */
 
-
 class Prediccion {
 
     @JsonProperty("product_id")
@@ -38,7 +38,7 @@ class Prediccion {
     @JsonProperty("fecha_prediccion")
     private String fecha;
     private Double prediccion;
-
+    
     public Prediccion(Integer productId, String fecha, Double prediccion){
         this.productId = productId;
         this.fecha = fecha;

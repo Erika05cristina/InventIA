@@ -12,31 +12,35 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 import com.inventia.inventia_app.entities.ExplicacionAvanzada;
 import com.inventia.inventia_app.entities.PredictionSingle; 
+
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono; 
 
 @Service
 public class ExplanationService {
 
     @Value("${third.party.model.server.url}")
-    private static String URL_BASE;
+    private String URL_BASE;
 
-    private static final String URL_ROUTE = URL_BASE + "/explain";
+    private final String URL_ROUTE = URL_BASE + "/explain";
 
-    private WebClient webClient = WebClient.create(URL_ROUTE);
+    // private WebClient webClient = WebClient.create(URL_ROUTE);
 
     @Value("${openai.api.key}")
     private String openAiApiKey;
 
     @Value("${openai.api.url}")
     private String openAiApiUrl;
+    private WebClient webClient;
+    private String urlRoute;
 
     @Autowired
-    public ExplanationService(WebClient.Builder webClientBuilder) {
+    public ExplanationService(WebClient.Builder webClientBuilder, @Value("${third.party.model.server.url}") String urlBase) {
+        this.urlRoute = urlBase + "/explain";
         this.webClient = webClientBuilder
-                .baseUrl(URL_ROUTE)
+                .baseUrl(this.urlRoute)
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
@@ -53,14 +57,23 @@ public class ExplanationService {
         messages.add(Map.of("role", "system", "content", "You are an assistant for InventIA."));
         messages.add(Map.of("role", "user", "content", userMessage));
         requestBody.put("messages", messages);
+
         return WebClient.create("https://api.openai.com/v1/chat/completions")
                 .post()
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + openAiApiKey)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(requestBody)
                 .retrieve()
-                .bodyToMono(String.class);
+                .bodyToMono(Map.class)
+                .map(responseMap -> {
+                    List<Map<String, Object>> choices = (List<Map<String, Object>>) responseMap.get("choices");
+                    Map<String, Object> firstChoice = choices.get(0);
+                    Map<String, String> message = (Map<String, String>) firstChoice.get("message");
+                    return message.get("content");
+                });
     }
+
+
     public Mono<String> askOpenAIFromPrediction(PredictionSingle pred) {
         String prompt = buildPromptFromPrediction(pred);
         return askOpenAI(prompt);
@@ -85,7 +98,7 @@ public class ExplanationService {
         for (List<Object> var : variables) {
             sb.append("   • ").append(var.get(0)).append(" con peso ").append(var.get(1)).append("\n");
         }
-        sb.append("\nPregunta: ¿Puedes explicar esta predicción de manera comprensible para un usuario?");
+        sb.append("\nPregunta: ¿Explica esta predicción de manera comprensible para un usuario?");
 
         // ✉️ Enviar prompt a OpenAI
         return askOpenAI(sb.toString());
@@ -108,8 +121,32 @@ public class ExplanationService {
             }
         }
 
-        sb.append("\nPregunta: ¿Podrías explicarle esta predicción a un usuario de negocio de forma comprensible?");
+        sb.append("\nPregunta: ¿Explica esta predicción a un usuario de negocio de forma comprensible?");
         return sb.toString();
 
     }
+    public Mono<Map<String, Object>> generarExplicacionEnriquecida(PredictionSingle prediction) {
+        String explicacionSimple = prediction.getSimple();
+
+        ExplicacionAvanzada avanzada = prediction.getExplicacionAvanzada();
+        List<List<Object>> variablesImportantes = avanzada != null ? avanzada.getImportantes() : null;
+
+        String graficaBase64 = generarGraficaBase64(prediction);
+
+        String prompt = buildPromptFromPrediction(prediction);
+
+        return askOpenAI(prompt).map(explicacionOpenAI -> {
+            Map<String, Object> response = new HashMap<>();
+            response.put("explicacionSimple", explicacionSimple);
+            response.put("variablesImportantes", variablesImportantes);
+            response.put("graficaBase64", graficaBase64);
+            response.put("explicacionOpenAI", explicacionOpenAI);
+            return response;
+        });
+    }
+
+    private String generarGraficaBase64(PredictionSingle prediction) {
+        return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...";
+    }
+
 }
