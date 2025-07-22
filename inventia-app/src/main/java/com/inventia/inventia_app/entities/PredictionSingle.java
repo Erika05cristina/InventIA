@@ -132,6 +132,8 @@ public class PredictionSingle {
     private String simple;
     @JsonProperty("explicacion_avanzada")
     private ExplicacionAvanzada explicacionAvanzada;
+    private Double inversion;
+    private String explicacionOpenAI;
 
     public PredictionSingle(String status, String simple) {
         this.status = status;
@@ -168,6 +170,22 @@ public class PredictionSingle {
 
     public ExplicacionAvanzada getExplicacionAvanzada() {
         return this.explicacionAvanzada;
+    }
+
+    public void setInversion(Double inversion) {
+        this.inversion = inversion;
+    }
+
+    public Double getInversion() {
+        return this.inversion;
+    }
+
+    public void setExplicacionOpenAi(String explicacionOpenAI) {
+        this.explicacionOpenAI = explicacionOpenAI;
+    }
+
+    public String getExplicacionOpenAi() {
+        return this.explicacionOpenAI;
     }
 
     @Override

@@ -48,6 +48,7 @@ public class PredictionGroup {
     private String status;
     private String fecha;
     private ArrayList<IndividualPrediction> predicciones;
+    private Double inversion;
 
     public PredictionGroup(String status, String fecha) {
         this.status = status;
@@ -80,6 +81,14 @@ public class PredictionGroup {
 
     public ArrayList<IndividualPrediction> getPredicciones(){
         return this.predicciones;
+    }
+
+    public void setInversion(Double inversion) {
+        this.inversion = inversion;
+    }
+
+    public Double getInversion() {
+        return this.inversion;
     }
 
     @Override

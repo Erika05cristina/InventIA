@@ -1,5 +1,6 @@
 package com.inventia.inventia_app.services;
 
+import com.inventia.inventia_app.entities.DashboardDTO;
 import com.inventia.inventia_app.entities.PredictionGroup;
 import com.inventia.inventia_app.entities.PredictionSingle;
 import com.inventia.inventia_app.entities.Product;
