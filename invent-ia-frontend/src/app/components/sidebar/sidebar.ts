@@ -1,14 +1,21 @@
-import { Component, ElementRef, ViewChild, AfterViewInit, HostListener,signal } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, HostListener,signal, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { Auth } from '../../services/auth';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [RouterModule],
+  imports: [RouterModule,CommonModule],
   templateUrl: './sidebar.html',
   styleUrls: ['./sidebar.scss']
 })
 
 export class Sidebar implements AfterViewInit {
+
+  private auth = inject(Auth);
+  private router = inject(Router);
+
   @ViewChild('sidebar') sidebarRef!: ElementRef<HTMLElement>;
   @ViewChild('menuIcon') menuIconRef!: ElementRef<HTMLElement>;
 
@@ -69,4 +76,10 @@ export class Sidebar implements AfterViewInit {
     sidebar.style.height = active ? `${sidebar.scrollHeight}px` : this.collapsedSidebarHeight;
     icon.innerText = active ? 'close' : 'menu';
   }
+
+  logout(): void {
+    this.auth.logout();
+    this.router.navigate(['/login']);
+  }
+
 }
