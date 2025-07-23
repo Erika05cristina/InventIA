@@ -1,0 +1,71 @@
+<div class="upload-container">
+
+  <!-- Encabezado general con descripción -->
+  <div class="upload-header">
+    <h2>Entrenamiento</h2>
+    <p>
+      En esta sección puedes cargar un archivo CSV para entrenar el modelo de predicción automáticamente. Una vista previa de los datos cargados se mostrará a continuación.
+    </p>
+  </div>
+
+  <!-- Subida de archivo CSV -->
+  <label class="upload-label">
+    <span class="upload-button">
+      <span class="material-symbols-rounded icon">folder_open</span>
+      Selecciona un archivo CSV
+    </span>
+    <input type="file" accept=".csv" (change)="onFileSelected($event)" />
+  </label>
+
+  <!-- Loader de carga CSV -->
+  @if (isUploading()) {
+    <div class="loader-box loader-upload">
+      <span class="spinner"></span>
+      <p>Cargando archivo CSV...</p>
+    </div>
+  }
+
+  <!-- Vista previa -->
+  @if (!isUploading() && previewData().length > 0) {
+    <div class="preview">
+      <h3>Vista previa del archivo:</h3>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              @for (header of previewData()[0]; track $index) {
+                <th>{{ header }}</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of previewData().slice(1); track $index) {
+              <tr>
+                @for (cell of row; track $index) {
+                  <td>{{ cell }}</td>
+                }
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+
+  <!-- Entrenamiento en progreso -->
+  @if (isTraining()) {
+    <div class="loader-box loader-training">
+      <span class="spinner"></span>
+      <p>Entrenando modelo en segundo plano...</p>
+    </div>
+  }
+
+  <!-- Mensaje de entrenamiento completado -->
+  @if (trainingCompleted()) {
+    <div class="loader-box loader-success">
+      <span class="material-symbols-rounded">check_circle</span>
+      <p>Modelo entrenado exitosamente</p>
+    </div>
+  }
+
+</div>

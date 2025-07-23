@@ -1,0 +1,17 @@
+<div class="agent-container">
+  <h1>Agente IA</h1>
+  <div class="chat-window">
+      @for (message of messages(); track $index) {
+      <div [class.user]="message.role === 'user'" [class.ai]="message.role === 'ai'" class="message">
+        <strong>{{ message.role === 'user' ? 'Tú' : 'Agente IA' }}:</strong> {{ message.content }}
+      </div>
+    }
+  </div>
+
+  <div class="input-area">
+    <input [formControl]="inputControl" placeholder="Escribe tu mensaje..." (keyup.enter)="sendMessage()" />
+    <button (click)="sendMessage()">
+      <span class="material-symbols-rounded">send</span>
+    </button>
+  </div>
+</div>

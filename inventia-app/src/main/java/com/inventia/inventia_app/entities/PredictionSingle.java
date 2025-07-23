@@ -8,11 +8,16 @@ class ExplicacionAvanzada {
 
     @JsonProperty("producto_id")
     private Integer productId;
+
     private Double prediccion;
+
     @JsonProperty("variables_importantes")
     private List<List<Object>> importantes;
+
     @JsonProperty("grafica_explicabilidad_base64")
     private String graphBase64;
+
+    public ExplicacionAvanzada() {}
 
     public ExplicacionAvanzada(Integer productId, Double prediccion) {
         this.productId = productId;
@@ -93,37 +98,35 @@ public class PredictionSingle {
     private Double inversion;
     private String explicacionOpenAI;
 
+    public PredictionSingle() {}
+
     public PredictionSingle(String status, String simple) {
         this.status = status;
         this.simple = simple;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public String getStatus() {
         return this.status;
     }
 
-    public void setPrediccion(Prediccion prediccion) {
-        this.prediccion = prediccion;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Prediccion getPrediccion() {
         return this.prediccion;
     }
 
-    public void setSimple(String simple) {
-        this.simple = simple;
+    public void setPrediccion(Prediccion prediccion) {
+        this.prediccion = prediccion;
     }
 
     public String getSimple() {
         return this.simple;
     }
 
-    public void setExplicacionAvanzada(ExplicacionAvanzada explicacionAvanzada) {
-        this.explicacionAvanzada = explicacionAvanzada;
+    public void setSimple(String simple) {
+        this.simple = simple;
     }
 
     public ExplicacionAvanzada getExplicacionAvanzada() {

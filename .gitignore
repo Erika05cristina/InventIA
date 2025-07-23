@@ -17,5 +17,3 @@ modelos/*
 # Archivos temporales
 *.log
 .DS_Store
-.csv
-*.zip
