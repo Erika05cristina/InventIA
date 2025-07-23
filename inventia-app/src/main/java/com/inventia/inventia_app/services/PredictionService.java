@@ -1,20 +1,22 @@
 package com.inventia.inventia_app.services;
 
-import com.inventia.inventia_app.entities.PrediccionDTO;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.inventia.inventia_app.entities.PrediccionDTO;
 import com.inventia.inventia_app.entities.PredictionGroup;
 import com.inventia.inventia_app.entities.PredictionSingle;
 import com.inventia.inventia_app.entities.Product;
 import com.inventia.inventia_app.repositories.PredictionRepository;
 
 import reactor.core.publisher.Flux;
-import java.util.Date;
-import java.util.List;
 
 /**
  * PredictionService
@@ -98,23 +100,31 @@ public class PredictionService {
         return prediccion;
     }
 
-    public Flux<PredictionGroup> predictGroup(String fecha_prediccion) {
-        Product product = new Product(0, fecha_prediccion);
+public Flux<PredictionGroup> predictGroup(String fecha_prediccion) {
+    Product product = new Product(0, fecha_prediccion);
         Flux<PredictionGroup> prediccion =  webClient.post().uri("/all-products").bodyValue(product).retrieve()
-            .bodyToFlux(PredictionGroup.class);
-        prediccion.subscribe(
-            prediction -> {
-                PrediccionDTO pred = new PrediccionDTO(new Date(), fecha_prediccion, "grupo" , prediction.toString());
-                predictionRepository.save(pred);
-                System.out.println("Prediccion guardada en la base de datos: " + pred);
-            },
-            error -> {
-                System.out.println("Error al predecir: " + error);
-            },
-            () -> {
-                System.out.println("Finalizado");
+        .bodyToFlux(PredictionGroup.class);
+    prediccion.subscribe(
+        prediction -> {
+            try {
+              
+                ObjectMapper mapper = new ObjectMapper();
+                String json = mapper.writeValueAsString(prediction);
+                PrediccionDTO pred = new PrediccionDTO(new Date(), fecha_prediccion, "grupo", json);
+
+                System.out.println("Predicción guardada en la base de datos: " + pred);
+            } catch (Exception e) {
+                System.err.println("Error al serializar y guardar la predicción: " + e.getMessage());
             }
-        );
-        return prediccion;
-    }
+        },
+        error -> {
+            System.err.println("Error al predecir: " + error.getMessage());
+        },
+        () -> {
+            System.out.println("Proceso de predicción completado.");
+        }
+    );
+
+    return prediccion;
+}
 }
