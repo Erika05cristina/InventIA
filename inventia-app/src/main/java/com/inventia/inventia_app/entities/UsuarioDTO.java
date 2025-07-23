@@ -1,21 +1,37 @@
 package com.inventia.inventia_app.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 /**
  * User
  */
-@Entity
-public class Usuario {
+@Entity(name = "usuario")
+public class UsuarioDTO {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "usuario_id")
     private Integer userId;
+    @Column(name = "usuario_name")
+    @JsonProperty("name")
     private String userName;
+    @Column(name = "usuario_email")
+    @JsonProperty("email")
     private String userEmail;
+    @Column(name = "usuario_password")
+    @JsonProperty("password")
     private String userPass;
 
-    public Usuario(String userName, String userEmail, String userPass) {
+    public UsuarioDTO() {
+    }
+
+    public UsuarioDTO(String userName, String userEmail, String userPass) {
         this.userName = userName;
         this.userEmail = userEmail;
         this.userPass = userPass;

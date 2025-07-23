@@ -1,18 +1,16 @@
 package com.inventia.inventia_app.repositories;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.inventia.inventia_app.entities.Usuario;
-import com.inventia.inventia_app.databases.CloudPostgresConnection;
+import com.inventia.inventia_app.entities.UsuarioDTO;
 
 /**
  * UserRepository
  */
 @Repository
-public interface UserRepository extends JpaRepository<Usuario, Long>{
+public interface UserRepository extends JpaRepository<UsuarioDTO, Long>{
 
-    Usuario findByUserEmail(String userEmail);
+    UsuarioDTO findByUserEmail(String userEmail);
 
 }

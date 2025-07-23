@@ -4,10 +4,23 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 /**
  * ProductRecords
  */
+@Entity(name = "producto_venta")
 public class ProductRecord {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty("record_id")
+    @Column(name = "record_id")
+    private Integer recordId;
 
     @JsonProperty("city_id")
     private Integer cityId;
@@ -66,27 +79,26 @@ public class ProductRecord {
     @JsonProperty("avg_wind_level")
     private Double avgWindLevel;
 
-    public ProductRecord (
-        Integer city_id,
-        Integer store_id,
-        Integer management_group_id,
-        Integer first_category_id,
-        Integer second_category_id,
-        Integer third_category_id,
-        Integer product_id,
-        String dt,
-        Double sale_amount,
-        List<Double> hours_sale,
-        Integer stock_hour6_22_cnt,
-        List<Integer> hours_stock_status,
-        Double discount,
-        Integer holiday_flag,
-        Integer activity_flag,
-        Double precpt,
-        Double avg_temperature,
-        Double avg_humidity,
-        Double avg_wind_level
-    ){
+    public ProductRecord(
+            Integer city_id,
+            Integer store_id,
+            Integer management_group_id,
+            Integer first_category_id,
+            Integer second_category_id,
+            Integer third_category_id,
+            Integer product_id,
+            String dt,
+            Double sale_amount,
+            List<Double> hours_sale,
+            Integer stock_hour6_22_cnt,
+            List<Integer> hours_stock_status,
+            Double discount,
+            Integer holiday_flag,
+            Integer activity_flag,
+            Double precpt,
+            Double avg_temperature,
+            Double avg_humidity,
+            Double avg_wind_level) {
         this.cityId = city_id;
         this.storeId = store_id;
         this.managementGroupId = management_group_id;
@@ -106,6 +118,14 @@ public class ProductRecord {
         this.avgTemperature = avg_temperature;
         this.avgHumidity = avg_humidity;
         this.avgWindLevel = avg_wind_level;
+    }
+
+    public Integer getRecordId() {
+        return recordId;
+    }
+
+    public void setRecordId(Integer recordId) {
+        this.recordId = recordId;
     }
 
     public Integer getCityId() {
@@ -263,25 +283,25 @@ public class ProductRecord {
     @Override
     public String toString() {
         return "ProductRecord{"
-        + "city_id='" + cityId + '\''
-        + ", store_id='" + storeId + '\''
-        + ", management_group_id='" + managementGroupId + '\''
-        + ", first_category_id='" + firstCategoryId + '\''
-        + ", second_category_id='" + secondCategoryId + '\''
-        + ", third_category_id='" + thirdCategoryId + '\''
-        + ", product_id='" + productId + '\''
-        + ", dt='" + dt + '\''
-        + ", sale_amount='" + saleAmount + '\''
-        + ", hours_sale=" + hoursSale
-        + ", stock_hour6_22_cnt='" + stockHour6_22Cnt + '\''
-        + ", hours_stock_status=" + hoursStockStatus
-        + ", discount='" + discount + '\''
-        + ", holiday_flag='" + holidayFlag + '\''
-        + ", activity_flag='" + activityFlag + '\''
-        + ", precpt='" + precpt + '\''
-        + ", avg_temperature='" + avgTemperature + '\''
-        + ", avg_humidity='" + avgHumidity + '\''
-        + ", avg_wind_level='" + avgWindLevel + '\''
-        + '}';
+                + "city_id='" + cityId + '\''
+                + ", store_id='" + storeId + '\''
+                + ", management_group_id='" + managementGroupId + '\''
+                + ", first_category_id='" + firstCategoryId + '\''
+                + ", second_category_id='" + secondCategoryId + '\''
+                + ", third_category_id='" + thirdCategoryId + '\''
+                + ", product_id='" + productId + '\''
+                + ", dt='" + dt + '\''
+                + ", sale_amount='" + saleAmount + '\''
+                + ", hours_sale=" + hoursSale
+                + ", stock_hour6_22_cnt='" + stockHour6_22Cnt + '\''
+                + ", hours_stock_status=" + hoursStockStatus
+                + ", discount='" + discount + '\''
+                + ", holiday_flag='" + holidayFlag + '\''
+                + ", activity_flag='" + activityFlag + '\''
+                + ", precpt='" + precpt + '\''
+                + ", avg_temperature='" + avgTemperature + '\''
+                + ", avg_humidity='" + avgHumidity + '\''
+                + ", avg_wind_level='" + avgWindLevel + '\''
+                + '}';
     }
 }

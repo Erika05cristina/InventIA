@@ -31,12 +31,9 @@ class IndividualPrediction {
     @Override
     public String toString() {
         return "IndividualPrediction{"
-        + "product_id='"
-        + product_id
-        + '\''
-        + ", predicted_stock="
-        + predicted_stock
-        + '}';
+            + "product_id=" + product_id
+            + ", predicted_stock=" + predicted_stock
+            + '}';
     }
 }
 
@@ -93,16 +90,11 @@ public class PredictionGroup {
 
     @Override
     public String toString() {
-        return "Product{"
-        + "status='"
-        + status
-        + '\''
-        + ", fecha="
-        + fecha
-        + '\''
-        + ", predicciones=["
-        + predicciones.toString()
-        + ']'
-        + '}';
+        return "PredictionGroup{"
+            + "status='" + status + '\''
+            + ", fecha='" + fecha + '\''
+            + ", predicciones=" + predicciones.toString()
+            + ", inversion=" + inversion
+            + '}';
     }
 }

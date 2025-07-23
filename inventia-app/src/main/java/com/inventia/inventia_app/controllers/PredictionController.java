@@ -7,10 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.inventia.inventia_app.entities.DashboardDTO;
 import com.inventia.inventia_app.entities.PredictionGroup;
 import com.inventia.inventia_app.entities.PredictionSingle;
-import com.inventia.inventia_app.entities.Product;
 import com.inventia.inventia_app.services.PredictionService;
 
 import reactor.core.publisher.Flux;
@@ -33,8 +31,7 @@ public class PredictionController {
     @CrossOrigin(origins = "*")
     public Flux<PredictionSingle> predecirUnico(@RequestParam Integer product_id, @RequestParam String fecha_prediccion) {
         System.out.println("Prediciendo de un solo producto: " + product_id + ", " + fecha_prediccion);
-        Product product = new Product(product_id, fecha_prediccion);
-        Flux<PredictionSingle> prediction = predictionService.predictSingle(product);
+        Flux<PredictionSingle> prediction = predictionService.predictSingle(product_id, fecha_prediccion);
         System.out.println(prediction.cast(PredictionSingle.class).toString());
         return prediction;
     }
@@ -43,8 +40,7 @@ public class PredictionController {
     @CrossOrigin(origins = "*")
     public Flux<PredictionGroup> predecirGrupo(@RequestParam String fecha_prediccion) {
         System.out.println("Prediciendo de todos los productos: " + fecha_prediccion);
-        Product product = new Product(0, fecha_prediccion);
-        return predictionService.predictGroup(product);
+        return predictionService.predictGroup(fecha_prediccion);
     }
 
     /*

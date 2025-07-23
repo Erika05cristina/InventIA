@@ -28,27 +28,6 @@ public class CloudPostgresConnection {
     private HikariDataSource connectionPool;
 
     public CloudPostgresConnection() {
-        /*
-        String jdbcUrl = "jdbc:postgresql:///base-inventia";
-        Properties connProps = new Properties();
-        connProps.setProperty("user","services-admin@inventia-app.iam");
-        connProps.setProperty("password", "password");
-        connProps.setProperty("sslmode","disable");
-        connProps.setProperty("socketFactory","com.google.cloud.sql.postgres.SocketFactory");
-        connProps.setProperty("cloudSqlInstance","inventia-app:us-central1:base-inventia");
-        connProps.setProperty("enableIamAuth","true");
-        connProps.setProperty("cloudSqlTargetPrincipal","services-admin@inventia-app.iam.gserviceaccount.com");
-        connProps.setProperty("ipTypes", "PUBLIC");
-
-        // Initialize connection pool
-        HikariConfig config = new HikariConfig();
-        config.setJdbcUrl(jdbcUrl);
-        config.setDataSourceProperties(connProps);
-        config.setConnectionTimeout(10000); // 10s
-
-        HikariDataSource connectionPool = new HikariDataSource(config);
-        this.connectionPool = connectionPool;
-        */
     }
 
     //@Bean

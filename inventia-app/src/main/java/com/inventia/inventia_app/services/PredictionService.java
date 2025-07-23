@@ -1,15 +1,19 @@
 package com.inventia.inventia_app.services;
 
-import com.inventia.inventia_app.entities.DashboardDTO;
+import com.inventia.inventia_app.entities.PrediccionDTO;
 import com.inventia.inventia_app.entities.PredictionGroup;
 import com.inventia.inventia_app.entities.PredictionSingle;
 import com.inventia.inventia_app.entities.Product;
+import com.inventia.inventia_app.repositories.PredictionRepository;
 
 import reactor.core.publisher.Flux;
 
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +30,9 @@ public class PredictionService {
     private WebClient webClient = WebClient.create(URL_ROUTE);
 
     @Autowired
+    private PredictionRepository predictionRepository;
+
+    @Autowired
     public PredictionService(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder
             .baseUrl(URL_ROUTE)
@@ -38,13 +45,45 @@ public class PredictionService {
         return webClient.get().uri("/run").retrieve().bodyToFlux(String.class);
     }
 
-    public Flux<PredictionSingle> predictSingle(Product product)  {
-        return webClient.post().uri("/by-product").bodyValue(product).retrieve()
+    public Flux<PredictionSingle> predictSingle(int product_id, String fecha_prediccion)  {
+        Product product = new Product(product_id, fecha_prediccion);
+        Flux<PredictionSingle> prediccion =  webClient.post().uri("/by-product").bodyValue(product).retrieve()
             .bodyToFlux(PredictionSingle.class);
+        prediccion.subscribe(
+            prediction -> {
+                PrediccionDTO pred = new PrediccionDTO(new Date(), fecha_prediccion, "individual" , prediction.toString());
+                System.out.println("Prediccion guardada en la base de datos: " + pred);
+                predictionRepository.save(pred);
+                System.out.println("Prediccion guardada en la base de datos: " + pred);
+            },
+            error -> {
+                System.out.println("Error al predecir: " + error);
+            },
+            () -> {
+                System.out.println("Finalizado");
+            }
+        );
+        return prediccion;
     }
 
-    public Flux<PredictionGroup> predictGroup(Product product) {
-        return webClient.post().uri("/all-products").bodyValue(product).retrieve()
+    public Flux<PredictionGroup> predictGroup(String fecha_prediccion) {
+        Product product = new Product(0, fecha_prediccion);
+        Flux<PredictionGroup> prediccion =  webClient.post().uri("/by-product").bodyValue(product).retrieve()
             .bodyToFlux(PredictionGroup.class);
+        prediccion.subscribe(
+            prediction -> {
+                PrediccionDTO pred = new PrediccionDTO(new Date(), fecha_prediccion, "grupo" , prediction.toString());
+                pred.setPrediccionId(0);
+                predictionRepository.save(pred);
+                System.out.println("Prediccion guardada en la base de datos: " + pred);
+            },
+            error -> {
+                System.out.println("Error al predecir: " + error);
+            },
+            () -> {
+                System.out.println("Finalizado");
+            }
+        );
+        return prediccion;
     }
 }
