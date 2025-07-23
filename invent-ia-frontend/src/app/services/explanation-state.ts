@@ -8,5 +8,6 @@ export class ExplanationState {
 readonly explicacionSimple = signal('');
 readonly variablesImportantes = signal<[string, number][]>([]);
 readonly graficaBase64 = signal('');
+readonly explicacionCompleta = signal('');
   
 }

@@ -7,15 +7,11 @@
     </p>
   </div>
 
-  <!-- Resumen simple -->
-  @if (explicacionSimple()) {
+  <!-- Explicación generada por OpenAI -->
+  @if (explicacionOpenAi()) {
     <section class="explanation-section">
-      <h2>Resumen de la predicción</h2>
-      <p>{{ explicacionSimple() }}</p>
-    </section>
-  } @else {
-    <section class="explanation-section">
-      <p><em>No hay una explicación simple disponible aún.</em></p>
+      <h2>Explicación detallada generada por IA</h2>
+      <p style="white-space: pre-line;">{{ explicacionOpenAi() }}</p>
     </section>
   }
 

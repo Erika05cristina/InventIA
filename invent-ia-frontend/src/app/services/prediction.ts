@@ -16,6 +16,7 @@ export interface PredictionResponseGroup {
 export interface PredictionExplanation {
   status: string;
   explicacion_simple: string;
+  explicacionOpenAi?: string; // ✅ Agregado aquí
   prediccion: {
     product_id: number;
     fecha_prediccion: string;

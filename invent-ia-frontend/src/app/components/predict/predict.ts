@@ -72,6 +72,7 @@ export class Predict {
           this.explanationState.explicacionSimple.set(explicacion.explicacion_simple ?? '');
           this.explanationState.variablesImportantes.set(explicacion.explicacion_avanzada?.variables_importantes ?? []);
           this.explanationState.graficaBase64.set(explicacion.explicacion_avanzada?.grafica_explicabilidad_base64 ?? '');
+          this.explanationState.explicacionCompleta.set(explicacion.explicacionOpenAi ?? '');
         }
       },
       error: (err) => {
