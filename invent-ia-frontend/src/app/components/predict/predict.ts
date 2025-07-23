@@ -91,6 +91,8 @@ export class Predict {
       return;
     }
 
+    this.state.fechaUltimaPrediccionGrupal.set(fechaFormateada);
+
     this.isPredictingGroup.set(true);
     this.wasGroupPredictionDownloaded.set(false);
 
@@ -116,5 +118,6 @@ export class Predict {
       complete: () => this.isPredictingGroup.set(false)
     });
   }
+
 
 }

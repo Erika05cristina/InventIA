@@ -14,6 +14,7 @@ export class UploadState {
   readonly isTraining = signal(false);
   readonly wasGroupPredictionDownloaded = signal(false);
   readonly trainingCompleted = signal(false);
+  readonly fechaUltimaPrediccionGrupal = signal<string>('');
 
   readonly manualProductId = signal<number | null>(null);
   readonly manualFecha = signal('');

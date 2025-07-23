@@ -7,5 +7,6 @@ export const routes: Routes = [
   { path: 'upload', loadComponent: () => import('./components/upload/upload-file').then(m => m.UploadFile) },
   { path: 'predict', loadComponent: () => import('./components/predict/predict').then(m => m.Predict) },
   { path: 'explanation', loadComponent: () => import('./components/explanation/explanation').then(m => m.Explanation) },
+  { path: 'dashboard', loadComponent: () => import('./components/dashboard/dashboard').then(m => m.Dashboard) },
   { path: 'agent', loadComponent: () => import('./components/agent/agent').then(m => m.Agent) },
 ];

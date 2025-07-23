@@ -1,0 +1,30 @@
+@if (stats) {
+
+  <section class="dashboard-container">
+    <h2>Resumen del día {{ stats.fecha }}</h2>
+
+    <div class="cards">
+      <div class="card">Total Unidades: {{ stats.totalUnidades }}</div>
+      <div class="card">Promedio x Producto: {{ stats.promedioPorProducto | number:'1.2-2' }}</div>
+      <div class="card">
+        Producto más demandado (ID {{ stats.productoMayorDemandaId }}):<br />
+        {{ stats.productoMayorDemandaStock | number:'1.2-2' }}
+      </div>
+      <div class="card">
+        Producto menos demandado (ID {{ stats.productoMenorDemandaId }}):<br />
+        {{ stats.productoMenorDemandaStock | number:'1.2-2' }}
+      </div>
+    </div>
+
+    <h3>Distribución por nivel de demanda</h3>
+    <p-chart type="doughnut" [data]="chartData"></p-chart>
+  </section>
+}
+
+@if (!stats) {
+  <div class="loader-box loader-predict">
+    Cargando estadísticas del dashboard...
+    <span class="spinner"></span>
+  </div>
+}
+
