@@ -17,3 +17,5 @@ modelos/*
 # Archivos temporales
 *.log
 .DS_Store
+
+.env
