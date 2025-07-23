@@ -32,11 +32,11 @@ public class PredictionController {
     public Flux<PredictionSingle> predecirUnico(@RequestParam Integer product_id, @RequestParam String fecha_prediccion) {
         System.out.println("Prediciendo de un solo producto: " + product_id + ", " + fecha_prediccion);
         Flux<PredictionSingle> prediction = predictionService.predictSingle(product_id, fecha_prediccion);
-        System.out.println(prediction.cast(PredictionSingle.class).toString());
         return prediction;
     }
 
     @GetMapping("/group")
+    @CrossOrigin(origins = "*")
     public Flux<PredictionGroup> predecirGrupo(@RequestParam String fecha_prediccion) {
         System.out.println("Prediciendo de todos los productos: " + fecha_prediccion);
         return predictionService.predictGroup(fecha_prediccion);
