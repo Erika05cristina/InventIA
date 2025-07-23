@@ -16,11 +16,14 @@ public class ProductosDTO {
     @Column(name = "producto_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @Column(name = "producto_nombre")
     private String nombre;
+
     @Column(name = "producto_precio")
     private Double precio;
-    @Column(name = "producto_categoria")
+
+    @Column(name = "producto_categoria", columnDefinition = "TEXT")
     private String categoria;
 
     public ProductosDTO() {

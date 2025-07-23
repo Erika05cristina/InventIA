@@ -11,25 +11,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.inventia.inventia_app.entities.PredictionGroup;
 import com.inventia.inventia_app.entities.PredictionSingle;
-import com.inventia.inventia_app.entities.Product;
-import com.inventia.inventia_app.services.ExplanationService;
 import com.inventia.inventia_app.services.PredictionService;
 
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/predict")
 @CrossOrigin(origins = "*")
 public class PredictionController {
 
-    private final PredictionService predictionService;
-    private final ExplanationService explanationService;
+    private PredictionService predictionService;
 
     @Autowired
-    public PredictionController(PredictionService predictionService, ExplanationService explanationService) {
+    public PredictionController(PredictionService predictionService) {
         this.predictionService = predictionService;
-        this.explanationService = explanationService;
     }
 
     @GetMapping("/single")

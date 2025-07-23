@@ -18,13 +18,17 @@ public class PrediccionDTO {
     @Column(name = "prediccion_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer prediccionId;
+
     @Column(name = "prediccion_fecha_creacion")
     private Date fechaCreacion;
+
     @Column(name = "prediccion_fecha_prediccion")
     private String fechaPrediccion;
+
     @Column(name = "prediccion_tipo")
     private String tipo;
-    @Column(name = "prediccion_contenido")
+
+    @Column(name = "prediccion_contenido", columnDefinition = "TEXT")
     private String jsonPrediccion;
 
     public PrediccionDTO() {}
