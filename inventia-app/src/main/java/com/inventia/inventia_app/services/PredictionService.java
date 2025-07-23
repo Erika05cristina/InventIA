@@ -2,6 +2,7 @@ package com.inventia.inventia_app.services;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -102,29 +103,44 @@ public class PredictionService {
 
 public Flux<PredictionGroup> predictGroup(String fecha_prediccion) {
     Product product = new Product(0, fecha_prediccion);
-        Flux<PredictionGroup> prediccion =  webClient.post().uri("/all-products").bodyValue(product).retrieve()
+    Flux<PredictionGroup> prediccion = webClient.post()
+        .uri("/all-products")
+        .bodyValue(product)
+        .retrieve()
         .bodyToFlux(PredictionGroup.class);
+
     prediccion.subscribe(
         prediction -> {
             try {
-              
+                // Verificar si ya existe una predicción para esa fecha y tipo
+                Optional<PrediccionDTO> existente = predictionRepository
+                    .findFirstByFechaPrediccionAndTipo(fecha_prediccion, "grupo");
+
+                if (existente.isPresent()) {
+                    System.out.println("⚠️ Ya existe una predicción para la fecha " + fecha_prediccion + ". No se guardará nuevamente.");
+                    return; // Salir sin guardar
+                }
+
+                // Si no existe, guardar
                 ObjectMapper mapper = new ObjectMapper();
                 String json = mapper.writeValueAsString(prediction);
                 PrediccionDTO pred = new PrediccionDTO(new Date(), fecha_prediccion, "grupo", json);
+                predictionRepository.save(pred);
+                System.out.println("✅ Predicción guardada para la fecha " + fecha_prediccion);
 
-                System.out.println("Predicción guardada en la base de datos: " + pred);
             } catch (Exception e) {
-                System.err.println("Error al serializar y guardar la predicción: " + e.getMessage());
+                System.err.println("❌ Error al serializar o guardar la predicción: " + e.getMessage());
             }
         },
         error -> {
-            System.err.println("Error al predecir: " + error.getMessage());
+            System.err.println("❌ Error al predecir: " + error.getMessage());
         },
         () -> {
-            System.out.println("Proceso de predicción completado.");
+            System.out.println("✅ Proceso de predicción completado.");
         }
     );
 
     return prediccion;
 }
+
 }
