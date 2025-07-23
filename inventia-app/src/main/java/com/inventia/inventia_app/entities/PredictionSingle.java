@@ -24,6 +24,22 @@ class ExplicacionAvanzada {
         this.prediccion = prediccion;
     }
 
+    public Integer getProductId() {
+        return this.productId;
+    }
+
+    public Double getPrediccion() {
+        return this.prediccion;
+    }
+
+    public List<List<Object>> getImportantes() {
+        return this.importantes;
+    }
+
+    public String getGraphBase64() {
+        return this.graphBase64;
+    }
+
     @Override
     public String toString() {
         return "ExplicacionAvanzada{"
@@ -147,6 +163,22 @@ public class PredictionSingle {
 
     public String getExplicacionOpenAi() {
         return this.explicacionOpenAI;
+    }
+
+    public Integer getProductId() {
+        return this.prediccion.getProductId();
+    }
+
+    public Double getPrediccionValue() {
+        return this.prediccion.getPrediccion();
+    }
+
+    public String getGraficaBase64() {
+        return this.explicacionAvanzada.getGraphBase64();
+    }
+
+    public List<List<Object>> getVariablesImportantes() {
+        return this.explicacionAvanzada.getImportantes();
     }
 
     @Override

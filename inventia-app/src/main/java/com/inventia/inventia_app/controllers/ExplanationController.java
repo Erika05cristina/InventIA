@@ -16,7 +16,7 @@ import com.inventia.inventia_app.services.ExplanationService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@RestController
+//@RestController
 @RequestMapping("/explanation")
 @CrossOrigin(origins = "*")
 public class ExplanationController {
