@@ -29,8 +29,6 @@ export class Sidebar implements AfterViewInit {
     { icon: 'clarify', label: 'Explicación', route: '/explanation' },
     { icon: 'insert_chart', label: 'Analíticas', route: '/dashboard' },
     { icon: 'group', label: 'Agente', route: '/agent' },
-    { icon: 'history', label: 'Marcadores' },
-    { icon: 'settings', label: 'Configuraciones' },
   ];
 
   readonly secondaryNav = [
