@@ -53,9 +53,7 @@ public class PredictionService {
             .bodyToFlux(PredictionSingle.class)
             .flatMap(prediction -> {
                 PrediccionDTO pred = new PrediccionDTO(new Date(), fecha_prediccion, "individual" , prediction.toString());
-                System.out.println("Prediccion guardada en la base de datos: " + pred);
                 predictionRepository.save(pred);
-                System.out.println("Prediccion guardada en la base de datos: " + pred);
 
                 String explicacionSimple = prediction.getSimple();
                 Double prediccionValue = prediction.getPrediccionValue();
@@ -63,16 +61,22 @@ public class PredictionService {
 
                 Long prediccionRedondeada = Math.round(prediccionValue);
                 StringBuilder sb = new StringBuilder();
-                sb.append("El sistema ha generado una predicción con la siguiente información:\n");
+                sb.append("Analiza la siguiente predicción de demanda para un producto y redacta un resumen profesional, claro y entendible para una persona sin conocimientos técnicos.\n\n");
+
                 sb.append("- Producto ID: ").append(product_id).append("\n");
-                sb.append("- Predicción esperada: ").append(prediccionRedondeada).append(" unidades\n");
+                sb.append("- Demanda estimada: ").append(prediccionRedondeada).append(" unidades\n");
                 sb.append("- Explicación simple: ").append(explicacionSimple).append("\n");
                 sb.append("- Variables más influyentes:\n");
                 for (List<Object> var : variablesImportantes) {
                     sb.append("   • ").append(var.get(0)).append(" con peso ").append(var.get(1)).append("\n");
                 }
-                sb.append("\nEscribe un resumen profesional y conciso para un usuario de negocio, presentando directamente las conclusiones, sin frases como 'puedo explicar' o 'el sistema ha generado'.");
 
+                sb.append("\nCon base en esta información, redacta una explicación clara para un cliente o gerente comercial, donde señales de forma sencilla ");
+                sb.append("por qué cada una de estas variables influye en la demanda de este producto.\n\n");
+
+                sb.append("Usa un lenguaje cotidiano, evita tecnicismos y no menciones frases como 'el sistema dice' ni 'el modelo genera'. ");
+                sb.append("La explicación debe ayudar a tomar decisiones prácticas como ajustar precios, planificar compras o entender estacionalidades.");
+                prediction.setPrediccionValue((double) prediccionRedondeada);
                 String prompt = sb.toString();
                 return explanationService.askOpenAI(prompt)
                     .map(explicacionOpenAI -> {
@@ -80,7 +84,6 @@ public class PredictionService {
                         return prediction;
                     })
                     .doOnNext(updatedPrediction -> {
-                        // Guardar después de obtener la explicación
                         predictionRepository.save(pred);
                         System.out.println("Predicción guardada con explicación");
                     });
@@ -97,12 +100,11 @@ public class PredictionService {
 
     public Flux<PredictionGroup> predictGroup(String fecha_prediccion) {
         Product product = new Product(0, fecha_prediccion);
-        Flux<PredictionGroup> prediccion =  webClient.post().uri("/by-product").bodyValue(product).retrieve()
+        Flux<PredictionGroup> prediccion =  webClient.post().uri("/all-products").bodyValue(product).retrieve()
             .bodyToFlux(PredictionGroup.class);
         prediccion.subscribe(
             prediction -> {
                 PrediccionDTO pred = new PrediccionDTO(new Date(), fecha_prediccion, "grupo" , prediction.toString());
-                pred.setPrediccionId(0);
                 predictionRepository.save(pred);
                 System.out.println("Prediccion guardada en la base de datos: " + pred);
             },

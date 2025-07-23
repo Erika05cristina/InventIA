@@ -28,6 +28,14 @@ class ExplicacionAvanzada {
         return this.productId;
     }
 
+    public void setProductId(Integer productId) {
+        this.productId = productId;
+    }
+
+    public void setPrediccion(Double prediccion) {
+        this.prediccion = prediccion;
+    }
+
     public Double getPrediccion() {
         return this.prediccion;
     }
@@ -163,6 +171,10 @@ public class PredictionSingle {
 
     public String getExplicacionOpenAi() {
         return this.explicacionOpenAI;
+    }
+
+    public void setPrediccionValue(Double prediccion) {
+        this.prediccion.setPrediccion(prediccion);
     }
 
     public Double getPrediccionValue() {
