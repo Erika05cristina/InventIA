@@ -2,6 +2,7 @@ package com.inventia.inventia_app.controllers;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.inventia.inventia_app.entities.ProductRecord;
+import com.inventia.inventia_app.repositories.RecordRepository;
 import com.inventia.inventia_app.services.CsvService;
 import com.inventia.inventia_app.services.DataService;
 
@@ -25,8 +27,11 @@ public class DataController {
 
     private CsvService csvService;
     private DataService dataService;
+    private RecordRepository productRepository;
 
-    public DataController(CsvService csvService, DataService dataService) {
+    @Autowired
+    public DataController(CsvService csvService, DataService dataService, RecordRepository productRepository) {
+        this.productRepository = productRepository;
         this.csvService = csvService;
         this.dataService = dataService;
     }
@@ -47,7 +52,7 @@ public class DataController {
 
             System.out.println("Se encontraron " + products.size() + " productos en el CSV.");
             //products.forEach(product -> System.out.println("Parsed product: " + product));
-            // productRepository.saveAll(products);
+            productRepository.saveAll(products);
             String response = this.dataService.upload(file).block();
             System.out.println("FastAPI Response: " + response);
 

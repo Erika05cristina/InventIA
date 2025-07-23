@@ -4,65 +4,49 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/*
-* "explicacion_avanzada": {
-    "producto_id": 38,
-    "prediccion": 0.04732787609100342,
-    "variables_importantes": [
-        [
-            "sale_amount",
-            0.8985185196251297
-        ],
-        [
-            "avg_temperature",
-            0.17775082988437793
-        ],
-        [
-            "holiday_flag",
-            0.13028467096889373
-        ],
-        [
-            "discount",
-            0.07526980119801568
-        ],
-        [
-            "avg_humidity",
-            0.07071108022976644
-        ]
-    ],
-    "grafica_explicabilidad_base64":
-*/
-
 class ExplicacionAvanzada {
 
     @JsonProperty("producto_id")
     private Integer productId;
+
     private Double prediccion;
+
     @JsonProperty("variables_importantes")
     private List<List<Object>> importantes;
+
     @JsonProperty("grafica_explicabilidad_base64")
     private String graphBase64;
+
+    public ExplicacionAvanzada() {}
 
     public ExplicacionAvanzada(Integer productId, Double prediccion) {
         this.productId = productId;
         this.prediccion = prediccion;
     }
 
+    public Integer getProductId() {
+        return this.productId;
+    }
+
+    public Double getPrediccion() {
+        return this.prediccion;
+    }
+
+    public List<List<Object>> getImportantes() {
+        return this.importantes;
+    }
+
+    public String getGraphBase64() {
+        return this.graphBase64;
+    }
+
     @Override
     public String toString() {
         return "ExplicacionAvanzada{"
-                + "productId='"
-                + productId
-                + '\''
-                + ", prediccion='"
-                + prediccion
-                + '\''
-                + ", importantes='"
-                + importantes
-                + '\''
-                + ", graphBase64='"
-                + graphBase64
-                + '\''
+                + "productId=" + productId
+                + ", prediccion=" + prediccion
+                + ", importantes=" + importantes
+                + ", graphBase64=" + graphBase64
                 + '}';
     }
 }
@@ -107,18 +91,13 @@ class Prediccion {
 
     @Override
     public String toString() {
-        return "Prediccion{"
-                + "productId='"
-                + productId
-                + '\''
-                + "fecha_prediccion='"
-                + fecha
-                + '\''
-                + ", prediccion='"
-                + prediccion
-                + '\''
-                + '}';
+        return "Prediccion{" +
+                "productId=" + productId +
+                ", fecha='" + fecha + '\'' +
+                ", prediccion=" + prediccion +
+                '}';
     }
+
 }
 
 /**
@@ -132,57 +111,81 @@ public class PredictionSingle {
     private String simple;
     @JsonProperty("explicacion_avanzada")
     private ExplicacionAvanzada explicacionAvanzada;
+    private Double inversion;
+    private String explicacionOpenAI;
+
+    public PredictionSingle() {}
 
     public PredictionSingle(String status, String simple) {
         this.status = status;
         this.simple = simple;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public String getStatus() {
         return this.status;
     }
 
-    public void setPrediccion(Prediccion prediccion) {
-        this.prediccion = prediccion;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Prediccion getPrediccion() {
         return this.prediccion;
     }
 
-    public void setSimple(String simple) {
-        this.simple = simple;
+    public void setPrediccion(Prediccion prediccion) {
+        this.prediccion = prediccion;
     }
 
     public String getSimple() {
         return this.simple;
     }
 
-    public void setExplicacionAvanzada(ExplicacionAvanzada explicacionAvanzada) {
-        this.explicacionAvanzada = explicacionAvanzada;
+    public void setSimple(String simple) {
+        this.simple = simple;
     }
 
     public ExplicacionAvanzada getExplicacionAvanzada() {
         return this.explicacionAvanzada;
     }
 
+    public void setInversion(Double inversion) {
+        this.inversion = inversion;
+    }
+
+    public Double getInversion() {
+        return this.inversion;
+    }
+
+    public void setExplicacionOpenAi(String explicacionOpenAI) {
+        this.explicacionOpenAI = explicacionOpenAI;
+    }
+
+    public String getExplicacionOpenAi() {
+        return this.explicacionOpenAI;
+    }
+
+    public Double getPrediccionValue() {
+        return this.prediccion.getPrediccion();
+    }
+
+    public List<List<Object>> getVariablesImportantes() {
+        return this.explicacionAvanzada.getImportantes();
+    }
+
+    public String getGraphBase64() {
+        return this.explicacionAvanzada.getGraphBase64();
+    }
+
     @Override
-    public String toString() {
-        return "PredictionSingle{"
-                + "status='"
-                + status
-                + '\''
-                + "prediccion="
-                + prediccion.toString()
-                + ", explicacion_simple='"
-                + simple
-                + '\''
-                + ", explicacion_avanzada="
-                + explicacionAvanzada.toString()
-                + '}';
+    public String toString(){
+        return "PredictionSingle{" +
+            "status='" + status + '\'' +
+            ", prediccion=" + prediccion.toString() +
+            ", explicacion_simple='" + simple + '\'' +
+            ", explicacion_avanzada=" + explicacionAvanzada.toString() +
+            ", inversion=" + inversion +
+            ", explicacionOpenAI='" + explicacionOpenAI + '\'' +
+            '}';
     }
 }

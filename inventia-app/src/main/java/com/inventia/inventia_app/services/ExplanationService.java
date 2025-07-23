@@ -1,38 +1,59 @@
 package com.inventia.inventia_app.services;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-/**
- * ExplanationService
- */
 @Service
 public class ExplanationService {
 
     @Value("${third.party.model.server.url}")
-    private static String URL_BASE;
+    private String URL_BASE;
 
-    private static final String URL_ROUTE = URL_BASE + "/explain";
+    @Value("${openai.api.key}")
+    private String openAiApiKey;
 
-    private WebClient webClient = WebClient.create(URL_ROUTE);
+    private WebClient webClient;
 
     @Autowired
-    public ExplanationService(WebClient.Builder webClientBuilder) {
+    public ExplanationService(WebClient.Builder webClientBuilder, @Value("${third.party.model.server.url}") String urlBase) {
         this.webClient = webClientBuilder
-                .baseUrl(URL_ROUTE)
+                .baseUrl(urlBase)
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
     }
 
-    public Flux<String> explain() {
-        return webClient.post().uri("/explain").retrieve().bodyToFlux(String.class);
+    public Mono<String> askOpenAI(String userMessage) {
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("model", "gpt-3.5-turbo");
+        List<Map<String, String>> messages = new ArrayList<>();
+        messages.add(Map.of("role", "system", "content", "You are an assistant for InventIA."));
+        messages.add(Map.of("role", "user", "content", userMessage));
+        requestBody.put("messages", messages);
+
+        return WebClient.create("https://api.openai.com/v1/chat/completions")
+                .post()
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + openAiApiKey)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .retrieve()
+                .bodyToMono(Map.class)
+                .map(responseMap -> {
+                    List<Map<String, Object>> choices = (List<Map<String, Object>>) responseMap.get("choices");
+                    Map<String, Object> firstChoice = choices.get(0);
+                    Map<String, String> message = (Map<String, String>) firstChoice.get("message");
+                    return message.get("content");
+                });
     }
 }

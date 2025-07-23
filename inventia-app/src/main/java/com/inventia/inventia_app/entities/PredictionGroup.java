@@ -31,12 +31,9 @@ class IndividualPrediction {
     @Override
     public String toString() {
         return "IndividualPrediction{"
-        + "product_id='"
-        + product_id
-        + '\''
-        + ", predicted_stock="
-        + predicted_stock
-        + '}';
+            + "product_id=" + product_id
+            + ", predicted_stock=" + predicted_stock
+            + '}';
     }
 }
 
@@ -48,6 +45,7 @@ public class PredictionGroup {
     private String status;
     private String fecha;
     private ArrayList<IndividualPrediction> predicciones;
+    private Double inversion;
 
     public PredictionGroup(String status, String fecha) {
         this.status = status;
@@ -82,18 +80,21 @@ public class PredictionGroup {
         return this.predicciones;
     }
 
+    public void setInversion(Double inversion) {
+        this.inversion = inversion;
+    }
+
+    public Double getInversion() {
+        return this.inversion;
+    }
+
     @Override
     public String toString() {
-        return "Product{"
-        + "status='"
-        + status
-        + '\''
-        + ", fecha="
-        + fecha
-        + '\''
-        + ", predicciones=["
-        + predicciones.toString()
-        + ']'
-        + '}';
+        return "PredictionGroup{"
+            + "status='" + status + '\''
+            + ", fecha='" + fecha + '\''
+            + ", predicciones=" + predicciones.toString()
+            + ", inversion=" + inversion
+            + '}';
     }
 }
