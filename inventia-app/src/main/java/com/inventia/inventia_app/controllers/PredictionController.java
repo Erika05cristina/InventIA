@@ -24,12 +24,12 @@ import reactor.core.publisher.Mono;
 public class PredictionController {
 
     private final PredictionService predictionService;
-    //private final ExplanationService explanationService;
+    private final ExplanationService explanationService;
 
     @Autowired
-    public PredictionController(PredictionService predictionService) {
+    public PredictionController(PredictionService predictionService, ExplanationService explanationService) {
         this.predictionService = predictionService;
-        //this.explanationService = explanationService;
+        this.explanationService = explanationService;
     }
 
     @GetMapping("/single")
