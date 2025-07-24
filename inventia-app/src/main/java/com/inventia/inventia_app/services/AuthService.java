@@ -22,7 +22,6 @@ public class AuthService {
         this.userRepository = userRepository;
     }
 
-    //public Mono<UsuarioDTO> register(String name, String email, String password) {
     public Mono<UsuarioDTO> register(UsuarioDTO usuario) {
         return Mono.fromCallable(() -> {
             UsuarioDTO usr = userRepository.save(usuario);

@@ -42,12 +42,4 @@ public class PredictionController {
         return predictionService.predictGroup(fecha_prediccion);
     }
 
-    /*
-    @GetMapping("/statistics")
-    @CrossOrigin(origins = "*")
-    public Flux<DashboardDTO> estadisticasPredicciones() {
-        System.out.println("Generando estadisticas de las predicciones");
-        //return predictionService.predictGroup(product);
-    }
-    */
 }

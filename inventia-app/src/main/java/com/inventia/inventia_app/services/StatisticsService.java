@@ -15,7 +15,7 @@ public class StatisticsService {
         List<PredictionGroup.IndividualPrediction> predicciones = group.getPredicciones();
 
         if (predicciones == null || predicciones.isEmpty()) {
-            return new DashboardStatisticsResponse(0, 0, null, null, null, null, 0, 0, 0, group.getFecha());
+            return new DashboardStatisticsResponse(0, 0, null, null, null, null, 0, 0, 0, group.getFecha(),0.0);
         }
 
         int total = predicciones.stream()
@@ -42,16 +42,17 @@ public class StatisticsService {
                 .filter(p -> p.getPredicted_stock() < 50).count();
 
         return new DashboardStatisticsResponse(
-                total,
-                promedio,
-                mayor != null ? mayor.getProduct_id() : null,
-                mayor != null ? mayor.getPredicted_stock() : null,
-                menor != null ? menor.getProduct_id() : null,
-                menor != null ? menor.getPredicted_stock() : null,
-                alta,
-                media,
-                baja,
-                group.getFecha()
+            total,
+            promedio,
+            mayor != null ? mayor.getProduct_id() : null,
+            mayor != null ? mayor.getPredicted_stock() : null,
+            menor != null ? menor.getProduct_id() : null,
+            menor != null ? menor.getPredicted_stock() : null,
+            alta,
+            media,
+            baja,
+            group.getFecha(),
+            group.getInversion()
         );
     }
 }

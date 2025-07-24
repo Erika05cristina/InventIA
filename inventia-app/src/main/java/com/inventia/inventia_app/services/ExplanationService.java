@@ -17,8 +17,7 @@ import reactor.core.publisher.Mono;
 @Service
 public class ExplanationService {
 
-    @Value("${third.party.model.server.url}")
-    private String URL_BASE;
+    private String URL_BASE = "https://api.openai.com/v1/chat/completions";
 
     @Value("${openai.api.key}")
     private String openAiApiKey;
@@ -26,9 +25,9 @@ public class ExplanationService {
     private WebClient webClient;
 
     @Autowired
-    public ExplanationService(WebClient.Builder webClientBuilder, @Value("${third.party.model.server.url}") String urlBase) {
+    public ExplanationService(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder
-                .baseUrl(urlBase)
+                .baseUrl(URL_BASE)
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
@@ -42,7 +41,7 @@ public class ExplanationService {
         messages.add(Map.of("role", "user", "content", userMessage));
         requestBody.put("messages", messages);
 
-        return WebClient.create("https://api.openai.com/v1/chat/completions")
+        return webClient
                 .post()
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + openAiApiKey)
                 .contentType(MediaType.APPLICATION_JSON)

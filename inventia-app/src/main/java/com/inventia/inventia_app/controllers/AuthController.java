@@ -23,6 +23,8 @@ public class AuthController {
     }
 
     @PostMapping("/register")
+    @CrossOrigin(origins = "*")
+    //public Mono<ResponseEntity<String>> login(@RequestParam String name, @RequestParam String email, @RequestParam String password) {
     public Mono<ResponseEntity<String>> register(@RequestBody UsuarioDTO usuario) {
         return authService.register(usuario)
             .map(usr -> ResponseEntity.ok().body(usr.toString()))

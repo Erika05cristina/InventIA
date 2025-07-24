@@ -32,7 +32,6 @@ public class DataService {
     public Mono<String> upload(MultipartFile file) {
         MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
         bodyBuilder.part("file", file.getResource()).filename(file.getOriginalFilename());
-        //System.out.println("Llamando al servicio para entrenar el modelo: " + URL_ROUTE);
         return webClient.post()
             .uri("/data")
             .body(BodyInserters.fromMultipartData(bodyBuilder.build()))
