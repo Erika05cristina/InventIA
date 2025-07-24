@@ -104,14 +104,14 @@ export class Predict {
 
   readonly totalPages = computed(() => {
     const total = this.prediccionesFiltradas().length;
-    const size = this._pageSize(); // ← usa el correcto
+    const size = this._pageSize();
     return Math.max(1, Math.ceil(total / size));
   });
 
   readonly paginatedPredictions = computed(() => {
     const all = this.prediccionesFiltradas();
     const page = this.currentPage();
-    const size = this._pageSize(); // ← usa el correcto
+    const size = this._pageSize();
     const start = (page - 1) * size;
     return all.slice(start, start + size);
   });
