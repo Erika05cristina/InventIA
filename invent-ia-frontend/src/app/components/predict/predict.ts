@@ -3,18 +3,26 @@ import {
   ChangeDetectionStrategy,
   inject,
   computed,
-  signal
+  signal,
+  OnInit
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 import {
   Prediction,
   PredictionResponseSingle,
-  PredictionResponseGroup,
-  GroupPrediction
+  PredictionResponseGroup
 } from '../../services/prediction';
 import { UploadState } from '../../services/upload-state';
 import { ExplanationState } from '../../services/explanation-state';
+
+interface ProductoCSV {
+  id: number;
+  nombre: string;
+  precio: number;
+  categoria: string;
+}
 
 @Component({
   selector: 'app-predict',
@@ -24,11 +32,12 @@ import { ExplanationState } from '../../services/explanation-state';
   templateUrl: './predict.html',
   styleUrl: './predict.scss'
 })
-export class Predict {
+export class Predict implements OnInit {
 
   private predictionService = inject(Prediction);
   private state = inject(UploadState);
   private explanationState = inject(ExplanationState);
+  private http = inject(HttpClient);
 
   readonly predictionResult = signal<PredictionResponseSingle[] | null>(null);
   readonly isPredictingIndividual = signal(false);
@@ -39,10 +48,18 @@ export class Predict {
 
   // Datos de predicción grupal
   readonly groupPrediction = signal<PredictionResponseGroup | null>(null);
-
   readonly _pageSize = signal(10);
 
-  // Filtros
+  // Productos CSV para predicción individual por nombre
+  readonly productosDisponibles = signal<ProductoCSV[]>([]);
+  readonly selectedNombre = signal<string | null>(null);
+
+  readonly productoSeleccionado = computed(() => {
+    const nombre = this.selectedNombre();
+    return this.productosDisponibles().find(p => p.nombre === nombre) ?? null;
+  });
+
+  // Filtros para tabla grupal
   private _selectedCategoria = signal<string | null>(null);
   private _selectedProducto = signal<string | null>(null);
 
@@ -59,7 +76,7 @@ export class Predict {
   }
   set selectedProductoValue(val: string | null) {
     this._selectedProducto.set(val);
-    this.currentPage.set(1); // reiniciar a página 1 si cambia filtro
+    this.currentPage.set(1);
   }
 
   get pageSizeValue(): number {
@@ -99,7 +116,6 @@ export class Predict {
     );
   });
 
-  // Paginación
   readonly currentPage = signal(1);
 
   readonly totalPages = computed(() => {
@@ -128,7 +144,6 @@ export class Predict {
     }
   }
 
-  // Inputs predicción individual
   get manualProductIdValue(): number | null {
     return this.state.manualProductId();
   }
@@ -145,13 +160,17 @@ export class Predict {
 
   getPrediction(): void {
     const fechaFormateada = this.manualFechaValue;
-    if (!fechaFormateada || this.manualProductIdValue === null || isNaN(this.manualProductIdValue)) {
+    const nombre = this.selectedNombre();
+    const producto = this.productosDisponibles().find(p => p.nombre === nombre);
+    const productId = producto?.id ?? null;
+
+    if (!fechaFormateada || productId === null) {
       console.warn('Predicción individual: datos inválidos');
       return;
     }
 
     this.isPredictingIndividual.set(true);
-    this.predictionService.predictSingle(this.manualProductIdValue, fechaFormateada).subscribe({
+    this.predictionService.predictSingle(productId, fechaFormateada).subscribe({
       next: (res) => {
         const preds = res.map(({ prediccion }) => ({
           productId: prediccion.product_id,
@@ -189,12 +208,28 @@ export class Predict {
     this.predictionService.predictGroup(fechaFormateada).subscribe({
       next: (res) => {
         this.groupPrediction.set(res[0]);
-        this.currentPage.set(1); // Reiniciar paginación
+        this.currentPage.set(1);
       },
       error: (err) => {
         console.error('Error al predecir por grupo:', err);
       },
       complete: () => this.isPredictingGroup.set(false)
+    });
+  }
+
+  ngOnInit(): void {
+    this.http.get('assets/productos.csv', { responseType: 'text' }).subscribe(csv => {
+      const lines = csv.trim().split('\n');
+      const data: ProductoCSV[] = lines.slice(1).map(line => {
+        const [id, nombre, precio, categoria] = line.split(',');
+        return {
+          id: parseInt(id.trim(), 10),
+          nombre: nombre.trim(),
+          precio: parseFloat(precio.trim()),
+          categoria: categoria.trim()
+        };
+      });
+      this.productosDisponibles.set(data);
     });
   }
 }

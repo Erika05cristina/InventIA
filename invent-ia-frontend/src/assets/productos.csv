@@ -1,0 +1,866 @@
+product_id,product_name,unit_price_usd,category
+38,Cereal integral,1.15,Cereal
+834,Yogur natural,2.12,Lácteo
+411,Zapallo,0.62,Verdura
+686,Jugo de naranja,0.78,Bebidas
+580,Bacalao,15.11,Pescado
+596,Mangostán,1.39,Fruta
+740,Harina de arroz,3.52,Cereal
+379,Nuez,3.33,Granos
+4,Guineo,3.64,Fruta
+600,Pan de queso,1.93,Panadería
+699,Pan blanco,1.56,Panadería
+548,Chocho,3.44,Verdura
+72,Atún enlatado,5.04,Conservas
+644,Garbanzo,3.91,Granos
+638,Jugo de piña,5.74,Bebidas
+496,Harina de maíz,4.46,Cereal
+296,Zanahoria,2.75,Verdura
+631,Leche deslactosada,5.28,Lácteo
+310,Chirimoya,1.33,Verdura
+633,Harina de maíz,1.98,Cereal
+345,Pan de yuca,5.02,Panadería
+291,Cereal integral,4.65,Cereal
+635,Chuleta ahumada,15.4,Carne
+194,Tocino,9.45,Carne
+764,Harina de arroz,2.32,Cereal
+783,Torta artesanal,5.61,Panadería
+117,Granadilla,4.2,Fruta
+796,Bollo,2.61,Panadería
+19,Pulpo,22.53,Pescado
+21,Pan de yuca,4.93,Panadería
+70,Limonada,1.86,Bebidas
+190,Costilla de cerdo,15.66,Carne
+18,Avellanas,6.23,Frutos_Secos
+215,Agua de coco,3.94,Bebidas
+136,Chuleta ahumada,11.39,Carne
+775,Cereza,1.19,Fruta
+843,Carne seca,14.57,Carne
+554,Aceitunas negras,2.92,Conservas
+810,Acelga en conserva,3.65,Conservas
+207,Pecanas,7.6,Frutos_Secos
+500,Cereal integral,5.09,Cereal
+118,Pecanas,2.87,Frutos_Secos
+23,Harina de maíz,1.67,Cereal
+578,Cerveza,4.81,Bebidas
+41,Huevo blanco,4.81,Lácteo
+90,Almendras,7.09,Frutos_Secos
+26,Leche condensada,3.54,Lácteo
+214,Atún,12.48,Pescado
+76,Chuleta ahumada,19.21,Carne
+201,Almendras,5.19,Frutos_Secos
+193,Arroz,0.89,Granos
+253,Torta artesanal,5.84,Panadería
+129,Salmón,9.82,Pescado
+672,Aceitunas negras,1.43,Conservas
+719,Lentejas,3.92,Granos
+104,Pecanas,1.88,Frutos_Secos
+300,Harina de avena,6.68,Cereal
+166,Filete de res,11.97,Carne
+567,Pepinillos en vinagre,5.82,Conservas
+6,Pecanas,6.11,Frutos_Secos
+127,Corvina,12.98,Pescado
+223,Harina de maíz,3.63,Cereal
+486,Castañas de cajú,1.85,Frutos_Secos
+122,Tilapia,11.76,Pescado
+769,Sardinas enlatadas,3.94,Conservas
+439,Fresa,3.69,Fruta
+93,Granadilla,0.8,Fruta
+691,Guayaba,0.82,Fruta
+259,Corvina,18.38,Pescado
+489,Calamar,7.65,Pescado
+806,Acelga en conserva,2.21,Conservas
+419,Chía,1.17,Granos
+370,Lupino,1.61,Verdura
+712,Limonada,8.71,Bebidas
+768,Pera,0.77,Fruta
+381,Galletas de chocolate,6.17,Panadería
+62,Bacalao,8.8,Pescado
+63,Quinoa,1.98,Granos
+830,Crema agria,2.25,Lácteo
+415,Cachanga,3.29,Verdura
+362,Almendras,1.35,Frutos_Secos
+653,Pecanas,1.1,Frutos_Secos
+841,Rábano,0.92,Verdura
+452,Semillas de girasol,1.25,Granos
+121,Jugo de naranja,2.06,Bebidas
+133,Ciruela,1.69,Fruta
+373,Acelga,1.98,Granos
+110,Anacardos,6.03,Frutos_Secos
+258,Costilla de cerdo,8.04,Carne
+151,Camu camu,3.81,Fruta
+304,Piña,0.76,Fruta
+670,Acelga en conserva,3.51,Conservas
+7,Nuez de macadamia,1.4,Frutos_Secos
+9,Almendras,6.96,Frutos_Secos
+829,Pachay,0.55,Verdura
+487,Camarón,7.4,Pescado
+793,Sardinas enlatadas,3.89,Conservas
+627,Salak,0.87,Fruta
+706,Harina de arroz,2.9,Cereal
+816,Yogur natural,4.35,Lácteo
+138,Pan de yuca,2.59,Panadería
+711,Pavo entero,13.97,Carne
+58,Acelga roja,3.75,Granos
+592,Tomate,2.0,Verdura
+858,Aceitunas negras,1.37,Conservas
+247,Calamar,10.3,Pescado
+556,Pan blanco,6.28,Panadería
+634,Pan de queso,1.95,Panadería
+422,Anacardos,3.12,Frutos_Secos
+470,Harina de arroz,1.05,Cereal
+249,Avellanas,7.52,Frutos_Secos
+366,Espinaca,1.28,Verdura
+717,Yantén,0.88,Verdura
+290,Huevo criollo,2.05,Lácteo
+563,Pan de yuca,5.12,Panadería
+295,Huevo blanco,3.44,Lácteo
+636,Mango,3.35,Fruta
+250,Leche entera,1.02,Lácteo
+424,Pavo entero,19.66,Carne
+293,Pierna de cerdo,10.51,Carne
+292,Agua mineral,1.56,Bebidas
+374,Chuleta ahumada,3.61,Carne
+321,Pastel de vainilla,4.32,Panadería
+368,Jugo de mango,0.9,Bebidas
+765,Galletas de chocolate,6.83,Panadería
+27,Mora,1.45,Fruta
+79,Sardina,7.06,Pescado
+140,Pecanas,3.84,Frutos_Secos
+213,Alcaparras,5.63,Conservas
+738,Atún,24.52,Pescado
+94,Hamburguesa,3.42,Carne
+16,Galletas de chocolate,6.58,Panadería
+108,Granola,2.6,Cereal
+200,Chirimoya,3.53,Verdura
+220,Pistacho,1.2,Granos
+219,Guisante,1.57,Granos
+99,Bacalao,5.47,Pescado
+114,Camarón,11.57,Pescado
+663,Ajo,1.6,Verdura
+822,Castañas de cajú,5.76,Frutos_Secos
+847,Avellanas,7.57,Frutos_Secos
+17,Yuca,0.96,Verdura
+499,Leche entera,1.54,Lácteo
+74,Refresco de cola,7.42,Bebidas
+628,Bollo,4.64,Panadería
+622,Almendras,3.7,Frutos_Secos
+60,Sardinas enlatadas,2.27,Conservas
+216,Agua mineral,5.44,Bebidas
+285,Anacardos,6.04,Frutos_Secos
+802,Granola,3.19,Cereal
+473,Mote,2.61,Verdura
+549,Cereal integral,5.32,Cereal
+11,Huevo blanco,2.55,Lácteo
+12,Té negro,4.32,Bebidas
+145,Huevo blanco,1.64,Lácteo
+181,Agua de coco,6.93,Bebidas
+135,Morcilla,12.67,Carne
+240,Agua mineral,3.39,Bebidas
+363,Camarón,20.72,Pescado
+774,Pimientos en conserva,3.32,Conservas
+77,Maní,2.29,Granos
+150,Pavo entero,4.44,Carne
+650,Anacardos,5.43,Frutos_Secos
+115,Pan blanco,5.91,Panadería
+715,Sardina,11.21,Pescado
+212,Atún,5.49,Pescado
+728,Langostino,17.23,Pescado
+416,Tomate de árbol,1.83,Verdura
+645,Granola,5.31,Cereal
+430,Agua con gas,4.3,Bebidas
+688,Pavo entero,14.69,Carne
+684,Lupino,1.11,Verdura
+71,Castañas de cajú,1.35,Frutos_Secos
+116,Tilapia,14.13,Pescado
+682,Acelga roja,3.83,Granos
+666,Chía,3.41,Granos
+467,Castañas de cajú,7.28,Frutos_Secos
+396,Semillas de calabaza,1.41,Granos
+716,Sardina,10.55,Pescado
+831,Castañas de cajú,5.39,Frutos_Secos
+536,Crema agria,1.39,Lácteo
+694,Yogur natural,2.36,Lácteo
+855,Pastel de chocolate,1.48,Panadería
+707,Costilla de cerdo,9.51,Carne
+826,Pierna de cerdo,6.64,Carne
+803,Agua de fruta natural,3.64,Bebidas
+15,Chía,0.72,Granos
+257,Agua de coco,9.1,Bebidas
+98,Aceitunas verdes,5.28,Conservas
+53,Pepinillos en vinagre,3.38,Conservas
+348,Pan de queso,5.52,Panadería
+599,Vino blanco,5.14,Bebidas
+669,Mantequilla,3.43,Lácteo
+5,Té negro,6.85,Bebidas
+788,Cerveza,8.48,Bebidas
+100,Morcilla,12.08,Carne
+155,Agua mineral,1.3,Bebidas
+8,Jugo de mango,8.74,Bebidas
+668,Pechuga de pollo,7.42,Carne
+817,Pan de yuca,3.73,Panadería
+698,Galletas de chocolate,6.28,Panadería
+525,Mantequilla,2.26,Lácteo
+819,Pepinillo,0.37,Verdura
+632,Almendras,8.0,Frutos_Secos
+630,Pan de yuca,4.9,Panadería
+425,Avena,5.53,Cereal
+673,Bacalao,21.78,Pescado
+825,Alcaparras,2.19,Conservas
+369,Garbanzo,2.47,Granos
+823,Langostino,18.99,Pescado
+88,Croissant,4.64,Panadería
+303,Coliflor,3.87,Verdura
+380,Chilco,0.4,Verdura
+351,Huevo criollo,4.39,Lácteo
+797,Agua de coco,9.44,Bebidas
+608,Tilapia,16.84,Pescado
+192,Granola,1.61,Cereal
+109,Leche condensada,4.0,Lácteo
+298,Guineo verde,3.2,Verdura
+78,Pastel de chocolate,3.57,Panadería
+276,Pan blanco,4.04,Panadería
+480,Pan integral,6.1,Panadería
+642,Garbanzo,2.02,Granos
+359,Donas,6.35,Panadería
+61,Quinoa,2.02,Granos
+335,Anacardos,2.89,Frutos_Secos
+574,Pecanas,4.38,Frutos_Secos
+413,Café,3.56,Bebidas
+481,Tilapia,10.58,Pescado
+676,Pistacho,3.13,Granos
+469,Pepinillos en vinagre,2.68,Conservas
+414,Acelga roja,1.14,Granos
+222,Trucha,20.96,Pescado
+420,Pan de queso,6.28,Panadería
+569,Huevo blanco,1.05,Lácteo
+306,Tilapia,9.83,Pescado
+426,Agua con gas,5.77,Bebidas
+95,Langostino,17.92,Pescado
+443,Semillas de calabaza,3.28,Granos
+853,Choclo,1.12,Verdura
+760,Corvina,18.28,Pescado
+468,Empanada,4.32,Panadería
+410,Bollo,6.98,Panadería
+509,Avellanas,3.46,Frutos_Secos
+657,Nuez,1.57,Granos
+30,Tilapia,19.43,Pescado
+745,Pan blanco,5.46,Panadería
+319,Costilla de cerdo,6.68,Carne
+862,Nuez,3.04,Granos
+228,Pistachos,2.98,Frutos_Secos
+67,Apio,1.4,Verdura
+203,Croissant,2.81,Panadería
+863,Nuez de macadamia,2.92,Frutos_Secos
+2,Mangostán,1.81,Fruta
+31,Pavo entero,17.76,Carne
+251,Garbanzo,3.55,Granos
+144,Atún enlatado,3.35,Conservas
+218,Acelga roja,1.15,Granos
+662,Maracuyá,4.73,Fruta
+126,Garbanzo,3.38,Granos
+37,Agua con gas,1.2,Bebidas
+224,Avena,1.91,Cereal
+20,Atún enlatado,1.43,Conservas
+84,Tilapia,16.16,Pescado
+119,Vino blanco,7.87,Bebidas
+515,Limonada,9.13,Bebidas
+612,Huevo criollo,5.95,Lácteo
+620,Huevo criollo,4.11,Lácteo
+807,Aceitunas negras,5.74,Conservas
+446,Sardina,9.22,Pescado
+266,Cereal integral,1.94,Cereal
+437,Chuleta ahumada,4.28,Carne
+804,Carambola,2.53,Fruta
+248,Acelga en conserva,2.46,Conservas
+560,Corvina,19.14,Pescado
+729,Lentejas,2.91,Granos
+779,Leche condensada,3.95,Lácteo
+397,Camarón,7.3,Pescado
+387,Sardina,7.98,Pescado
+429,Yogur de fresa,1.36,Lácteo
+132,Carne seca,8.23,Carne
+80,Atún enlatado,3.2,Conservas
+478,Acelga,2.95,Granos
+677,Huevo blanco,3.7,Lácteo
+746,Lentejas,2.59,Granos
+142,Té negro,6.24,Bebidas
+244,Mango,1.53,Fruta
+565,Avena,7.0,Cereal
+344,Muesli,4.46,Cereal
+226,Tocino,11.82,Carne
+294,Nuez,1.14,Granos
+407,Pepinillos en vinagre,4.17,Conservas
+763,Lentejas,2.15,Granos
+545,Té negro,3.55,Bebidas
+510,Coliflor,1.52,Verdura
+757,Acelga,2.82,Granos
+217,Jugo de naranja,4.82,Bebidas
+386,Pan de queso,2.94,Panadería
+22,Agua mineral,6.75,Bebidas
+139,Castañas de cajú,3.89,Frutos_Secos
+230,Calamar,12.24,Pescado
+705,Semillas de calabaza,3.16,Granos
+357,Corvina,15.98,Pescado
+629,Crema agria,5.4,Lácteo
+233,Garbanzo,0.6,Granos
+546,Granola,5.26,Cereal
+767,Huevo blanco,1.07,Lácteo
+614,Jugo de piña,2.63,Bebidas
+575,Tomate de árbol,3.8,Verdura
+29,Corn flakes,3.99,Cereal
+105,Huevo blanco,4.53,Lácteo
+475,Agua con gas,9.81,Bebidas
+334,Langostino,16.03,Pescado
+404,Vino tinto,9.26,Bebidas
+54,Anacardos,7.16,Frutos_Secos
+238,Ajo,3.16,Verdura
+553,Té negro,9.38,Bebidas
+805,Avellanas,6.74,Frutos_Secos
+766,Leche evaporada,2.49,Lácteo
+282,Acelga en conserva,5.33,Conservas
+785,Semillas de girasol,1.71,Granos
+476,Pecanas,4.8,Frutos_Secos
+484,Acelga roja,3.54,Granos
+508,Pulpo,12.66,Pescado
+47,Jugo de naranja,3.52,Bebidas
+506,Maíz,1.85,Granos
+277,Corn flakes,3.97,Cereal
+693,Melón,2.76,Fruta
+449,Pimientos en conserva,5.35,Conservas
+577,Garbanzo,2.34,Granos
+97,Arroz,3.03,Granos
+723,Jugo de mango,1.21,Bebidas
+265,Queso mozzarella,4.12,Lácteo
+598,Jugo de piña,8.59,Bebidas
+453,Harina de arroz,3.28,Cereal
+494,Donas,5.31,Panadería
+176,Frijoles,2.66,Granos
+856,Sardina,18.69,Pescado
+0,Yogur natural,4.73,Lácteo
+314,Jugo de mora,7.72,Bebidas
+330,Cachanga,0.92,Verdura
+758,Leche entera,1.23,Lácteo
+465,Lulo,2.11,Fruta
+313,Jugo de mango,2.82,Bebidas
+427,Cerveza,2.11,Bebidas
+759,Rocoto,3.52,Verdura
+781,Sardinas enlatadas,3.49,Conservas
+342,Alcaparras,2.16,Conservas
+585,Muesli,3.76,Cereal
+206,Avena,6.39,Cereal
+13,Acelga,2.87,Granos
+821,Muslo de pollo,10.51,Carne
+160,Pastel de vainilla,2.79,Panadería
+539,Café,4.84,Bebidas
+820,Yogur natural,6.0,Lácteo
+625,Garbanzo,1.33,Granos
+776,Pimientos en conserva,3.87,Conservas
+640,Leche entera,5.89,Lácteo
+405,Harina de trigo,2.65,Cereal
+837,Aceitunas verdes,5.55,Conservas
+527,Acelga,3.22,Granos
+734,Pulpo,21.04,Pescado
+859,Sardina,8.8,Pescado
+623,Leche condensada,4.78,Lácteo
+839,Corn flakes,4.77,Cereal
+367,Avena,2.85,Cereal
+28,Frijoles,2.53,Granos
+185,Muslo de pollo,18.46,Carne
+179,Galletas de avena,3.49,Panadería
+260,Atún,20.73,Pescado
+474,Pastel de chocolate,4.01,Panadería
+537,Yogur de fresa,2.28,Lácteo
+237,Acelga,3.11,Granos
+143,Galletas de chocolate,1.69,Panadería
+827,Calabacín,3.09,Verdura
+813,Sardina,19.48,Pescado
+235,Refresco de cola,1.36,Bebidas
+383,Agua mineral,3.01,Bebidas
+777,Tomate de árbol,1.66,Verdura
+756,Muesli,4.51,Cereal
+761,Harina de maíz,1.65,Cereal
+497,Langostino,5.5,Pescado
+375,Avellanas,7.41,Frutos_Secos
+264,Sardina,6.26,Pescado
+263,Acelga,2.77,Granos
+621,Espinaca,0.47,Verdura
+659,Aguacate,4.98,Fruta
+421,Pimiento,1.17,Verdura
+697,Nuez de macadamia,3.72,Frutos_Secos
+154,Donas,6.7,Panadería
+279,Castañas de cajú,5.11,Frutos_Secos
+440,Hamburguesa,14.13,Carne
+341,Chía,3.79,Granos
+540,Leche entera,4.45,Lácteo
+835,Langostino,13.89,Pescado
+204,Trucha,6.99,Pescado
+406,Harina de maíz,4.27,Cereal
+857,Harina de maíz,1.36,Cereal
+347,Yogur natural,5.84,Lácteo
+372,Lentejas,2.82,Granos
+680,Avena,1.3,Cereal
+787,Pan de yuca,6.93,Panadería
+852,Sardinas enlatadas,1.34,Conservas
+568,Nuez de macadamia,5.1,Frutos_Secos
+360,Trucha,20.49,Pescado
+643,Aceitunas verdes,2.39,Conservas
+288,Carne molida,12.18,Carne
+809,Muslo de pollo,14.24,Carne
+828,Melón,0.57,Fruta
+189,Pulpo,11.48,Pescado
+518,Filete de res,3.89,Carne
+794,Jugo de mora,7.58,Bebidas
+450,Semillas de calabaza,3.22,Granos
+516,Pistachos,1.76,Frutos_Secos
+312,Nuez de macadamia,7.62,Frutos_Secos
+323,Caimito,1.86,Fruta
+1,Avena,1.36,Cereal
+790,Maíz,1.99,Granos
+586,Cabeles,2.94,Verdura
+583,Lentejas,3.65,Granos
+762,Pastel de vainilla,1.89,Panadería
+124,Filete de res,13.61,Carne
+418,Pimientos en conserva,2.9,Conservas
+611,Atún enlatado,3.27,Conservas
+454,Pepinillos en vinagre,1.5,Conservas
+703,Yantén,2.97,Verdura
+485,Camarón,14.03,Pescado
+714,Camarón,11.78,Pescado
+754,Maíz,1.96,Granos
+801,Arveja verde,1.88,Verdura
+713,Muesli,3.25,Cereal
+227,Pavo entero,18.69,Carne
+161,Brócoli,3.38,Verdura
+498,Lupino,0.66,Verdura
+101,Galletas de chocolate,1.78,Panadería
+96,Camu camu,4.8,Fruta
+840,Avellanas,5.69,Frutos_Secos
+808,Refresco de cola,8.8,Bebidas
+252,Jugo de naranja,9.7,Bebidas
+752,Atún enlatado,2.76,Conservas
+753,Sardinas enlatadas,1.77,Conservas
+225,Pistacho,3.47,Granos
+55,Torta artesanal,4.34,Panadería
+49,Ajo,2.42,Verdura
+325,Agua mineral,6.29,Bebidas
+660,Muesli,1.17,Cereal
+576,Leche evaporada,4.81,Lácteo
+388,Pan dulce,1.04,Panadería
+10,Morcilla,14.17,Carne
+286,Calabacín,3.04,Verdura
+270,Mango,3.86,Fruta
+147,Camarón,13.4,Pescado
+731,Croissant,3.22,Panadería
+269,Galletas de chocolate,6.65,Panadería
+112,Aceitunas negras,5.42,Conservas
+530,Carne molida,15.83,Carne
+83,Mango,1.72,Fruta
+573,Harina de trigo,3.91,Cereal
+332,Chía,1.46,Granos
+522,Almendras,3.42,Frutos_Secos
+392,Choclo,2.81,Verdura
+434,Acelga en conserva,3.63,Conservas
+461,Leche entera,2.1,Lácteo
+531,Aceitunas verdes,1.04,Conservas
+678,Yogur natural,4.84,Lácteo
+815,Queso fresco,2.64,Lácteo
+521,Zapote,3.86,Fruta
+535,Carne molida,9.46,Carne
+275,Calamar,16.17,Pescado
+393,Harina de maíz,1.43,Cereal
+394,Pitahaya,0.58,Fruta
+64,Arveja verde,2.43,Verdura
+210,Pepinillos en vinagre,4.55,Conservas
+50,Té verde,1.59,Bebidas
+65,Piña,1.27,Fruta
+579,Acelga en conserva,5.16,Conservas
+254,Pan blanco,3.62,Panadería
+196,Rábano,1.91,Verdura
+317,Jugo de piña,4.26,Bebidas
+503,Leche evaporada,2.7,Lácteo
+45,Galletas de chocolate,2.01,Panadería
+309,Anacardos,1.8,Frutos_Secos
+864,Nuez de macadamia,7.34,Frutos_Secos
+272,Pan dulce,5.36,Panadería
+69,Corn flakes,2.42,Cereal
+153,Filete de res,6.35,Carne
+73,Alcaparras,4.8,Conservas
+558,Cereal integral,2.06,Cereal
+268,Harina de avena,3.78,Cereal
+458,Acelga en conserva,4.41,Conservas
+402,Pimientos en conserva,5.32,Conservas
+284,Harina de maíz,1.91,Cereal
+66,Pepinillo,1.94,Verdura
+149,Queso fresco,3.96,Lácteo
+305,Pastel de chocolate,1.45,Panadería
+198,Semillas de calabaza,0.63,Granos
+195,Torta artesanal,2.72,Panadería
+589,Cereal integral,4.69,Cereal
+184,Castañas de cajú,4.24,Frutos_Secos
+350,Pecanas,6.17,Frutos_Secos
+320,Chirimoya,4.59,Fruta
+428,Sardinas enlatadas,2.61,Conservas
+456,Quinoa,3.85,Granos
+103,Garbanzo,3.34,Granos
+725,Galletas de avena,1.51,Panadería
+297,Corn flakes,1.23,Cereal
+221,Semillas de calabaza,2.33,Granos
+534,Alcaparras,2.82,Conservas
+441,Mantequilla,3.04,Lácteo
+462,Donas,4.59,Panadería
+791,Harina de maíz,1.4,Cereal
+442,Yantén,2.81,Verdura
+590,Queso fresco,4.62,Lácteo
+512,Corn flakes,3.0,Cereal
+346,Alcaparras,5.58,Conservas
+141,Leche condensada,4.49,Lácteo
+523,Jugo de mango,6.15,Bebidas
+352,Arveja,2.37,Verdura
+146,Harina de maíz,5.88,Cereal
+609,Harina de arroz,1.56,Cereal
+748,Harina de trigo,4.05,Cereal
+447,Frambuesa,1.89,Fruta
+400,Trucha,23.95,Pescado
+520,Maní,1.29,Granos
+355,Carne molida,4.31,Carne
+472,Tumbo,3.15,Verdura
+507,Almendras,5.63,Frutos_Secos
+102,Alcaparras,3.99,Conservas
+236,Carne molida,6.07,Carne
+533,Alcaparras,4.61,Conservas
+551,Carambola,2.14,Fruta
+14,Langostino,17.21,Pescado
+564,Pistacho,2.37,Granos
+542,Crema agria,5.52,Lácteo
+417,Trucha,18.57,Pescado
+602,Acelga en conserva,3.31,Conservas
+570,Mantequilla,3.51,Lácteo
+529,Cerveza,8.26,Bebidas
+658,Alcaparras,5.37,Conservas
+131,Níspero,4.43,Fruta
+654,Almendras,5.98,Frutos_Secos
+326,Pecanas,1.87,Frutos_Secos
+610,Coliflor,1.31,Verdura
+87,Nuez de macadamia,6.82,Frutos_Secos
+48,Remolacha,3.32,Verdura
+511,Pan integral,3.49,Panadería
+89,Refresco de cola,2.74,Bebidas
+488,Oca,1.13,Verdura
+780,Pan blanco,6.04,Panadería
+349,Harina de maíz,5.75,Cereal
+308,Pechuga de pollo,7.88,Carne
+128,Quinoa,3.16,Granos
+186,Semillas de calabaza,2.65,Granos
+773,Cebolla,1.25,Verdura
+814,Chuleta ahumada,18.98,Carne
+331,Pepinillos en vinagre,1.56,Conservas
+120,Yogur natural,2.51,Lácteo
+81,Tamarindo,2.39,Fruta
+25,Acelga en conserva,1.31,Conservas
+601,Arroz,2.71,Granos
+157,Sardinas enlatadas,4.59,Conservas
+860,Mantequilla,1.01,Lácteo
+836,Pan de yuca,4.42,Panadería
+587,Pavo entero,14.36,Carne
+336,Avellanas,1.47,Frutos_Secos
+792,Pistachos,4.55,Frutos_Secos
+403,Pistachos,1.14,Frutos_Secos
+385,Frijoles,2.72,Granos
+339,Pan de queso,5.48,Panadería
+340,Galletas de chocolate,1.41,Panadería
+617,Sardina,17.57,Pescado
+188,Pimientos en conserva,1.67,Conservas
+333,Pastel de chocolate,3.03,Panadería
+187,Corn flakes,5.98,Cereal
+92,Harina de avena,6.88,Cereal
+316,Almendra,3.34,Granos
+302,Tomate de árbol,0.44,Verdura
+607,Salmón,20.82,Pescado
+3,Piña,4.7,Fruta
+377,Castañas de cajú,7.92,Frutos_Secos
+541,Castañas de cajú,2.77,Frutos_Secos
+191,Granola,2.72,Cereal
+280,Guayaba,1.73,Fruta
+44,Bollo,6.34,Panadería
+832,Maíz,1.69,Granos
+861,Tocino,14.77,Carne
+229,Galletas de chocolate,4.12,Panadería
+183,Lupino,0.59,Verdura
+211,Alcaparras,3.73,Conservas
+771,Pan blanco,1.48,Panadería
+718,Muesli,2.84,Cereal
+448,Pepinillos en vinagre,1.83,Conservas
+356,Guisante,2.06,Granos
+423,Pastel de vainilla,6.99,Panadería
+395,Leche condensada,5.9,Lácteo
+675,Fresa,3.52,Fruta
+739,Refresco de cola,5.37,Bebidas
+737,Corn flakes,6.72,Cereal
+833,Morcilla,14.53,Carne
+460,Frijoles,0.94,Granos
+130,Sardina,12.33,Pescado
+517,Jugo de naranja,6.25,Bebidas
+399,Harina de avena,6.69,Cereal
+315,Empanada,5.58,Panadería
+641,Alcaparras,3.65,Conservas
+125,Té negro,6.67,Bebidas
+664,Tilapia,5.52,Pescado
+256,Tocino,11.8,Carne
+591,Almendras,2.83,Frutos_Secos
+526,Leche evaporada,3.23,Lácteo
+107,Atún enlatado,4.47,Conservas
+605,Maní,0.93,Granos
+177,Cachanga,0.94,Verdura
+490,Lentejas,3.34,Granos
+550,Donas,3.08,Panadería
+696,Yantén,2.31,Verdura
+561,Yogur de fresa,4.56,Lácteo
+687,Corn flakes,5.76,Cereal
+674,Nuez de macadamia,1.85,Frutos_Secos
+337,Atún,9.73,Pescado
+338,Arroz,1.76,Granos
+398,Pimientos en conserva,3.34,Conservas
+639,Nuez de macadamia,5.28,Frutos_Secos
+702,Lechuga,1.44,Verdura
+205,Chía,3.19,Granos
+784,Aceitunas negras,1.63,Conservas
+770,Donas,1.44,Panadería
+735,Guisante,0.95,Granos
+164,Anacardos,5.11,Frutos_Secos
+615,Hamburguesa,11.55,Carne
+647,Cereza,2.83,Fruta
+435,Yogur de fresa,1.81,Lácteo
+245,Trucha,23.95,Pescado
+626,Avellanas,6.92,Frutos_Secos
+56,Yogur natural,4.18,Lácteo
+175,Avellanas,1.88,Frutos_Secos
+562,Huevo criollo,3.67,Lácteo
+209,Anacardos,2.18,Frutos_Secos
+318,Alcaparras,1.86,Conservas
+692,Pimientos en conserva,5.21,Conservas
+505,Aceitunas verdes,5.13,Conservas
+278,Mango,0.7,Fruta
+436,Muesli,4.91,Cereal
+167,Pepinillos en vinagre,4.09,Conservas
+239,Zapote,4.5,Fruta
+170,Avellanas,5.49,Frutos_Secos
+156,Crema agria,2.22,Lácteo
+137,Harina de trigo,2.78,Cereal
+750,Papa,0.88,Verdura
+733,Agua con gas,4.91,Bebidas
+624,Pastel de vainilla,1.86,Panadería
+800,Galletas de avena,6.93,Panadería
+445,Bollo,1.78,Panadería
+42,Pastel de chocolate,4.37,Panadería
+106,Pan de yuca,3.8,Panadería
+165,Crema agria,2.24,Lácteo
+812,Papa,1.37,Verdura
+208,Agua de fruta natural,2.86,Bebidas
+732,Chorizo,18.87,Carne
+158,Pan de yuca,5.58,Panadería
+324,Semillas de calabaza,2.25,Granos
+353,Crema agria,1.12,Lácteo
+851,Limonada,9.68,Bebidas
+665,Pulpo,12.06,Pescado
+593,Lulo,2.73,Fruta
+584,Harina de avena,2.71,Cereal
+502,Pera,2.44,Fruta
+169,Leche evaporada,2.83,Lácteo
+649,Refresco de cola,0.93,Bebidas
+281,Grosella,3.03,Fruta
+172,Pastel de chocolate,2.73,Panadería
+538,Limonada,7.76,Bebidas
+24,Huevo criollo,4.4,Lácteo
+152,Espinaca,3.91,Verdura
+514,Refresco de cola,8.05,Bebidas
+671,Pastel de chocolate,6.63,Panadería
+700,Costilla de cerdo,13.24,Carne
+616,Jugo de naranja,0.93,Bebidas
+695,Pierna de cerdo,8.66,Carne
+648,Semillas de calabaza,1.02,Granos
+451,Nuez de macadamia,3.3,Frutos_Secos
+159,Pimientos en conserva,1.81,Conservas
+604,Atún enlatado,3.97,Conservas
+566,Pecanas,4.57,Frutos_Secos
+178,Acelga,2.16,Granos
+618,Frambuesa,1.99,Fruta
+51,Sacha culantro,2.46,Verdura
+343,Avena,4.58,Cereal
+267,Leche condensada,4.91,Lácteo
+241,Sardinas enlatadas,4.61,Conservas
+824,Acelga en conserva,1.85,Conservas
+543,Harina de trigo,1.89,Cereal
+655,Granola,1.19,Cereal
+772,Apio,0.37,Verdura
+261,Bollo,1.91,Panadería
+354,Camarón,15.04,Pescado
+559,Acelga en conserva,5.36,Conservas
+547,Melón,2.83,Fruta
+287,Avellanas,7.99,Frutos_Secos
+262,Maíz,1.6,Granos
+301,Tocino,18.51,Carne
+242,Pastel de chocolate,3.13,Panadería
+311,Muesli,4.66,Cereal
+594,Bacalao,10.58,Pescado
+683,Yogur natural,5.71,Lácteo
+704,Queso fresco,4.52,Lácteo
+749,Acelga roja,2.18,Granos
+544,Pecanas,6.05,Frutos_Secos
+689,Leche deslactosada,3.87,Lácteo
+656,Castañas de cajú,7.27,Frutos_Secos
+491,Refresco de cola,9.57,Bebidas
+848,Filete de res,3.72,Carne
+845,Chocho,3.72,Verdura
+409,Muesli,5.48,Cereal
+690,Bacalao,21.56,Pescado
+606,Huevo blanco,4.48,Lácteo
+661,Muslo de pollo,13.47,Carne
+483,Sardinas enlatadas,2.21,Conservas
+789,Harina de arroz,2.35,Cereal
+685,Salmón,7.0,Pescado
+246,Galletas de avena,3.83,Panadería
+123,Corn flakes,1.03,Cereal
+849,Nuez de macadamia,3.85,Frutos_Secos
+307,Semillas de girasol,2.78,Granos
+479,Queso mozzarella,2.43,Lácteo
+85,Mango,3.44,Fruta
+408,Calamar,19.77,Pescado
+231,Mandarina,2.38,Fruta
+134,Pechuga de pollo,19.95,Carne
+162,Agua con gas,2.27,Bebidas
+741,Leche entera,1.05,Lácteo
+786,Aceitunas negras,5.64,Conservas
+557,Pan de queso,3.73,Panadería
+595,Harina de arroz,4.15,Cereal
+232,Chuleta ahumada,10.96,Carne
+799,Tilapia,11.61,Pescado
+495,Nuez,3.02,Granos
+389,Guayaba,4.06,Fruta
+619,Sardinas enlatadas,1.88,Conservas
+493,Harina de trigo,5.96,Cereal
+463,Avellanas,1.61,Frutos_Secos
+283,Cereal integral,2.11,Cereal
+111,Tocino,8.5,Carne
+52,Salmón,10.22,Pescado
+171,Langostino,20.08,Pescado
+289,Pan de queso,4.49,Panadería
+457,Aceitunas verdes,2.31,Conservas
+459,Galletas de avena,2.42,Panadería
+433,Cereal integral,3.79,Cereal
+679,Hamburguesa,14.66,Carne
+818,Leche evaporada,1.59,Lácteo
+736,Queso mozzarella,4.07,Lácteo
+273,Atún,14.56,Pescado
+364,Guisante,1.96,Granos
+471,Castañas de cajú,6.3,Frutos_Secos
+581,Granola,5.57,Cereal
+588,Cereal integral,4.15,Cereal
+34,Anacardos,3.53,Frutos_Secos
+91,Aceitunas negras,1.31,Conservas
+382,Pistachos,2.42,Frutos_Secos
+637,Nuez de macadamia,2.15,Frutos_Secos
+743,Castañas de cajú,1.81,Frutos_Secos
+202,Pulpo,14.78,Pescado
+148,Castañas de cajú,6.66,Frutos_Secos
+376,Quinoa,2.3,Granos
+243,Frijoles,2.46,Granos
+82,Muesli,5.34,Cereal
+720,Café,8.26,Bebidas
+234,Pulpo,6.46,Pescado
+46,Refresco de cola,7.15,Bebidas
+182,Almendras,7.54,Frutos_Secos
+751,Pepinillo,0.42,Verdura
+744,Cerveza,7.81,Bebidas
+854,Harina de trigo,3.25,Cereal
+378,Limonada,8.76,Bebidas
+778,Agua de coco,1.26,Bebidas
+464,Harina de arroz,1.8,Cereal
+401,Pan blanco,2.07,Panadería
+384,Castañas de cajú,4.7,Frutos_Secos
+466,Salmón,20.12,Pescado
+850,Crema agria,4.37,Lácteo
+390,Castañas de cajú,4.72,Frutos_Secos
+391,Bacalao,14.21,Pescado
+681,Filete de res,6.2,Carne
+33,Zanahoria,3.3,Verdura
+358,Agua mineral,2.79,Bebidas
+528,Pimiento,2.5,Verdura
+730,Frijoles,1.36,Granos
+39,Higo,2.48,Fruta
+40,Nuez de macadamia,6.28,Frutos_Secos
+492,Melón,2.77,Fruta
+168,Yogur natural,5.08,Lácteo
+708,Pimientos en conserva,3.89,Conservas
+846,Harina de maíz,2.42,Cereal
+482,Pavo entero,11.86,Carne
+844,Té verde,3.11,Bebidas
+742,Pistachos,7.16,Frutos_Secos
+438,Pavo entero,14.54,Carne
+255,Castañas de cajú,1.33,Frutos_Secos
+322,Donas,5.03,Panadería
+173,Avellanas,5.87,Frutos_Secos
+709,Jugo de mango,3.35,Bebidas
+327,Carne seca,12.14,Carne
+329,Bacalao,11.01,Pescado
+365,Carne seca,10.87,Carne
+57,Mangostán,2.36,Fruta
+36,Jugo de mango,4.19,Bebidas
+68,Yogur natural,2.65,Lácteo
+75,Cachanga,3.43,Verdura
+371,Zapallo,2.98,Verdura
+552,Salmón,10.37,Pescado
+455,Avena,6.24,Cereal
+571,Pulpo,19.49,Pescado
+603,Nuez de macadamia,4.36,Frutos_Secos
+274,Pan de queso,6.74,Panadería
+199,Papaya,4.72,Fruta
+519,Pepinillo,3.68,Verdura
+412,Sardinas enlatadas,2.98,Conservas
+163,Calamar,11.43,Pescado
+651,Mantequilla,3.33,Lácteo
+361,Harina de maíz,2.85,Cereal
+613,Pastel de chocolate,6.3,Panadería
+795,Garbanzo,3.31,Granos
+726,Acelga roja,3.7,Granos
+501,Pan dulce,3.48,Panadería
+174,Sardinas enlatadas,4.71,Conservas
+32,Maracuyá,2.99,Fruta
+572,Pepinillos en vinagre,2.48,Conservas
+432,Trucha,9.6,Pescado
+755,Sardinas enlatadas,3.5,Conservas
+180,Harina de maíz,2.54,Cereal
+444,Semillas de girasol,2.11,Granos
+727,Croissant,1.84,Panadería
+842,Castañas de cajú,2.29,Frutos_Secos
+524,Anacardos,7.7,Frutos_Secos
+811,Almendras,6.87,Frutos_Secos
+35,Papa,3.13,Verdura
+798,Jugo de mango,8.5,Bebidas
+722,Tilapia,19.14,Pescado
+652,Papaya,2.78,Fruta
+477,Pan integral,4.71,Panadería
+532,Harina de avena,4.96,Cereal
+513,Manzana,2.89,Fruta
+782,Agua mineral,0.66,Bebidas
+710,Huevo blanco,5.89,Lácteo
+582,Acerola,4.16,Fruta
+667,Harina de trigo,5.84,Cereal
+724,Muslo de pollo,18.61,Carne
+721,Nuez de macadamia,2.69,Frutos_Secos
+747,Atún enlatado,5.08,Conservas
+504,Mantequilla,1.4,Lácteo
+838,Limonada,5.87,Bebidas
+597,Corvina,18.68,Pescado
+701,Zanahoria,0.65,Verdura
+86,Agua de coco,5.75,Bebidas
+646,Manzana,3.66,Fruta
+113,Cabeles,3.43,Verdura
+431,Harina de maíz,4.4,Cereal
+299,Tachí,3.7,Verdura
+197,Bacalao,23.03,Pescado
+271,Acelga en conserva,2.36,Conservas
+59,Ajo,3.63,Verdura
+43,Aceitunas verdes,1.9,Conservas
+328,Pan integral,6.77,Panadería
+555,Alcaparras,4.76,Conservas

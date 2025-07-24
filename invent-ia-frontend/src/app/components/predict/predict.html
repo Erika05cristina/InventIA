@@ -13,8 +13,13 @@
     <h3>Predicción individual</h3>
     <div class="input-row">
       <label>
-        ID del producto:
-        <input type="number" [(ngModel)]="manualProductIdValue" />
+        Producto:
+        <select [(ngModel)]="selectedNombre">
+          <option [ngValue]="null">Seleccione un producto</option>
+          @for (p of productosDisponibles(); track p.id) {
+            <option [ngValue]="p.nombre">{{ p.nombre }}</option>
+          }
+        </select>
       </label>
 
       <label>
@@ -23,6 +28,12 @@
       </label>
 
       <button (click)="getPrediction()">Predecir</button>
+    </div>
+
+    <!-- Mostrar detalles del producto seleccionado -->
+    <div class="producto-info" *ngIf="productoSeleccionado()">
+      <p><strong>Precio:</strong> {{ productoSeleccionado()?.precio | currency }}</p>
+      <p><strong>Categoría:</strong> {{ productoSeleccionado()?.categoria }}</p>
     </div>
 
     <!-- Loader individual -->
