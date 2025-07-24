@@ -3,15 +3,15 @@ package com.inventia.inventia_app.entities;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Product
+ * PredictionRequest
  */
-public class Product {
+public class PredictionRequest {
 
     private Integer product_id;
     @JsonProperty("fecha_prediccion")
     private String fecha;
 
-    public Product(Integer product_id, String fecha){
+    public PredictionRequest(Integer product_id, String fecha){
         this.product_id = product_id;
         this.fecha = fecha;
     }
@@ -34,7 +34,7 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product{"
+        return "PredictionRequest{"
         + "product_id='"
         + product_id
         + '\''

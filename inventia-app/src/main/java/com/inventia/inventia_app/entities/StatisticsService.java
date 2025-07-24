@@ -1,6 +1,5 @@
 package com.inventia.inventia_app.entities;
 
-
 import java.util.Comparator;
 import java.util.List;
 
@@ -12,7 +11,7 @@ import com.inventia.inventia_app.dto.DashboardStatisticsResponse;
 public class StatisticsService {
 
     public DashboardStatisticsResponse calcularEstadisticas(PredictionGroup group) {
-        List<IndividualPrediction> predicciones = group.getPredicciones();
+        List<PredictionGroup.IndividualPrediction> predicciones = group.getPredicciones();
 
         if (predicciones == null || predicciones.isEmpty()) {
             return new DashboardStatisticsResponse(0, 0, null, null, null, null, 0, 0, 0, group.getFecha());
@@ -24,12 +23,12 @@ public class StatisticsService {
 
         double promedio = total / (double) predicciones.size();
 
-        IndividualPrediction mayor = predicciones.stream()
-                .max(Comparator.comparing(IndividualPrediction::getPredicted_stock))
+        PredictionGroup.IndividualPrediction mayor = predicciones.stream()
+                .max(Comparator.comparing(PredictionGroup.IndividualPrediction::getPredicted_stock))
                 .orElse(null);
 
-        IndividualPrediction menor = predicciones.stream()
-                .min(Comparator.comparing(IndividualPrediction::getPredicted_stock))
+        PredictionGroup.IndividualPrediction menor = predicciones.stream()
+                .min(Comparator.comparing(PredictionGroup.IndividualPrediction::getPredicted_stock))
                 .orElse(null);
 
         int alta = (int) predicciones.stream()
