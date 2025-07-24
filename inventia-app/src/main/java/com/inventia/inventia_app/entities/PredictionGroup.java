@@ -1,50 +1,62 @@
 package com.inventia.inventia_app.entities;
 
 import java.util.ArrayList;
+import java.util.List;
 
-class IndividualPrediction {
-
-    private Integer product_id;
-    private Double predicted_stock;
-
-    public IndividualPrediction(Integer product_id, Double predicted_stock) {
-        this.product_id = product_id;
-        this.predicted_stock = predicted_stock;
-    }
-
-    public void setProduct_id(Integer product_id) {
-        this.product_id = product_id;
-    }
-
-    public Integer getProduct_id() {
-        return this.product_id;
-    }
-
-    public void setPredicted_stock(Double predicted_stock) {
-        this.predicted_stock = predicted_stock;
-    }
-
-    public Double getPredicted_stock() {
-        return this.predicted_stock;
-    }
-
-    @Override
-    public String toString() {
-        return "IndividualPrediction{"
-            + "product_id=" + product_id
-            + ", predicted_stock=" + predicted_stock
-            + '}';
-    }
-}
 
 /**
  * PredictionGroup
  */
 public class PredictionGroup {
 
+    public static class IndividualPrediction {
+
+        private Integer product_id;
+        private String name;
+        private Double predicted_stock;
+
+        public IndividualPrediction(Integer product_id, String name, Double predicted_stock) {
+            this.product_id = product_id;
+            this.name = name;
+            this.predicted_stock = predicted_stock;
+        }
+
+        public void setProduct_id(Integer product_id) {
+            this.product_id = product_id;
+        }
+
+        public Integer getProduct_id() {
+            return this.product_id;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return this.name;
+        }
+
+        public void setPredicted_stock(Double predicted_stock) {
+            this.predicted_stock = predicted_stock;
+        }
+
+        public Double getPredicted_stock() {
+            return this.predicted_stock;
+        }
+
+        @Override
+        public String toString() {
+            return "IndividualPrediction{"
+            + "product_id=" + product_id
+            + ", predicted_stock=" + predicted_stock
+            + '}';
+        }
+    }
+
     private String status;
     private String fecha;
-    private ArrayList<IndividualPrediction> predicciones;
+    private List<IndividualPrediction> predicciones;
     private Double inversion;
 
     public PredictionGroup(String status, String fecha) {
@@ -76,7 +88,7 @@ public class PredictionGroup {
         this.predicciones = predicciones;
     }
 
-    public ArrayList<IndividualPrediction> getPredicciones(){
+    public List<IndividualPrediction> getPredicciones(){
         return this.predicciones;
     }
 
