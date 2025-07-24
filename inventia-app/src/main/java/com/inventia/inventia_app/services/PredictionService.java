@@ -25,6 +25,7 @@ import com.inventia.inventia_app.repositories.ProductoRepository;
 import com.inventia.inventia_app.repositories.ProductoRepository.ProductProjection;
 
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 /**
  * PredictionService
@@ -67,12 +68,6 @@ public class PredictionService {
             .flatMap(prediction -> {
             try {
 
-                //Persisitir en la base de datos
-                ObjectMapper mapper = new ObjectMapper();
-                String json = mapper.writeValueAsString(prediction);
-                PrediccionDTO pred = new PrediccionDTO(new Date(), fecha_prediccion, "individual", json);
-                predictionRepository.save(pred);
-                System.out.println("Predicción guardada para la fecha " + fecha_prediccion);
 
                 String explicacionSimple = prediction.getSimple();
                 Double prediccionValue = prediction.getPrediccionValue();
@@ -85,6 +80,7 @@ public class PredictionService {
 
                 prediction.getPrediccion().setNombre(producto.getNombre());
                 prediction.getPrediccion().setCategoria(producto.getCategoria());
+                prediction.getPrediccion().setPrecio(producto.getPrecio());
 
                 Double inversion = producto.getPrecio() * prediction.getPrediccionValue();
                 prediction.setInversion(inversion);
@@ -107,16 +103,21 @@ public class PredictionService {
                 sb.append("La explicación debe ayudar a tomar decisiones prácticas como ajustar precios, planificar compras o entender estacionalidades.");
                 String prompt = sb.toString();
 
+                //Persisitir en la base de datos
+                ObjectMapper mapper = new ObjectMapper();
+                String json = mapper.writeValueAsString(prediction);
+                PrediccionDTO pred = new PrediccionDTO(new Date(), fecha_prediccion, "individual", json);
+                predictionRepository.save(pred);
+                System.out.println("Predicción guardada para la fecha " + fecha_prediccion);
+
                 //realizar el request y devolver
-                return explanationService.askOpenAI(prompt)
+                Mono<PredictionSingle> result = explanationService.askOpenAI(prompt)
                 .map(explicacionOpenAI -> {
                     prediction.setExplicacionOpenAi(explicacionOpenAI);
                     return prediction;
-                })
-                .doOnNext(updatedPrediction -> {
-                    predictionRepository.save(pred);
-                    System.out.println("Predicción guardada con explicación");
                 });
+
+                return result;
 
             } catch (Exception e) {
                 System.err.println("Error al serializar o guardar la predicción: " + e.getMessage());
@@ -178,7 +179,6 @@ public Flux<PredictionGroup> predictGroup(String fecha_prediccion) {
         .bodyToFlux(PredictionGroup.class)
         .flatMap(predictionGroup -> {
             try {
-                Double inversion = 0.0;
 
                 List<Integer> productIds = predictionGroup.getPredicciones().stream()
                 .map(PredictionGroup.IndividualPrediction::getProduct_id)
@@ -203,19 +203,23 @@ public Flux<PredictionGroup> predictGroup(String fecha_prediccion) {
                 System.out.println("Predicción guardada para la fecha " + fecha_prediccion);
                 //System.out.println("Prediccion guardada en la base de datos: " + pred);
 
-                predictionGroup.getPredicciones().stream()
-                    .map(prediction -> {
+                Double inversion = predictionGroup.getPredicciones().stream()
+                    .mapToDouble(prediction -> {
                         ProductProjection producto = productsNames.get(prediction.getProduct_id());
                         if (producto != null) {
                             prediction.setName(producto.getNombre());
                             prediction.setCategoria(producto.getCategoria());
+                            prediction.setPrecio(producto.getPrecio());
                         } else {
                             prediction.setName("Nombre Desconocido");
                             prediction.setCategoria("Categoria Desconocida");
+                            prediction.setPrecio(0.0);
                         }
-                        return prediction;
+                        return prediction.getPrecio()*prediction.getPredicted_stock();
                     })
-                    .collect(Collectors.toList());
+                    .sum();
+
+                predictionGroup.setInversion(inversion);
 
                 return Flux.just(predictionGroup);
             } catch (Exception e) {

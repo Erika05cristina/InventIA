@@ -25,7 +25,7 @@ public class DataService {
     @Autowired
     public DataService(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder
-                //.baseUrl(URL_ROUTE)
+                .baseUrl(URL_ROUTE)
                 .build();
     }
 
@@ -34,7 +34,7 @@ public class DataService {
         bodyBuilder.part("file", file.getResource()).filename(file.getOriginalFilename());
         //System.out.println("Llamando al servicio para entrenar el modelo: " + URL_ROUTE);
         return webClient.post()
-            .uri("http://localhost:8000/upload/data")
+            .uri("/data")
             .body(BodyInserters.fromMultipartData(bodyBuilder.build()))
             .retrieve()
             .bodyToMono(String.class)
