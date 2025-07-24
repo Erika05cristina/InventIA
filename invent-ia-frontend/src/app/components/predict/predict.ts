@@ -34,12 +34,13 @@ export class Predict {
   readonly isPredictingIndividual = signal(false);
   readonly isPredictingGroup = signal(false);
   readonly wasGroupPredictionDownloaded = this.state.wasGroupPredictionDownloaded;
-  readonly _pageSize = signal(10);
 
   public fecha: string = '';
 
   // Datos de predicción grupal
   readonly groupPrediction = signal<PredictionResponseGroup | null>(null);
+
+  readonly _pageSize = signal(10);
 
   // Filtros
   private _selectedCategoria = signal<string | null>(null);
@@ -64,9 +65,10 @@ export class Predict {
   get pageSizeValue(): number {
     return this._pageSize();
   }
-  set pageSizeValue(val: number) {
-    this._pageSize.set(val);
-    this.currentPage.set(1); // reiniciar página
+  set pageSizeValue(val: number | string) {
+    const parsed = typeof val === 'string' ? parseInt(val, 10) : val;
+    this._pageSize.set(parsed);
+    this.currentPage.set(1);
   }
 
   readonly categorias = computed(() => {
@@ -98,19 +100,18 @@ export class Predict {
   });
 
   // Paginación
-  readonly pageSize = signal(10);
   readonly currentPage = signal(1);
 
   readonly totalPages = computed(() => {
     const total = this.prediccionesFiltradas().length;
-    const size = this.pageSize();
+    const size = this._pageSize(); // ← usa el correcto
     return Math.max(1, Math.ceil(total / size));
   });
 
   readonly paginatedPredictions = computed(() => {
     const all = this.prediccionesFiltradas();
     const page = this.currentPage();
-    const size = this.pageSize();
+    const size = this._pageSize(); // ← usa el correcto
     const start = (page - 1) * size;
     return all.slice(start, start + size);
   });
