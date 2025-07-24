@@ -5,24 +5,23 @@ from dateparser.search import search_dates
 
 
 def extraer_fecha(pregunta: str) -> str | None:
-    """
-    Extrae una fecha en formato YYYY-MM-DD desde una pregunta en español.
-    """
     resultado = search_dates(pregunta, languages=["es"])
     if resultado:
-        return resultado[0][1].strftime("%Y-%m-%d")
+        fecha = resultado[0][1]
+        if fecha.year < 2025:
+            fecha = fecha.replace(year=2025)
+        return fecha.strftime("%Y-%m-%d")
 
     fecha_directa = dateparser.parse(pregunta, languages=["es"])
     if fecha_directa:
+        if fecha_directa.year < 2025:
+            fecha_directa = fecha_directa.replace(year=2025)
         return fecha_directa.strftime("%Y-%m-%d")
 
     return None
 
 
 def obtener_productos() -> list[dict]:
-    """
-    Consulta al backend la lista de productos disponibles.
-    """
     try:
         response = requests.get("http://localhost:8080/products/all")
         if response.status_code == 200:
@@ -30,6 +29,7 @@ def obtener_productos() -> list[dict]:
     except Exception as e:
         print(f"❗ Error al obtener productos: {e}")
     return []
+
 
 def obtener_nombre_producto(product_id: int) -> str | None:
     try:
@@ -43,23 +43,18 @@ def obtener_nombre_producto(product_id: int) -> str | None:
     return None
 
 
-def buscar_product_id_por_nombre(nombre_producto: str) -> int | None:
-    """
-    Intenta encontrar el ID del producto a partir del nombre (incluso parcial).
-    """
+def buscar_product_id_por_nombre(pregunta: str) -> int | None:
     productos = obtener_productos()
-    nombre_normalizado = nombre_producto.lower()
+    pregunta_lower = pregunta.lower()
 
-    for p in productos:
-        if nombre_normalizado in p["nombre"].lower():
-            return p["id"]
+    for producto in productos:
+        nombre = producto["nombre"].lower()
+        if nombre in pregunta_lower:
+            return producto["id"]
     return None
 
+
 def consultar_estadisticas(pregunta: str) -> dict:
-    """
-    Consulta estadísticas generales de stock si el usuario da solo la fecha.
-    Agrega nombres de productos en lugar de solo los IDs.
-    """
     fecha_str = extraer_fecha(pregunta)
 
     if not fecha_str:
@@ -78,15 +73,11 @@ def consultar_estadisticas(pregunta: str) -> dict:
 
         data = response.json()
 
-        # Obtener nombres para los productos con mayor y menor demanda
+        # Agregar nombres
         id_mayor = data.get("productoMayorDemandaId")
         id_menor = data.get("productoMenorDemandaId")
-        nombre_mayor = obtener_nombre_producto(id_mayor) or f"Producto ID {id_mayor}"
-        nombre_menor = obtener_nombre_producto(id_menor) or f"Producto ID {id_menor}"
-
-        # Agregar los nombres al diccionario de respuesta
-        data["productoMayorDemandaNombre"] = nombre_mayor
-        data["productoMenorDemandaNombre"] = nombre_menor
+        data["productoMayorDemandaNombre"] = obtener_nombre_producto(id_mayor) or f"Producto ID {id_mayor}"
+        data["productoMenorDemandaNombre"] = obtener_nombre_producto(id_menor) or f"Producto ID {id_menor}"
 
         return data
 
@@ -95,30 +86,23 @@ def consultar_estadisticas(pregunta: str) -> dict:
 
 
 def consultar_explicacion(pregunta: str) -> dict:
-    # 1️⃣ Intentar detectar número de producto explícito
-    producto_match = re.search(r"(producto\s*(número|nro|num|#)?\s*)?(\d{1,5})", pregunta, re.IGNORECASE)
-    product_id = None
+    pregunta_lower = pregunta.lower()
 
-    if producto_match:
-        product_id = int(producto_match.group(3))
-    else:
-        # 2️⃣ Si no se detecta número, intentar buscar por nombre
-        productos = obtener_productos()
-        for producto in productos:
-            nombre = producto["nombre"].lower()
-            if nombre in pregunta.lower():
-                product_id = producto["id"]
-                break
+    # Intentar detectar por nombre
+    product_id = buscar_product_id_por_nombre(pregunta)
 
-    if not product_id:
-        return {"mensaje": "❗ No se identificó el producto en tu pregunta. Puedes decir algo como 'producto 267' o el nombre exacto."}
+    # Intentar detectar por número si no se encontró por nombre
+    if product_id is None:
+        match = re.search(r"(producto\s*(número|nro|num|#)?\s*)?(\d{1,5})", pregunta_lower)
+        if match:
+            product_id = int(match.group(3))
+        else:
+            return {"mensaje": "❗ No se identificó el producto en tu pregunta. Puedes decir algo como 'producto 267' o el nombre exacto."}
 
-    # 3️⃣ Obtener la fecha
     fecha_str = extraer_fecha(pregunta)
     if not fecha_str:
         return {"mensaje": "❗ No se encontró una fecha en tu pregunta. Ej: 'el 25 de julio'"}
 
-    # 4️⃣ Llamar al backend FastAPI
     url = "http://localhost:8000/predict/by-product"
     payload = {
         "product_id": product_id,
@@ -132,16 +116,16 @@ def consultar_explicacion(pregunta: str) -> dict:
 
         data = response.json()
 
-        # ❌ Eliminar imagen si existe
-        if "explicacion_avanzada" in data and "grafica_explicabilidad_base64" in data["explicacion_avanzada"]:
-            data["explicacion_avanzada"].pop("grafica_explicabilidad_base64")
+        # Eliminar imagen base64 si existe
+        if "explicacion_avanzada" in data:
+            data["explicacion_avanzada"].pop("grafica_explicabilidad_base64", None)
 
-        # ✅ Obtener y agregar nombre del producto
+        # Reemplazar ID por nombre
         nombre = obtener_nombre_producto(product_id)
         if nombre:
             data["nombre_producto"] = nombre
-            if "explicacion_simple" in data and f"producto {product_id}" in data["explicacion_simple"]:
-                data["explicacion_simple"] = data["explicacion_simple"].replace(f"producto {product_id}", f"{nombre}")
+            if "explicacion_simple" in data:
+                data["explicacion_simple"] = data["explicacion_simple"].replace(f"producto {product_id}", nombre)
 
         return data
 
