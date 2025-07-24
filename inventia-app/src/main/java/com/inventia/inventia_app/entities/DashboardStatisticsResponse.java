@@ -1,4 +1,4 @@
-package com.inventia.inventia_app.dto;
+package com.inventia.inventia_app.entities;
 
 public class DashboardStatisticsResponse {
 

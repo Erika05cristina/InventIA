@@ -72,6 +72,7 @@ public class PredictionSingle {
         @JsonProperty("product_id")
         private Integer productId;
         private String nombre;
+        private String categoria;
         @JsonProperty("fecha_prediccion")
         private String fecha;
         private Double prediccion;
@@ -96,6 +97,14 @@ public class PredictionSingle {
 
         public String getNombre() {
             return this.nombre;
+        }
+
+        public void setCategoria(String categoria) {
+            this.categoria = categoria;
+        }
+
+        public String getCategoria() {
+            return this.categoria;
         }
 
         public void setFecha(String fecha) {

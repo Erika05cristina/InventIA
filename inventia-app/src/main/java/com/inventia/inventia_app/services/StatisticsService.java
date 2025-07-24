@@ -1,11 +1,12 @@
-package com.inventia.inventia_app.entities;
+package com.inventia.inventia_app.services;
 
 import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.inventia.inventia_app.dto.DashboardStatisticsResponse;
+import com.inventia.inventia_app.entities.DashboardStatisticsResponse;
+import com.inventia.inventia_app.entities.PredictionGroup;
 
 @Service
 public class StatisticsService {

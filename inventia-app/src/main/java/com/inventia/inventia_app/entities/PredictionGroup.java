@@ -13,11 +13,13 @@ public class PredictionGroup {
 
         private Integer product_id;
         private String name;
+        private String categoria;
         private Double predicted_stock;
 
-        public IndividualPrediction(Integer product_id, String name, Double predicted_stock) {
+        public IndividualPrediction(Integer product_id, String name, String categoria, Double predicted_stock) {
             this.product_id = product_id;
             this.name = name;
+            this.categoria = categoria;
             this.predicted_stock = predicted_stock;
         }
 
@@ -35,6 +37,14 @@ public class PredictionGroup {
 
         public String getName() {
             return this.name;
+        }
+
+        public void setCategoria(String categoria) {
+            this.categoria = categoria;
+        }
+
+        public String getCategoria() {
+            return this.categoria;
         }
 
         public void setPredicted_stock(Double predicted_stock) {
