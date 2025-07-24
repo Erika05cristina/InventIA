@@ -84,11 +84,12 @@ public class PredictionService {
 
                 Double inversion = producto.getPrecio() * prediction.getPrediccionValue();
                 prediction.setInversion(inversion);
+
                 //Generar la el prompt para el OpenAI
                 StringBuilder sb = new StringBuilder();
                 sb.append("Analiza la siguiente predicción de demanda para un producto y redacta un resumen profesional, claro y entendible para una persona sin conocimientos técnicos.\n\n");
 
-                sb.append("- Producto ID: ").append(product_id).append("\n");
+                sb.append("- Nombre del Producto: ").append(producto.getNombre()).append("\n");
                 sb.append("- Demanda estimada: ").append(prediccionRedondeada).append(" unidades\n");
                 sb.append("- Explicación simple: ").append(explicacionSimple).append("\n");
                 sb.append("- Variables más influyentes:\n");
@@ -134,45 +135,6 @@ public class PredictionService {
         return prediccion;
     }
 
-/*
-public Flux<PredictionGroup> predictGroup(String fecha_prediccion) {
-    PredictionRequest product = new PredictionRequest(0, fecha_prediccion);
-    Flux<PredictionGroup> prediccion = webClient.post()
-        .uri("/all-products")
-        .bodyValue(product)
-        .retrieve()
-        .bodyToFlux(PredictionGroup.class);
-
-    prediccion.subscribe(
-        prediction -> {
-            try {
-                // Verificar si ya existe una predicción para esa fecha y tipo
-                Optional<PrediccionDTO> existente = predictionRepository
-                    .findFirstByFechaPrediccionAndTipo(fecha_prediccion, "grupo");
-
-                if (existente.isPresent()) {
-                    System.out.println("Ya existe una predicción para la fecha " + fecha_prediccion + ". No se guardará nuevamente.");
-                    return; // Salir sin guardar
-                }
-
-                // Si no existe, guardar
-                ObjectMapper mapper = new ObjectMapper();
-                String json = mapper.writeValueAsString(prediction);
-                PrediccionDTO pred = new PrediccionDTO(new Date(), fecha_prediccion, "grupo", json);
-                predictionRepository.save(pred);
-                System.out.println("Predicción guardada para la fecha " + fecha_prediccion);
-
-            } catch (Exception e) {
-                System.err.println("Error al serializar o guardar la predicción: " + e.getMessage());
-
-        },
-        error -> {
-            System.err.println("❌ Error al predecir: " + error.getMessage());
-        },
-        () -> {
-            System.out.println("✅ Proceso de predicción completado.");
-        }
-                */
     public Flux<PredictionGroup> predictGroup(String fecha_prediccion) {
         PredictionRequest request = new PredictionRequest(0, fecha_prediccion);
         Flux<PredictionGroup> prediccion =  webClient.post().uri("/all-products").bodyValue(request).retrieve()
