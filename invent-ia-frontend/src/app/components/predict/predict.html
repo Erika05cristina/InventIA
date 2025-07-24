@@ -11,29 +11,44 @@
   <!-- Bloque de predicción individual -->
   <div class="prediction-section">
     <h3>Predicción individual</h3>
+
     <div class="input-row">
+      <!-- Filtro por categoría CSV -->
       <label>
-        Producto:
-        <select [(ngModel)]="selectedNombre">
-          <option [ngValue]="null">Seleccione un producto</option>
-          @for (p of productosDisponibles(); track p.id) {
-            <option [ngValue]="p.nombre">{{ p.nombre }}</option>
+        Categoría:
+        <select [(ngModel)]="selectedCategoriaCSVValue">
+          <option [ngValue]="null">Todas</option>
+          @for (cat of categoriasCSV(); track cat) {
+            <option [value]="cat">{{ cat }}</option>
           }
         </select>
       </label>
 
+      <!-- Filtro por producto (objeto completo) -->
+      <label *ngIf="productosFiltradosCSV().length > 0">
+        Producto:
+        <select [(ngModel)]="selectedProductoCSV">
+          <option [ngValue]="null">Seleccione producto</option>
+          @for (p of productosFiltradosCSV(); track p.id) {
+            <option [ngValue]="p">{{ p.nombre }}</option>
+          }
+        </select>
+      </label>
+
+      <!-- Fecha -->
       <label>
         Fecha:
         <input type="date" [(ngModel)]="manualFechaValue" />
       </label>
 
+      <!-- Botón de predicción -->
       <button (click)="getPrediction()">Predecir</button>
     </div>
 
     <!-- Mostrar detalles del producto seleccionado -->
-    <div class="producto-info" *ngIf="productoSeleccionado()">
-      <p><strong>Precio:</strong> {{ productoSeleccionado()?.precio | currency }}</p>
-      <p><strong>Categoría:</strong> {{ productoSeleccionado()?.categoria }}</p>
+    <div class="producto-info" *ngIf="productoSeleccionado">
+      <p><strong>Precio:</strong> {{ productoSeleccionado.precio | currency }}</p>
+      <p><strong>Categoría:</strong> {{ productoSeleccionado.categoria }}</p>
     </div>
 
     <!-- Loader individual -->
@@ -51,8 +66,8 @@
         <ul>
           @for (r of predictionResult(); track r.productId) {
             <li>
-              Producto #{{ r.productId }} — {{ r.date }}:
-              <strong>{{ r.prediction }}</strong>
+              La cantidad de <strong>{{ getNombreProductoPorId(r.productId) }}</strong>
+              para la fecha <strong>{{ r.date }}</strong> es: <strong>{{ r.prediction }}</strong>
             </li>
           }
         </ul>
@@ -90,79 +105,79 @@
   </div>
 
   <!-- Filtros y tabla de resultados grupales -->
-@if (groupPrediction()) {
-  <div class="prediction-group-result">
+  @if (groupPrediction()) {
+    <div class="prediction-group-result">
 
-    <!-- Filtros -->
-    <div class="filter-row">
-      <label>
-        Categoría:
-        <select [(ngModel)]="selectedCategoriaValue">
-          <option value="">Todas</option>
-          @for (cat of categorias(); track cat) {
-            <option [value]="cat">{{ cat }}</option>
-          }
-        </select>
-      </label>
+      <!-- Filtros -->
+      <div class="filter-row">
+        <label>
+          Categoría:
+          <select [(ngModel)]="selectedCategoriaValue">
+            <option value="">Todas</option>
+            @for (cat of categorias(); track cat) {
+              <option [value]="cat">{{ cat }}</option>
+            }
+          </select>
+        </label>
 
-      <label *ngIf="productosFiltrados().length > 0">
-        Producto:
-        <select [(ngModel)]="selectedProductoValue">
-          <option [ngValue]="null">Todos</option>
-          @for (prod of productosFiltrados(); track prod) {
-            <option [value]="prod">{{ prod }}</option>
-          }
-        </select>
-      </label>
+        <label *ngIf="productosFiltrados().length > 0">
+          Producto:
+          <select [(ngModel)]="selectedProductoValue">
+            <option [ngValue]="null">Todos</option>
+            @for (prod of productosFiltrados(); track prod) {
+              <option [value]="prod">{{ prod }}</option>
+            }
+          </select>
+        </label>
 
-      <!-- Tamaño de página -->
-      <label>
-        Tamaño de página:
-        <select [(ngModel)]="pageSizeValue">
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="50">50</option>
-        </select>
-      </label>
-    </div>
+        <!-- Tamaño de página -->
+        <label>
+          Tamaño de página:
+          <select [(ngModel)]="pageSizeValue">
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+          </select>
+        </label>
+      </div>
 
-    <!-- Tabla de predicciones -->
-    <div class="table-container" *ngIf="paginatedPredictions().length > 0">
-      <table>
-        <thead>
-          <tr>
-            <th>Producto</th>
-            <th>Categoría</th>
-            <th>Stock</th>
-            <th>Precio</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (p of paginatedPredictions(); track p.product_id) {
+      <!-- Tabla de predicciones -->
+      <div class="table-container" *ngIf="paginatedPredictions().length > 0">
+        <table>
+          <thead>
             <tr>
-              <td>{{ p.name }}</td>
-              <td>{{ p.categoria }}</td>
-              <td>{{ p.predicted_stock }}</td>
-              <td>{{ p.precio | currency }}</td>
+              <th>Producto</th>
+              <th>Categoría</th>
+              <th>Stock</th>
+              <th>Precio</th>
             </tr>
-          }
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            @for (p of paginatedPredictions(); track p.product_id) {
+              <tr>
+                <td>{{ p.name }}</td>
+                <td>{{ p.categoria }}</td>
+                <td>{{ p.predicted_stock }}</td>
+                <td>{{ p.precio | currency }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
 
-    <!-- Controles de paginación -->
-    <div class="pagination-controls">
-      <button (click)="prevPage()" [disabled]="currentPage() === 1">Anterior</button>
-      <span>Página {{ currentPage() }} de {{ totalPages() }}</span>
-      <button (click)="nextPage()" [disabled]="currentPage() === totalPages()">Siguiente</button>
-    </div>
+      <!-- Controles de paginación -->
+      <div class="pagination-controls">
+        <button (click)="prevPage()" [disabled]="currentPage() === 1">Anterior</button>
+        <span>Página {{ currentPage() }} de {{ totalPages() }}</span>
+        <button (click)="nextPage()" [disabled]="currentPage() === totalPages()">Siguiente</button>
+      </div>
 
-    <!-- Total inversión -->
-    <div class="inversion-box">
-      <strong>Inversión total:</strong> {{ groupPrediction()?.inversion | currency }}
-    </div>
+      <!-- Total inversión -->
+      <div class="inversion-box">
+        <strong>Inversión total:</strong> {{ groupPrediction()?.inversion | currency }}
+      </div>
 
-  </div>
-}
+    </div>
+  }
 
 </div>

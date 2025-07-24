@@ -33,7 +33,6 @@ interface ProductoCSV {
   styleUrl: './predict.scss'
 })
 export class Predict implements OnInit {
-
   private predictionService = inject(Prediction);
   private state = inject(UploadState);
   private explanationState = inject(ExplanationState);
@@ -46,20 +45,39 @@ export class Predict implements OnInit {
 
   public fecha: string = '';
 
+  // Datos CSV cargados
+  readonly productosDisponibles = signal<ProductoCSV[]>([]);
+  readonly selectedCategoriaCSV = signal<string | null>(null);
+  readonly selectedProductoCSV = signal<ProductoCSV | null>(null);
+
+  readonly categoriasCSV = computed(() => {
+    const productos = this.productosDisponibles();
+    return [...new Set(productos.map(p => p.categoria))];
+  });
+
+  readonly productosFiltradosCSV = computed(() => {
+    const cat = this.selectedCategoriaCSV();
+    if (!cat) return [];
+    return this.productosDisponibles().filter(p => p.categoria === cat);
+  });
+
+  get selectedCategoriaCSVValue(): string | null {
+    return this.selectedCategoriaCSV();
+  }
+  set selectedCategoriaCSVValue(val: string | null) {
+    this.selectedCategoriaCSV.set(val === '' ? null : val);
+    this.selectedProductoCSV.set(null); // Reset producto al cambiar categoría
+  }
+
+  get productoSeleccionado(): ProductoCSV | null {
+    return this.selectedProductoCSV();
+  }
+
   // Datos de predicción grupal
   readonly groupPrediction = signal<PredictionResponseGroup | null>(null);
   readonly _pageSize = signal(10);
+  readonly currentPage = signal(1);
 
-  // Productos CSV para predicción individual por nombre
-  readonly productosDisponibles = signal<ProductoCSV[]>([]);
-  readonly selectedNombre = signal<string | null>(null);
-
-  readonly productoSeleccionado = computed(() => {
-    const nombre = this.selectedNombre();
-    return this.productosDisponibles().find(p => p.nombre === nombre) ?? null;
-  });
-
-  // Filtros para tabla grupal
   private _selectedCategoria = signal<string | null>(null);
   private _selectedProducto = signal<string | null>(null);
 
@@ -98,11 +116,7 @@ export class Predict implements OnInit {
     const group = this.groupPrediction();
     const categoria = this.selectedCategoriaValue;
     if (!group || !categoria) return [];
-    return [...new Set(
-      group.predicciones
-        .filter(p => p.categoria === categoria)
-        .map(p => p.name)
-    )];
+    return [...new Set(group.predicciones.filter(p => p.categoria === categoria).map(p => p.name))];
   });
 
   readonly prediccionesFiltradas = computed(() => {
@@ -115,8 +129,6 @@ export class Predict implements OnInit {
       (!prod || p.name === prod)
     );
   });
-
-  readonly currentPage = signal(1);
 
   readonly totalPages = computed(() => {
     const total = this.prediccionesFiltradas().length;
@@ -160,8 +172,7 @@ export class Predict implements OnInit {
 
   getPrediction(): void {
     const fechaFormateada = this.manualFechaValue;
-    const nombre = this.selectedNombre();
-    const producto = this.productosDisponibles().find(p => p.nombre === nombre);
+    const producto = this.selectedProductoCSV();
     const productId = producto?.id ?? null;
 
     if (!fechaFormateada || productId === null) {
@@ -216,6 +227,12 @@ export class Predict implements OnInit {
       complete: () => this.isPredictingGroup.set(false)
     });
   }
+
+  getNombreProductoPorId(id: number): string {
+    const producto = this.productosDisponibles().find(p => p.id === id);
+    return producto ? producto.nombre : `#${id}`;
+  }
+
 
   ngOnInit(): void {
     this.http.get('assets/productos.csv', { responseType: 'text' }).subscribe(csv => {
