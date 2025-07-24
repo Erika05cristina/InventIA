@@ -12,6 +12,7 @@ public class DashboardStatisticsResponse {
     private int cantidadMediaDemanda;
     private int cantidadBajaDemanda;
     private String fecha;
+    private Double inversion;
 
     public DashboardStatisticsResponse() {
     }
@@ -20,7 +21,7 @@ public class DashboardStatisticsResponse {
             Integer productoMayorDemandaId, Double productoMayorDemandaStock,
             Integer productoMenorDemandaId, Double productoMenorDemandaStock,
             int cantidadAltaDemanda, int cantidadMediaDemanda, int cantidadBajaDemanda,
-            String fecha) {
+            String fecha, Double inversion) {
         this.totalUnidades = totalUnidades;
         this.promedioPorProducto = promedioPorProducto;
         this.productoMayorDemandaId = productoMayorDemandaId;
@@ -31,6 +32,7 @@ public class DashboardStatisticsResponse {
         this.cantidadMediaDemanda = cantidadMediaDemanda;
         this.cantidadBajaDemanda = cantidadBajaDemanda;
         this.fecha = fecha;
+        this.inversion = inversion;
     }
 
     // Getters y setters
@@ -112,5 +114,13 @@ public class DashboardStatisticsResponse {
 
     public void setFecha(String fecha) {
         this.fecha = fecha;
+    }
+
+    public void setInversion(Double inversion) {
+        this.inversion = inversion;
+    }
+
+    public Double getInversion() {
+        return this.inversion;
     }
 }

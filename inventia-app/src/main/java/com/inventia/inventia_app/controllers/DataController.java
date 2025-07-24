@@ -27,11 +27,9 @@ public class DataController {
 
     private CsvService csvService;
     private DataService dataService;
-    //private RecordRepository productRepository;
 
     @Autowired
     public DataController(CsvService csvService, DataService dataService, RecordRepository productRepository) {
-        //this.productRepository = productRepository;
         this.csvService = csvService;
         this.dataService = dataService;
     }
