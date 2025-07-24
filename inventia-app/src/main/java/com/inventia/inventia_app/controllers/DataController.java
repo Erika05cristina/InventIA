@@ -27,11 +27,11 @@ public class DataController {
 
     private CsvService csvService;
     private DataService dataService;
-    private RecordRepository productRepository;
+    //private RecordRepository productRepository;
 
     @Autowired
     public DataController(CsvService csvService, DataService dataService, RecordRepository productRepository) {
-        this.productRepository = productRepository;
+        //this.productRepository = productRepository;
         this.csvService = csvService;
         this.dataService = dataService;
     }
@@ -52,7 +52,7 @@ public class DataController {
 
             System.out.println("Se encontraron " + products.size() + " productos en el CSV.");
             //products.forEach(product -> System.out.println("Parsed product: " + product));
-            productRepository.saveAll(products);
+            //productRepository.saveAll(products);
             String response = this.dataService.upload(file).block();
             System.out.println("FastAPI Response: " + response);
 

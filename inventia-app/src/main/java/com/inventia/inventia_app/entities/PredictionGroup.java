@@ -14,6 +14,7 @@ public class PredictionGroup {
         private Integer product_id;
         private String name;
         private String categoria;
+        private Double precio;
         private Double predicted_stock;
 
         public IndividualPrediction(Integer product_id, String name, String categoria, Double predicted_stock) {
@@ -45,6 +46,14 @@ public class PredictionGroup {
 
         public String getCategoria() {
             return this.categoria;
+        }
+
+        public void setPrecio(Double precio) {
+            this.precio = precio;
+        }
+
+        public Double getPrecio() {
+            return this.precio;
         }
 
         public void setPredicted_stock(Double predicted_stock) {
