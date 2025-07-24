@@ -1,19 +1,24 @@
-package com.inventia.inventia_app.entities;
+package com.inventia.inventia_app.controllers;
 
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.inventia.inventia_app.dto.DashboardStatisticsResponse;
+import com.inventia.inventia_app.entities.DashboardStatisticsResponse;
+import com.inventia.inventia_app.entities.PrediccionDTO;
+import com.inventia.inventia_app.entities.PredictionGroup;
+import com.inventia.inventia_app.services.StatisticsService;
 import com.inventia.inventia_app.repositories.PredictionRepository;
 
 @RestController
 @RequestMapping("/dashboard")
+@CrossOrigin(origins = "*")
 public class DashboardController {
 
     private final StatisticsService statisticsService;
@@ -27,6 +32,7 @@ public class DashboardController {
     }
 
     @GetMapping("/statistics")
+    @CrossOrigin(origins = "*")
     public ResponseEntity<DashboardStatisticsResponse> calcularDesdeFecha(
             @RequestParam String fecha,
             @RequestParam(defaultValue = "grupo") String tipo) {

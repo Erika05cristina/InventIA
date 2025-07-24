@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import com.inventia.inventia_app.entities.PredictionRequest;
 import com.inventia.inventia_app.entities.ProductosDTO;
 import com.inventia.inventia_app.repositories.PredictionRepository;
 import com.inventia.inventia_app.repositories.ProductoRepository;
-import com.inventia.inventia_app.repositories.ProductoRepository.ProductIdAndNombre;
+import com.inventia.inventia_app.repositories.ProductoRepository.ProductProjection;
 
 import reactor.core.publisher.Flux;
 
@@ -64,8 +65,14 @@ public class PredictionService {
         Flux<PredictionSingle> prediccion =  webClient.post().uri("/by-product").bodyValue(request).retrieve()
             .bodyToFlux(PredictionSingle.class)
             .flatMap(prediction -> {
-                PrediccionDTO pred = new PrediccionDTO(new Date(), fecha_prediccion, "individual" , prediction.toString());
+            try {
+
+                //Persisitir en la base de datos
+                ObjectMapper mapper = new ObjectMapper();
+                String json = mapper.writeValueAsString(prediction);
+                PrediccionDTO pred = new PrediccionDTO(new Date(), fecha_prediccion, "individual", json);
                 predictionRepository.save(pred);
+                System.out.println("Predicción guardada para la fecha " + fecha_prediccion);
 
                 String explicacionSimple = prediction.getSimple();
                 Double prediccionValue = prediction.getPrediccionValue();
@@ -77,6 +84,7 @@ public class PredictionService {
                 ProductosDTO producto = productoRepository.findById(prediction.getPrediccion().getProductId()).get();
 
                 prediction.getPrediccion().setNombre(producto.getNombre());
+                prediction.getPrediccion().setCategoria(producto.getCategoria());
 
                 Double inversion = producto.getPrecio() * prediction.getPrediccionValue();
                 prediction.setInversion(inversion);
@@ -101,20 +109,25 @@ public class PredictionService {
 
                 //realizar el request y devolver
                 return explanationService.askOpenAI(prompt)
-                    .map(explicacionOpenAI -> {
-                        prediction.setExplicacionOpenAi(explicacionOpenAI);
-                        return prediction;
-                    })
-                    .doOnNext(updatedPrediction -> {
-                        predictionRepository.save(pred);
-                        System.out.println("Predicción guardada con explicación");
-                    });
-            })
-            .doOnError(error -> {
-                System.out.println("Error al predecir: " + error);
-            })
-            .doOnComplete(() -> {
-                System.out.println("Finalizado");
+                .map(explicacionOpenAI -> {
+                    prediction.setExplicacionOpenAi(explicacionOpenAI);
+                    return prediction;
+                })
+                .doOnNext(updatedPrediction -> {
+                    predictionRepository.save(pred);
+                    System.out.println("Predicción guardada con explicación");
+                });
+
+            } catch (Exception e) {
+                System.err.println("Error al serializar o guardar la predicción: " + e.getMessage());
+                return null;
+            }
+        })
+        .doOnError(error -> {
+            System.out.println("Error al predecir: " + error);
+        })
+        .doOnComplete(() -> {
+            System.out.println("Finalizado");
             }
         );
         return prediccion;
@@ -162,37 +175,61 @@ public Flux<PredictionGroup> predictGroup(String fecha_prediccion) {
     public Flux<PredictionGroup> predictGroup(String fecha_prediccion) {
         PredictionRequest request = new PredictionRequest(0, fecha_prediccion);
         Flux<PredictionGroup> prediccion =  webClient.post().uri("/all-products").bodyValue(request).retrieve()
-            .bodyToFlux(PredictionGroup.class)
-            .flatMap(prediction -> {
+        .bodyToFlux(PredictionGroup.class)
+        .flatMap(predictionGroup -> {
+            try {
                 Double inversion = 0.0;
-                List<Integer> productIds = prediction.getPredicciones().stream()
-                    .map(PredictionGroup.IndividualPrediction::getProduct_id)
-                    .distinct()
-                    .collect(Collectors.toList());
-                for (PredictionGroup.IndividualPrediction pred : prediction.getPredicciones()) {
-                    //ProductosDTO producto = productoRepository.findById(productId).get();
-                    //pred.setName(producto.getNombre());
+
+                List<Integer> productIds = predictionGroup.getPredicciones().stream()
+                .map(PredictionGroup.IndividualPrediction::getProduct_id)
+                .distinct()
+                .collect(Collectors.toList());
+
+                for (PredictionGroup.IndividualPrediction pred : predictionGroup.getPredicciones()) {
                     Double predValue = pred.getPredicted_stock();
                     Long redondeado = Math.round(predValue);
                     pred.setPredicted_stock((double) redondeado);
-                    //inversion += producto.getPrecio()*pred.getPredicted_stock();
                 }
-                List<ProductIdAndNombre> productos = productoRepository.findByIdIn(productIds);
-                Map<Integer, String> productsNames = productos.stream()
-                    .collect(Collectors.toMap(ProductIdAndNombre::getId, ProductIdAndNombre::getNombre));
-                System.out.println(productos);
-                PrediccionDTO pred = new PrediccionDTO(new Date(), fecha_prediccion, "grupo" , prediction.toString());
-                predictionRepository.save(pred);
-                System.out.println("Prediccion guardada en la base de datos: " + pred);
 
-                return Flux.just(prediction);
-            })
-            .doOnError(error -> {
-                System.out.println("Error al predecir: " + error);
-            })
-            .doOnComplete(() -> {
-                System.out.println("Finalizado");
-            });
+                List<ProductProjection> productos = productoRepository.findByIdIn(productIds);
+
+                Map<Integer, ProductProjection> productsNames = productos.stream()
+                .collect(Collectors.toMap(ProductProjection::getId, Function.identity()));
+
+                ObjectMapper mapper = new ObjectMapper();
+                String json = mapper.writeValueAsString(predictionGroup);
+                PrediccionDTO pred = new PrediccionDTO(new Date(), fecha_prediccion, "grupo", json);
+                predictionRepository.save(pred);
+                System.out.println("Predicción guardada para la fecha " + fecha_prediccion);
+                //System.out.println("Prediccion guardada en la base de datos: " + pred);
+
+                predictionGroup.getPredicciones().stream()
+                    .map(prediction -> {
+                        ProductProjection producto = productsNames.get(prediction.getProduct_id());
+                        if (producto != null) {
+                            prediction.setName(producto.getNombre());
+                            prediction.setCategoria(producto.getCategoria());
+                        } else {
+                            prediction.setName("Nombre Desconocido");
+                            prediction.setCategoria("Categoria Desconocida");
+                        }
+                        return prediction;
+                    })
+                    .collect(Collectors.toList());
+
+                return Flux.just(predictionGroup);
+            } catch (Exception e) {
+                System.err.println("Error al serializar o guardar la predicción: " + e.getMessage());
+                return null;
+            }
+        })
+        .doOnError(error -> {
+            System.out.println("Error al predecir: " + error);
+        })
+        .doOnComplete(() -> {
+            System.out.println("Finalizado");
+        });
+
         return prediccion;
     }
 

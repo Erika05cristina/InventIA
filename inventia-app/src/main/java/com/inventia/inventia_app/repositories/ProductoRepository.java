@@ -14,13 +14,15 @@ import com.inventia.inventia_app.entities.ProductosDTO;
 @Repository
 public interface ProductoRepository extends JpaRepository<ProductosDTO, Integer> {
 
-    public interface ProductIdAndNombre {
+    public interface ProductProjection {
         Integer getId();
         String getNombre();
+        String getCategoria();
+        Double getPrecio();
     }
 
     ProductosDTO findByNombre(String nombre);
     ProductosDTO findByPrecio(Double precio);
     ProductosDTO findByCategoria(String categoria);
-    List<ProductIdAndNombre> findByIdIn(List<Integer> productosIds);
+    List<ProductProjection> findByIdIn(List<Integer> productosIds);
 }

@@ -1,0 +1,39 @@
+# log_config.yaml
+version: 1
+disable_existing_loggers: false
+
+# Define the format of your log messages
+formatters:
+  default:
+    # A detailed formatter
+    (): "uvicorn.logging.DefaultFormatter"
+    fmt: "%(levelprefix)s %(asctime)s - %(message)s"
+    datefmt: "%Y-%m-%d %H:%M:%S"
+  access:
+    # A formatter specifically for access logs
+    (): "uvicorn.logging.AccessFormatter"
+    fmt: '%(levelprefix)s %(client_addr)s - "%(request_line)s" %(status_code)s'
+
+# Define where the logs go (e.g., console)
+handlers:
+  default:
+    formatter: default
+    class: logging.StreamHandler
+    stream: ext://sys.stderr
+  access:
+    formatter: access
+    class: logging.StreamHandler
+    stream: ext://sys.stdout
+
+# Define the loggers themselves
+loggers:
+  uvicorn:
+    handlers: [default]
+    level: TRACE
+    propagate: false
+  uvicorn.error:
+    level: TRACE
+  uvicorn.access:
+    handlers: [access]
+    level: TRACE
+    propagate: false
