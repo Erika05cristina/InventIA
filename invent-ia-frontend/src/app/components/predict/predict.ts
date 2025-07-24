@@ -9,7 +9,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
   Prediction,
-  PredictionResponseSingle
+  PredictionResponseSingle,
+  PredictionResponseGroup,
+  GroupPrediction
 } from '../../services/prediction';
 import { UploadState } from '../../services/upload-state';
 import { ExplanationState } from '../../services/explanation-state';
@@ -29,13 +31,103 @@ export class Predict {
   private explanationState = inject(ExplanationState);
 
   readonly predictionResult = signal<PredictionResponseSingle[] | null>(null);
-
   readonly isPredictingIndividual = signal(false);
   readonly isPredictingGroup = signal(false);
   readonly wasGroupPredictionDownloaded = this.state.wasGroupPredictionDownloaded;
+  readonly _pageSize = signal(10);
 
   public fecha: string = '';
 
+  // Datos de predicción grupal
+  readonly groupPrediction = signal<PredictionResponseGroup | null>(null);
+
+  // Filtros
+  private _selectedCategoria = signal<string | null>(null);
+  private _selectedProducto = signal<string | null>(null);
+
+  get selectedCategoriaValue(): string | null {
+    return this._selectedCategoria();
+  }
+  set selectedCategoriaValue(val: string | null) {
+    this._selectedCategoria.set(val);
+    this.currentPage.set(1); // reiniciar a página 1 si cambia filtro
+  }
+
+  get selectedProductoValue(): string | null {
+    return this._selectedProducto();
+  }
+  set selectedProductoValue(val: string | null) {
+    this._selectedProducto.set(val);
+    this.currentPage.set(1); // reiniciar a página 1 si cambia filtro
+  }
+
+  get pageSizeValue(): number {
+    return this._pageSize();
+  }
+  set pageSizeValue(val: number) {
+    this._pageSize.set(val);
+    this.currentPage.set(1); // reiniciar página
+  }
+
+  readonly categorias = computed(() => {
+    const group = this.groupPrediction();
+    if (!group) return [];
+    return [...new Set(group.predicciones.map(p => p.categoria))];
+  });
+
+  readonly productosFiltrados = computed(() => {
+    const group = this.groupPrediction();
+    const categoria = this.selectedCategoriaValue;
+    if (!group || !categoria) return [];
+    return [...new Set(
+      group.predicciones
+        .filter(p => p.categoria === categoria)
+        .map(p => p.name)
+    )];
+  });
+
+  readonly prediccionesFiltradas = computed(() => {
+    const pred = this.groupPrediction()?.predicciones ?? [];
+    const cat = this.selectedCategoriaValue;
+    const prod = this.selectedProductoValue;
+
+    return pred.filter(p =>
+      (!cat || p.categoria === cat) &&
+      (!prod || p.name === prod)
+    );
+  });
+
+  // Paginación
+  readonly pageSize = signal(10);
+  readonly currentPage = signal(1);
+
+  readonly totalPages = computed(() => {
+    const total = this.prediccionesFiltradas().length;
+    const size = this.pageSize();
+    return Math.max(1, Math.ceil(total / size));
+  });
+
+  readonly paginatedPredictions = computed(() => {
+    const all = this.prediccionesFiltradas();
+    const page = this.currentPage();
+    const size = this.pageSize();
+    const start = (page - 1) * size;
+    return all.slice(start, start + size);
+  });
+
+  nextPage(): void {
+    if (this.currentPage() < this.totalPages()) {
+      this.currentPage.set(this.currentPage() + 1);
+    }
+  }
+
+  prevPage(): void {
+    if (this.currentPage() > 1) {
+      this.currentPage.set(this.currentPage() - 1);
+    }
+  }
+
+  // Inputs predicción individual
   get manualProductIdValue(): number | null {
     return this.state.manualProductId();
   }
@@ -83,7 +175,6 @@ export class Predict {
     });
   }
 
-
   getGroupPrediction(): void {
     const fechaFormateada = this.fecha;
     if (!fechaFormateada) {
@@ -92,25 +183,12 @@ export class Predict {
     }
 
     this.state.fechaUltimaPrediccionGrupal.set(fechaFormateada);
-
     this.isPredictingGroup.set(true);
-    this.wasGroupPredictionDownloaded.set(false);
 
     this.predictionService.predictGroup(fechaFormateada).subscribe({
       next: (res) => {
-        const blob = new Blob([JSON.stringify(res, null, 2)], {
-          type: 'application/json',
-        });
-
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `prediccion_grupo_${fechaFormateada}.json`;
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-
-        this.wasGroupPredictionDownloaded.set(true);
+        this.groupPrediction.set(res[0]);
+        this.currentPage.set(1); // Reiniciar paginación
       },
       error: (err) => {
         console.error('Error al predecir por grupo:', err);
@@ -118,6 +196,4 @@ export class Predict {
       complete: () => this.isPredictingGroup.set(false)
     });
   }
-
-
 }

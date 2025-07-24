@@ -8,15 +8,25 @@ export interface PredictionResponseSingle {
   prediction: number;
 }
 
+export interface GroupPrediction {
+  product_id: number;
+  name: string;
+  categoria: string;
+  predicted_stock: number;
+  precio: number;
+}
+
 export interface PredictionResponseGroup {
-  date: string;
-  predictions: { productId: number; prediction: number }[];
+  status: string;
+  fecha: string;
+  predicciones: GroupPrediction[];
+  inversion: number;
 }
 
 export interface PredictionExplanation {
   status: string;
   explicacion_simple: string;
-  explicacionOpenAi?: string; // ✅ Agregado aquí
+  explicacionOpenAi?: string;
   prediccion: {
     product_id: number;
     fecha_prediccion: string;
@@ -46,18 +56,15 @@ export class Prediction {
     });
   }
 
-  // Predicción para un solo producto
   predictSingle(productId: number, fecha: string): Observable<PredictionExplanation[]> {
     return this.http.get<PredictionExplanation[]>(`${this.predictionUrl}/single`, {
       params: { product_id: productId, fecha_prediccion: fecha },
     });
   }
 
-// Predicción para todos los productos
   predictGroup(fecha: string): Observable<PredictionResponseGroup[]> {
     return this.http.get<PredictionResponseGroup[]>(`${this.predictionUrl}/group`, {
       params: { fecha_prediccion: fecha },
     });
   }
-
 }

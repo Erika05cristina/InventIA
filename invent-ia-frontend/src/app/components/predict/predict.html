@@ -78,4 +78,80 @@
     }
   </div>
 
+  <!-- Filtros y tabla de resultados grupales -->
+@if (groupPrediction()) {
+  <div class="prediction-group-result">
+
+    <!-- Filtros -->
+    <div class="filter-row">
+      <label>
+        Categoría:
+        <select [(ngModel)]="selectedCategoriaValue">
+          <option [ngValue]="null">Todas</option>
+          @for (cat of categorias(); track cat) {
+            <option [value]="cat">{{ cat }}</option>
+          }
+        </select>
+      </label>
+
+      <label *ngIf="productosFiltrados().length > 0">
+        Producto:
+        <select [(ngModel)]="selectedProductoValue">
+          <option [ngValue]="null">Todos</option>
+          @for (prod of productosFiltrados(); track prod) {
+            <option [value]="prod">{{ prod }}</option>
+          }
+        </select>
+      </label>
+
+      <!-- Tamaño de página -->
+      <label>
+        Tamaño de página:
+        <select [(ngModel)]="pageSizeValue">
+          <option [ngValue]="10">10</option>
+          <option [ngValue]="20">20</option>
+          <option [ngValue]="50">50</option>
+        </select>
+      </label>
+    </div>
+
+    <!-- Tabla de predicciones -->
+    <div class="table-container" *ngIf="paginatedPredictions().length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Categoría</th>
+            <th>Stock</th>
+            <th>Precio</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (p of paginatedPredictions(); track p.product_id) {
+            <tr>
+              <td>{{ p.name }}</td>
+              <td>{{ p.categoria }}</td>
+              <td>{{ p.predicted_stock }}</td>
+              <td>{{ p.precio | currency }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Controles de paginación -->
+    <div class="pagination-controls">
+      <button (click)="prevPage()" [disabled]="currentPage() === 1">Anterior</button>
+      <span>Página {{ currentPage() }} de {{ totalPages() }}</span>
+      <button (click)="nextPage()" [disabled]="currentPage() === totalPages()">Siguiente</button>
+    </div>
+
+    <!-- Total inversión -->
+    <div class="inversion-box">
+      <strong>Inversión total:</strong> {{ groupPrediction()?.inversion | currency }}
+    </div>
+
+  </div>
+}
+
 </div>
