@@ -87,7 +87,7 @@
       <label>
         Categoría:
         <select [(ngModel)]="selectedCategoriaValue">
-          <option [ngValue]="null">Todas</option>
+          <option value="">Todas</option>
           @for (cat of categorias(); track cat) {
             <option [value]="cat">{{ cat }}</option>
           }

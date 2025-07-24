@@ -49,8 +49,8 @@ export class Predict {
     return this._selectedCategoria();
   }
   set selectedCategoriaValue(val: string | null) {
-    this._selectedCategoria.set(val);
-    this.currentPage.set(1); // reiniciar a página 1 si cambia filtro
+    this._selectedCategoria.set(val === '' ? null : val);
+    this.currentPage.set(1);
   }
 
   get selectedProductoValue(): string | null {
