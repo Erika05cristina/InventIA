@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  # Servicio Frontend (Nginx + Angular)
+  frontend:
+    build:
+      dockerfile: frontend.Dockerfile
+      context: ./invent-ia-frontend/ # Carpeta con el Dockerfile del frontend
+    ports:
+      - "8080:80" # Expone el puerto 80 del contenedor al 8080 de tu máquina
+
+      # Servicio Backend (Java + Tomcat)
+  backend:
+    build:
+      dockerfile: backend.Dockerfile
+      context: ./inventia-app/ # Carpeta con el Dockerfile del backend
+    environment:
+      AI_SERVICE_URL: http://fast-api-ai:8000
+
+      # Servicio de IA (FastAPI + Gunicorn)
+  fast-api-ai:
+    build:
+      dockerfile: fastapi.Dockerfile
+      context: ./apps/predictor-service/ # Carpeta con el Dockerfile de la IA
+      # No necesita 'ports' si solo el backend habla con él
+
+networks:
+  default:
+    driver: bridge

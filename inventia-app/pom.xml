@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.inventia</groupId>
 	<artifactId>inventia-app</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<packaging>war</packaging>
 	<name>InventIA-App</name>
 	<description>Backend de InventIA</description>

@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environmets/environment';
 
 export interface PredictionResponseSingle {
   productId: number;
@@ -44,7 +45,8 @@ export interface PredictionExplanation {
 })
 export class Prediction {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = 'http://localhost:8080'; 
+  //private readonly baseUrl = 'http://localhost:8080';
+  private readonly baseUrl = environment.backendBaseUrl;
   private readonly predictionUrl = `${this.baseUrl}/predict`;
 
   uploadCsv(file: File): Observable<string> {
