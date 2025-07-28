@@ -66,7 +66,7 @@ def entrenar_modelo_global(file_path):
     model = Model(inputs=[input_seq, input_pid], outputs=dense_out)
     model.compile(optimizer="adam", loss="mse")
 
-    model.fit([X, product_ids], y, epochs=10, batch_size=32, verbose=1)
+    model.fit([X, product_ids], y, epochs=3, batch_size=128, verbose=1)
 
     joblib.dump(scaler, SCALER_PATH)
     model.save(MODEL_PATH)
