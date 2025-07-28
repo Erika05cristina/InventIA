@@ -1,30 +1,80 @@
-@if (stats) {
+<div class="dashboard-container">
 
-  <section class="dashboard-container">
-    <h2>Resumen del día {{ stats.fecha }}</h2>
-
-    <div class="cards">
-      <div class="card">Total Unidades: {{ stats.totalUnidades }}</div>
-      <div class="card">Promedio x Producto: {{ stats.promedioPorProducto | number:'1.2-2' }}</div>
-      <div class="card">
-        Producto más demandado (ID {{ stats.productoMayorDemandaId }}):<br />
-        {{ stats.productoMayorDemandaStock | number:'1.2-2' }}
-      </div>
-      <div class="card">
-        Producto menos demandado (ID {{ stats.productoMenorDemandaId }}):<br />
-        {{ stats.productoMenorDemandaStock | number:'1.2-2' }}
-      </div>
+  <!-- Estadísticas Generales -->
+  <div class="stat-card">
+    <h2><span class="material-symbols-rounded icon-title">query_stats</span> Estadísticas Generales</h2>
+    <div class="stats">
+      <div class="stat-box"><h3>Productos Totales</h3><p>{{ totalProductos }}</p></div>
+      <div class="stat-box"><h3>Inversión Total</h3><p>$ {{ totalInvertido | number }}</p></div>
+      <div class="stat-box"><h3>Categorías</h3><p>{{ totalCategorias }}</p></div>
+      <div class="stat-box"><h3>Productos Exitosos</h3><p>{{ productosExitosos }}</p></div>
     </div>
-
-    <h3>Distribución por nivel de demanda</h3>
-    <p-chart type="doughnut" [data]="chartData"></p-chart>
-  </section>
-}
-
-@if (!stats) {
-  <div class="loader-box loader-predict">
-    Cargando estadísticas del dashboard...
-    <span class="spinner"></span>
   </div>
-}
 
+  <!-- Promedio de inversión por producto -->
+  <div class="stat-card">
+    <h2><span class="material-symbols-rounded icon-title">calculate</span> Promedio de Inversión por Producto</h2>
+    <p class="stat-highlight">${{ promedioInversion }}</p>
+  </div>
+
+  <!-- Inversión por Categoría -->
+  <div class="stat-card">
+    <h2><span class="material-symbols-rounded icon-title">pie_chart</span> Inversión por Categoría</h2>
+    <div class="chart-wrapper">
+      <p-chart type="pie" [data]="chartDataPie" [options]="chartOptionsPie"></p-chart>
+    </div>
+  </div>
+
+  <!-- Rentabilidad por Categoría -->
+  <div class="stat-card">
+    <h2><span class="material-symbols-rounded icon-title">bar_chart</span> Rentabilidad por Categoría</h2>
+    <div class="chart-wrapper">
+      <p-chart type="bar" [data]="chartDataBar" [options]="chartOptionsBar"></p-chart>
+    </div>
+  </div>
+
+  <!-- Inversión mensual -->
+  <div class="stat-card">
+    <h2><span class="material-symbols-rounded icon-title">show_chart</span> Inversión Mensual</h2>
+    <div class="chart-wrapper">
+      <p-chart type="line" [data]="chartDataLine" [options]="chartOptionsLine"></p-chart>
+    </div>
+  </div>
+
+  <!-- Top 5 productos -->
+  <div class="stat-card">
+    <h2><span class="material-symbols-rounded icon-title">emoji_events</span> Top 5 Productos con Mayor Inversión</h2>
+    <ul class="ranking-list">
+      <li *ngFor="let item of ranking">
+        <span class="material-symbols-rounded icon-list">trending_up</span>
+        {{ item.nombre }}
+        <span class="ranking-amount">${{ item.inversion | number }}</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Stock disponible por categoría (radar) -->
+  <div class="stat-card">
+    <h2><span class="material-symbols-rounded icon-title">inventory_2</span> Stock Disponible por Categoría</h2>
+    <div class="chart-wrapper">
+      <p-chart type="radar" [data]="chartDataRadar" [options]="chartOptionsRadar"></p-chart>
+    </div>
+  </div>
+
+  <!-- Precisión por categoría (barra horizontal) -->
+  <div class="stat-card">
+    <h2><span class="material-symbols-rounded icon-title">insights</span> Precisión de Predicciones</h2>
+    <div class="chart-wrapper">
+      <p-chart type="bar" [data]="chartDataHorizontalBar" [options]="chartOptionsHorizontalBar"></p-chart>
+    </div>
+  </div>
+
+  <!-- Disminución de demanda (dispersión) -->
+  <div class="stat-card">
+    <h2><span class="material-symbols-rounded icon-title">trending_down</span> Productos con Disminución de Demanda</h2>
+    <div class="chart-wrapper">
+      <p-chart type="scatter" [data]="chartDataScatter" [options]="chartOptionsScatter"></p-chart>
+    </div>
+  </div>
+
+</div>
