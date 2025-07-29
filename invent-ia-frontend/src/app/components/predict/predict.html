@@ -91,6 +91,7 @@
               <th>Categoría</th>
               <th>Cantidad a comprar</th>
               <th>Precio</th>
+              <th>Popularidad</th>
               <th>Explicación</th>
             </tr>
           </thead>
@@ -101,6 +102,7 @@
                 <td>{{ p.categoria }}</td>
                 <td>{{ p.predicted_stock }}</td>
                 <td>{{ p.precio | currency }}</td>
+                <td [ngClass]="getPopularidadClass(p.predicted_stock)">{{ getPopularidadLabel(p.predicted_stock) }}</td>
                 <td>
                   <button (click)="explicarProductoDesdeGrupal(p.product_id)">Explicar</button>
                 </td>

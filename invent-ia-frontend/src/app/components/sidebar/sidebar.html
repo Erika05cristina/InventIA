@@ -1,6 +1,6 @@
 <aside class="sidebar" #sidebar>
   <header class="sidebar-header">
-    <a href="#" class="header-logo">
+    <a [routerLink]="['/home']" class="header-logo">
       <img src="/assets/icono.png" alt="Invent IA Logo" width="100" height="100" />
     </a>
     <button class="toggler sidebar-toggler" (click)="toggleCollapsed()">

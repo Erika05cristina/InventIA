@@ -90,6 +90,7 @@
     set selectedCategoriaValue(val: string | null) {
       this._selectedCategoria.set(val === '' ? null : val);
       this.currentPage.set(1);
+      this.saveTableState();
     }
 
     get selectedProductoValue(): string | null {
@@ -98,6 +99,7 @@
     set selectedProductoValue(val: string | null) {
       this._selectedProducto.set(val);
       this.currentPage.set(1);
+      this.saveTableState();
     }
 
     get pageSizeValue(): number {
@@ -107,6 +109,7 @@
       const parsed = typeof val === 'string' ? parseInt(val, 10) : val;
       this._pageSize.set(parsed);
       this.currentPage.set(1);
+      this.saveTableState();
     }
 
     readonly categorias = computed(() => {
@@ -156,12 +159,14 @@
     nextPage(): void {
       if (this.currentPage() < this.totalPages()) {
         this.currentPage.set(this.currentPage() + 1);
+        this.saveTableState();
       }
     }
 
     prevPage(): void {
       if (this.currentPage() > 1) {
         this.currentPage.set(this.currentPage() - 1);
+        this.saveTableState();
       }
     }
 
@@ -177,6 +182,18 @@
     }
     set manualFechaValue(val: string) {
       this.state.manualFecha.set(val);
+    }
+
+    getPopularidadLabel(stock: number): string {
+      if (stock <= 1) return 'Baja demanda';
+      if (stock <= 2) return 'Demanda media';
+      return 'Alta demanda';
+    }
+
+    getPopularidadClass(stock: number): string {
+      if (stock <= 1) return 'popularidad-baja';
+      if (stock <= 2) return 'popularidad-media';
+      return 'popularidad-alta';
     }
 
     saveTableState(): void {

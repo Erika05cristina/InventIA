@@ -342,3 +342,30 @@ select::-ms-expand {
   outline: none;
   box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.4);
 }
+
+.popularidad-baja {
+  background-color: #ffe5e5;
+  color: #d32f2f;
+  font-weight: 600;
+  border-radius: 6px;
+  text-align: center;
+  padding: 4px 8px;
+}
+
+.popularidad-media {
+  background-color: #fff8e1;
+  color: #f9a825;
+  font-weight: 600;
+  border-radius: 6px;
+  text-align: center;
+  padding: 4px 8px;
+}
+
+.popularidad-alta {
+  background-color: #e8f5e9;
+  color: #388e3c;
+  font-weight: 600;
+  border-radius: 6px;
+  text-align: center;
+  padding: 4px 8px;
+}
