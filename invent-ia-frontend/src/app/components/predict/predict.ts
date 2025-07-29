@@ -251,10 +251,10 @@
     }
 
     ngOnInit(): void {
-      this.http.get('assets/productos.csv', { responseType: 'text' }).subscribe(csv => {
+      this.http.get('assets/productos_250.csv', { responseType: 'text' }).subscribe(csv => {
         const lines = csv.trim().split('\n');
         const data: ProductoCSV[] = lines.slice(1).map(line => {
-          const [id, nombre, precio, categoria] = line.split(',');
+          const [id, categoria, nombre, precio] = line.split(',');
           return {
             id: parseInt(id.trim(), 10),
             nombre: nombre.trim(),
