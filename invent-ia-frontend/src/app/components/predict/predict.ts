@@ -16,6 +16,7 @@
   } from '../../services/prediction';
   import { UploadState } from '../../services/upload-state';
   import { ExplanationState } from '../../services/explanation-state';
+  import { Router } from '@angular/router';
 
   interface ProductoCSV {
     id: number;
@@ -35,6 +36,7 @@
   export class Predict implements OnInit {
     private predictionService = inject(Prediction);
     private state = inject(UploadState);
+    private router = inject(Router);
     private explanationState = inject(ExplanationState);
     private http = inject(HttpClient);
 
@@ -77,6 +79,7 @@
     readonly groupPrediction = signal<PredictionResponseGroup | null>(null);
     readonly _pageSize = signal(10);
     readonly currentPage = signal(1);
+    readonly mostrarExplicacion = signal(false);
 
     private _selectedCategoria = signal<string | null>(null);
     private _selectedProducto = signal<string | null>(null);
@@ -174,6 +177,33 @@
     }
     set manualFechaValue(val: string) {
       this.state.manualFecha.set(val);
+    }
+
+    explicarProductoDesdeGrupal(productId: number): void {
+      const fecha = this.fecha;
+
+      if (!fecha || !productId) return;
+
+      this.isPredictingIndividual.set(true);
+
+      this.predictionService.predictSingle(productId, fecha).subscribe({
+        next: (res) => {
+          if (res.length > 0) {
+            const explicacion = res[0];
+            this.explanationState.explicacionSimple.set(explicacion.explicacion_simple ?? '');
+            this.explanationState.variablesImportantes.set(explicacion.explicacion_avanzada?.variables_importantes ?? []);
+            this.explanationState.graficaBase64.set(explicacion.explicacion_avanzada?.grafica_explicabilidad_base64 ?? '');
+            this.explanationState.explicacionCompleta.set(explicacion.explicacionOpenAi ?? '');
+
+            // ✅ Redirigir a la vista de explicación
+            this.router.navigate(['/explanation']);
+          }
+        },
+        error: (err) => {
+          console.error('Error al explicar producto:', err);
+        },
+        complete: () => this.isPredictingIndividual.set(false)
+      });
     }
 
     getPrediction(): void {

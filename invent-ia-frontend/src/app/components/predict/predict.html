@@ -4,74 +4,8 @@
   <div class="predict-header">
     <h2>Predicciones</h2>
     <p>
-      En esta sección puedes obtener predicciones automáticas sobre las cantidades de productos necesarias, de forma individual o grupal, para una fecha determinada.
+      En esta sección puedes obtener predicciones automáticas sobre las cantidades de productos necesarias para una fecha determinada.
     </p>
-  </div>
-
-  <!-- Bloque de predicción individual -->
-  <div class="prediction-section">
-    <h3>Predicción individual</h3>
-
-    <div class="input-row">
-      <!-- Filtro por categoría CSV -->
-      <label>
-        Categoría:
-        <select [(ngModel)]="selectedCategoriaCSVValue">
-          <option [ngValue]="null">Todas</option>
-          @for (cat of categoriasCSV(); track cat) {
-            <option [value]="cat">{{ cat }}</option>
-          }
-        </select>
-      </label>
-
-      <!-- Filtro por producto (objeto completo) -->
-      <label *ngIf="productosFiltradosCSV().length > 0">
-        Producto:
-        <select [(ngModel)]="selectedProductoCSV">
-          <option [ngValue]="null">Seleccione producto</option>
-          @for (p of productosFiltradosCSV(); track p.id) {
-            <option [ngValue]="p">{{ p.nombre }}</option>
-          }
-        </select>
-      </label>
-
-      <!-- Fecha -->
-      <label>
-        Fecha:
-        <input type="date" [(ngModel)]="manualFechaValue" />
-      </label>
-
-      <!-- Botón de predicción -->
-      <button (click)="getPrediction()">Predecir</button>
-    </div>
-
-    <!-- Mostrar detalles del producto seleccionado -->
-    <div class="producto-info" *ngIf="productoSeleccionado">
-      <p><strong>Precio:</strong> {{ productoSeleccionado.precio | currency }}</p>
-    </div>
-
-    <!-- Loader individual -->
-    @if (isPredictingIndividual()) {
-      <div class="loader-box loader-predict">
-        <span class="spinner"></span>
-        <p>Procesando predicción individual...</p>
-      </div>
-    }
-
-    <!-- Resultado predicción individual -->
-    @if (predictionResult()) {
-      <div class="prediction-box">
-        <h4>Resultado:</h4>
-        <ul>
-          @for (r of predictionResult(); track r.productId) {
-            <li>
-              La cantidad de <strong>{{ getNombreProductoPorId(r.productId) }}</strong>
-              para la fecha <strong>{{ r.date }}</strong> es: <strong>{{ r.prediction }}</strong>
-            </li>
-          }
-        </ul>
-      </div>
-    }
   </div>
 
   <!-- Bloque de predicción grupal -->
@@ -85,6 +19,15 @@
 
       <button (click)="getGroupPrediction()">Predecir grupo</button>
     </div>
+
+    
+      <!-- Loader de explicación individual -->
+  @if (isPredictingIndividual()) {
+    <div class="loader-box loader-predict">
+      <span class="spinner"></span>
+      <p>Cargando explicación del producto...</p>
+    </div>
+  }
 
     <!-- Loader grupal -->
     @if (isPredictingGroup()) {
@@ -149,6 +92,7 @@
               <th>Categoría</th>
               <th>Cantidad a comprar</th>
               <th>Precio</th>
+              <th>Explicación</th>
             </tr>
           </thead>
           <tbody>
@@ -158,6 +102,9 @@
                 <td>{{ p.categoria }}</td>
                 <td>{{ p.predicted_stock }}</td>
                 <td>{{ p.precio | currency }}</td>
+                <td>
+                  <button (click)="explicarProductoDesdeGrupal(p.product_id)">Explicar</button>
+                </td>
               </tr>
             }
           </tbody>

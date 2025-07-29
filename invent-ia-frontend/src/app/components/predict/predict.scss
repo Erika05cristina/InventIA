@@ -14,7 +14,7 @@
   padding: 2.5rem;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   width: 100%;
-  max-width: 600px;
+  max-width: 1000px;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -319,4 +319,26 @@ select {
 /* Eliminar flecha nativa en algunos navegadores */
 select::-ms-expand {
   display: none;
+}
+
+/* Botón de explicación en la tabla */
+.table-container table td button {
+  padding: 0.4rem 1rem;
+  background: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.table-container table td button:hover {
+  background: #115293;
+}
+
+.table-container table td button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.4);
 }
