@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 })
 export class Dashboard {
   totalProductos = 250;
-  totalInvertido = 98500;
+  totalInvertido = 7804;
   totalCategorias = 6;
   productosExitosos = 135;
   promedioInversion = Math.round(this.totalInvertido / this.totalProductos);

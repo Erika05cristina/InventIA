@@ -78,6 +78,7 @@ export class Sidebar implements AfterViewInit {
   logout(): void {
     this.auth.logout();
     this.router.navigate(['/login']);
+    localStorage.removeItem('predictionTableState'); 
   }
 
 }

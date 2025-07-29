@@ -179,6 +179,17 @@
       this.state.manualFecha.set(val);
     }
 
+    saveTableState(): void {
+      const state = {
+        currentPage: this.currentPage(),
+        selectedCategoriaValue: this.selectedCategoriaValue,
+        selectedProductoValue: this.selectedProductoValue,
+        pageSizeValue: this.pageSizeValue,
+        groupPrediction: this.groupPrediction() // ← GUARDAMOS LA PREDICCIÓN
+      };
+      localStorage.setItem('predictionTableState', JSON.stringify(state));
+    }
+
     explicarProductoDesdeGrupal(productId: number): void {
       const fecha = this.fecha;
 
@@ -194,8 +205,8 @@
             this.explanationState.variablesImportantes.set(explicacion.explicacion_avanzada?.variables_importantes ?? []);
             this.explanationState.graficaBase64.set(explicacion.explicacion_avanzada?.grafica_explicabilidad_base64 ?? '');
             this.explanationState.explicacionCompleta.set(explicacion.explicacionOpenAi ?? '');
-
-            // ✅ Redirigir a la vista de explicación
+            this.saveTableState();
+            // Redirigir a la vista de explicación
             this.router.navigate(['/explanation']);
           }
         },
@@ -281,6 +292,24 @@
     }
 
     ngOnInit(): void {
+      try {
+        const saved = localStorage.getItem('predictionTableState');
+        if (saved) {
+          const state = JSON.parse(saved);
+          this.currentPage.set(state.currentPage);
+          this.selectedCategoriaValue = state.selectedCategoriaValue;
+          this.selectedProductoValue = state.selectedProductoValue;
+          this.pageSizeValue = state.pageSizeValue;
+
+          if (state.groupPrediction) {
+            this.groupPrediction.set(state.groupPrediction); // ← RESTAURAMOS LA TABLA
+          }
+        }
+      } catch (e) {
+        console.warn('No se pudo restaurar el estado de la tabla:', e);
+        localStorage.removeItem('predictionTableState');
+      }
+
       this.http.get('assets/productos_250.csv', { responseType: 'text' }).subscribe(csv => {
         const lines = csv.trim().split('\n');
         const data: ProductoCSV[] = lines.slice(1).map(line => {
@@ -295,5 +324,4 @@
         this.productosDisponibles.set(data);
       });
     }
-
-  }
+}
