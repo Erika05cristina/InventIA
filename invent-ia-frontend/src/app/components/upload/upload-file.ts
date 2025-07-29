@@ -53,7 +53,7 @@ export class UploadFile {
           this.isTraining.set(false);
           this.trainingCompleted.set(true); 
           console.log(' Entrenamiento finalizado automáticamente');
-        }, 5 * 60 * 1000); // 5 minutos
+        }, 1 * 60 * 1000); // 5 minutos
       },
       error: (err) => {
         console.error(' Error al subir el archivo:', err);
